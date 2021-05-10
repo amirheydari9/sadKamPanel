@@ -17,25 +17,25 @@ a{
     direction: ltr !important;
 }
 body .v-application {
-    font-family: IRANYekanWeb, serif !important;
-    letter-spacing: 0 !important;
-.display-1,
-.display-2,
-.display-3,
-.display-4,
-.headline,
-.title,
-.subtitle-1,
-.subtitle-2,
-.body-1,
-.body-2,
-.caption,
-.overline,
-.v-btn ,
-.v-tab{
-    font-family: IRANYekanWeb, serif !important;
+    font-family: YekiFaNum, serif !important;
     letter-spacing: 0 !important;
 }
+body .v-application .display-1,
+body .v-application .display-2,
+body .v-application .display-3,
+body .v-application .display-4,
+body .v-application .headline,
+body .v-application .title,
+body .v-application .subtitle-1,
+body .v-application .subtitle-2,
+body .v-application .body-1,
+body .v-application .body-2,
+body .v-application .caption,
+body .v-application .overline,
+body .v-application .v-btn ,
+body .v-application .v-tab{
+    font-family: YekiFaNum, serif !important;
+    letter-spacing: 0 !important;
 }
 .container {
     max-width: 1200px;

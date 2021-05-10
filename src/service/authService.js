@@ -27,7 +27,7 @@ export function authService() {
     }
 
     const getToken = () => {
-        window.localStorage.getItem('sadKamToken')
+       return  JSON.parse(window.localStorage.getItem('sadKamToken'))
     }
 
     return {

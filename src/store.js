@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {authService} from "./service/authService";
 import router from "./router";
+import {userService} from "./service/userService";
+import {organizationService} from "./service/organizationService";
 
 Vue.use(Vuex)
 
@@ -12,7 +14,9 @@ export default new Vuex.Store({
         SidebarColor: 'white',
         SidebarBg: '',
         loginPhone: null,
-        isAuth: false
+        isAuth: false,
+        users: [],
+        organizations: []
     },
     getters: {
         getLoginPhone(state) {
@@ -20,6 +24,12 @@ export default new Vuex.Store({
         },
         getIsAuth(state) {
             return state.isAuth
+        },
+        getUsers(state) {
+            return state.users
+        },
+        getOrganizations(state) {
+            return state.organizations
         },
     },
     mutations: {
@@ -38,6 +48,12 @@ export default new Vuex.Store({
         SET_AUTH(state, payload) {
             state.isAuth = payload
         },
+        SET_USERS(state, payload) {
+            state.users = payload
+        },
+        SET_ORGANIZATIONS(state, payload) {
+            state.organizations = payload
+        },
     },
     actions: {
         async login({commit}, phone) {
@@ -55,6 +71,22 @@ export default new Vuex.Store({
                 commit('SET_AUTH', true)
                 await authService().setToken(data.token)
                 await router.push({name: 'Dashboard'})
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async fetchUsers({commit}) {
+            try {
+                const {data} = await userService().getAllUsers()
+                commit('SET_USERS', data.data)
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async fetchOrganizations({commit}) {
+            try {
+                const {data} = await organizationService().getAllOrganization()
+                commit('SET_ORGANIZATIONS', data.data)
             } catch (e) {
                 console.log(e)
             }
