@@ -4,7 +4,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const DashboardLayout = () => import(/* webpackChunkName: "DashboardLayout" */ './layouts/Layout');
+// const DashboardLayout = () => import(/* webpackChunkName: "DashboardLayout" */ './layouts/Layout');
 
 const Login = () => import(/* webpackChunkName: "Login" */ './views/Auth/Login');
 const LoginCheck = () => import(/* webpackChunkName: "LoginCheck" */ './views/Auth/LoginCheck');
@@ -15,41 +15,7 @@ const routes = new Router({
     routes: [
         {
             path: '/',
-            redirect: 'dashboard/basic-dashboard',
-            component: DashboardLayout,
-            children: [
-                // Components
-                // {
-                //     name: 'Alerts',
-                //     path: 'pages/alerts',
-                //     component: () => import('@/views/pages/Alerts'),
-                // },
-                //
-                // {
-                //     name: 'Profile',
-                //     path: 'pages/profile',
-                //     component: () => import('@/views/pages/Profile'),
-                // },
-                //
-                // {
-                //     name: 'Icons',
-                //     path: 'pages/icons',
-                //     component: () => import('@/views/pages/Icons'),
-                // },
-                //
-                // {
-                //     name: 'TableSimple',
-                //     path: 'pages/tables-simple',
-                //     component: () => import('@/views/pages/TableSimple'),
-                // },
-                //
-                // {
-                //     name: 'Dashboard',
-                //     path: 'dashboard/basic-dashboard',
-                //     component: () => import('@/views/dashboard/BasicDashboard'),
-                // },
-
-            ]
+            redirect: '/login',
         },
         {
             path: '/login',
@@ -66,18 +32,55 @@ const routes = new Router({
             meta: {
                 isAuth: false
             }
-        }
-
+        },
+        // {
+        //     path: '/',
+        //     redirect: 'dashboard/basic-dashboard',
+        //     component: DashboardLayout,
+        //     children: [
+        //         // Components
+        //         // {
+        //         //     name: 'Alerts',
+        //         //     path: 'pages/alerts',
+        //         //     component: () => import('@/views/pages/Alerts'),
+        //         // },
+        //         //
+        //         // {
+        //         //     name: 'Profile',
+        //         //     path: 'pages/profile',
+        //         //     component: () => import('@/views/pages/Profile'),
+        //         // },
+        //         //
+        //         // {
+        //         //     name: 'Icons',
+        //         //     path: 'pages/icons',
+        //         //     component: () => import('@/views/pages/Icons'),
+        //         // },
+        //         //
+        //         // {
+        //         //     name: 'TableSimple',
+        //         //     path: 'pages/tables-simple',
+        //         //     component: () => import('@/views/pages/TableSimple'),
+        //         // },
+        //         //
+        //         // {
+        //         //     name: 'Dashboard',
+        //         //     path: 'dashboard/basic-dashboard',
+        //         //     component: () => import('@/views/dashboard/BasicDashboard'),
+        //         // },
+        //
+        //     ]
+        // },
     ],
 })
 
-routes.beforeEach((to, from, next) => {
-    // if (to.meta.isAuth) {
-    //     if(store.getters['auth/getIsAuth']){
-    //        return  next()
-    //     }
-    // }
-    return next()
-})
+// routes.beforeEach((to, from, next) => {
+//     // if (to.meta.isAuth) {
+//     //     if(store.getters['auth/getIsAuth']){
+//     //        return  next()
+//     //     }
+//     // }
+//     return next()
+// })
 
 export default routes;
