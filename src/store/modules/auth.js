@@ -1,24 +1,48 @@
 import {authService} from "../../service/authService";
+import router from "../../router";
 
 export const namespaced = true;
 
-export const state = {}
-export const mutations = {
-    // SET_SIDEBAR_DRAWER(state, payload) {
-    //     state.Sidebar_drawer = payload
-    // },
-    // SET_CUSTOMIZER_DRAWER(state, payload) {
-    //     state.Customizer_drawer = payload
-    // },
-    // SET_SIDEBAR_COLOR(state, payload) {
-    //     state.SidebarColor = payload
-    // }
+export const state = {
+    loginPhone: null,
+    isAuth: false
 }
-export const actions = {
-    async login({commit}, payload) {
-        await authService().login(payload)
+
+export const getters = {
+    getLoginPhone(state) {
+        return state.loginPhone
     },
-    async loginCheck({commit}, payload) {
-        await authService().loginCheck(payload)
+    getIsAuth(state) {
+        return state.isAuth
+    }
+}
+
+export const mutations = {
+    SET_LOGIN_PHONE(state, payload) {
+        state.loginPhone = payload
+    },
+    SET_AUTH(state, payload) {
+        state.isAuth = payload
+    },
+}
+
+
+export const actions = {
+    async login({commit}, phone) {
+        try {
+            await authService().login(phone)
+            commit('SET_LOGIN_PHONE', phone)
+            await router.push({name: 'LoginCheck'})
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    async loginCheck({state, commit}, code) {
+        try {
+            await authService().loginCheck(state.loginPhone, code)
+            commit('SET_AUTH', true)
+        } catch (e) {
+            console.log(e)
+        }
     }
 }

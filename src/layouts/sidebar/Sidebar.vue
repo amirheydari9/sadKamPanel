@@ -59,9 +59,14 @@ export default {
   data: () => ({
     items: [
       {
-        title: "Dashboard",
+        title: "داشبورد",
         icon: "mdi-view-dashboard",
         to: "/dashboard/basic-dashboard"
+      },
+      {
+        title: "مدیریت کاربران",
+        icon: "mdi-account-circle",
+        to: "/users"
       },
 
       {
@@ -125,9 +130,9 @@ export default {
         justify-content: center;
         text-align: center;
         width: 20px;
-        
+
       }
-      
-  }    
+
+  }
 }
 </style>
