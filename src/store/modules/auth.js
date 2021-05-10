@@ -40,7 +40,6 @@ export const actions = {
     async loginCheck({state, commit}, code) {
         try {
             const {data} = await authService().loginCheck(state.loginPhone, code)
-            await console.log(data.token)
             commit('SET_AUTH', true)
             await authService().setToken(data.token)
         } catch (e) {
