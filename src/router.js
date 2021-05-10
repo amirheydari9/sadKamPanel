@@ -4,7 +4,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-// const DashboardLayout = () => import(/* webpackChunkName: "DashboardLayout" */ './layouts/Layout');
+const DashboardLayout = () => import(/* webpackChunkName: "DashboardLayout" */ './layouts/Layout');
 
 const Login = () => import(/* webpackChunkName: "Login" */ './views/Auth/Login');
 const LoginCheck = () => import(/* webpackChunkName: "LoginCheck" */ './views/Auth/LoginCheck');
@@ -13,10 +13,6 @@ const routes = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
-        {
-            path: '/',
-            redirect: '/login',
-        },
         {
             path: '/login',
             name: 'Login',
@@ -33,44 +29,24 @@ const routes = new Router({
                 isAuth: false
             }
         },
-        // {
-        //     path: '/',
-        //     redirect: 'dashboard/basic-dashboard',
-        //     component: DashboardLayout,
-        //     children: [
-        //         // Components
-        //         // {
-        //         //     name: 'Alerts',
-        //         //     path: 'pages/alerts',
-        //         //     component: () => import('@/views/pages/Alerts'),
-        //         // },
-        //         //
-        //         // {
-        //         //     name: 'Profile',
-        //         //     path: 'pages/profile',
-        //         //     component: () => import('@/views/pages/Profile'),
-        //         // },
-        //         //
-        //         // {
-        //         //     name: 'Icons',
-        //         //     path: 'pages/icons',
-        //         //     component: () => import('@/views/pages/Icons'),
-        //         // },
-        //         //
-        //         // {
-        //         //     name: 'TableSimple',
-        //         //     path: 'pages/tables-simple',
-        //         //     component: () => import('@/views/pages/TableSimple'),
-        //         // },
-        //         //
-        //         // {
-        //         //     name: 'Dashboard',
-        //         //     path: 'dashboard/basic-dashboard',
-        //         //     component: () => import('@/views/dashboard/BasicDashboard'),
-        //         // },
-        //
-        //     ]
-        // },
+        {
+            path: '/',
+            redirect: 'dashboard/basic-dashboard',
+            component: DashboardLayout,
+            children: [
+                {
+                    name: 'Dashboard',
+                    path: 'dashboard/basic-dashboard',
+                    component: () => import('@/views/dashboard/BasicDashboard'),
+                },
+                {
+                    name: 'Users',
+                    path: '/users',
+                    component: () => import('@/views/pages/User/Index.vue'),
+                },
+
+            ]
+        },
     ],
 })
 
