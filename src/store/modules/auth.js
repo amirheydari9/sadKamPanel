@@ -42,6 +42,7 @@ export const actions = {
             const {data} = await authService().loginCheck(state.loginPhone, code)
             commit('SET_AUTH', true)
             await authService().setToken(data.token)
+            await router.push({name: 'Dashboard'})
         } catch (e) {
             console.log(e)
         }

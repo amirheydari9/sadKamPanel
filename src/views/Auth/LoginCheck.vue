@@ -51,7 +51,7 @@ export default {
   methods: {
     loginCheck() {
       if (this.$refs.verifyCodeForm.validate()) {
-        this.$store.dispatch('auth/loginCheck', this.form.code)
+        this.$store.dispatch('loginCheck', this.form.code)
       }
     }
   }

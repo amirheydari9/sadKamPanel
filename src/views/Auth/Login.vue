@@ -50,7 +50,7 @@ export default {
   methods: {
     login() {
       if (this.$refs.loginForm.validate()) {
-        this.$store.dispatch('auth/login', this.form.phone)
+        this.$store.dispatch('login', this.form.phone)
       }
     }
   }
