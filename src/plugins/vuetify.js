@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
 import '@/scss/vuetify/overrides.scss'
+// import Vuetify from 'vuetify/lib/framework';
+import fa from 'vuetify/es5/locale/fa'
 
 Vue.use(Vuetify);
 
@@ -14,6 +16,10 @@ const theme = {
 
 export default new Vuetify({
     rtl: true,
+    lang: {
+        locales: {fa},
+        current: 'fa'
+    },
     theme: {
         themes: {
             dark: theme,

@@ -3,6 +3,7 @@
       :headers="headers"
       :items="users"
       :search="search"
+      no-results-text="اطلاعاتی یافت نشد"
       class="elevation-1 w-100"
   >
     <template v-slot:top>
@@ -14,6 +15,7 @@
             label="جست جو"
             single-line
             hide-details
+            autofocus
         ></v-text-field>
         <v-spacer></v-spacer>
         <v-dialog
