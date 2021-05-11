@@ -2,12 +2,19 @@
   <v-data-table
       :headers="headers"
       :items="users"
+      :search="search"
       class="elevation-1 w-100"
   >
     <template v-slot:top>
       <v-toolbar
           flat
       >
+        <v-text-field
+            v-model="search"
+            label="جست جو"
+            single-line
+            hide-details
+        ></v-text-field>
         <v-spacer></v-spacer>
         <v-dialog
             v-model="dialog"
@@ -135,6 +142,7 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
+    search: '',
     headers: [
       {text: 'نام کاربری', value: 'nickname',},
       {text: 'شماره تماس', value: 'phone'},

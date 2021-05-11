@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {authService} from "./service/authService";
-import router from "./router";
 import {userService} from "./service/userService";
 import {organizationService} from "./service/organizationService";
 
@@ -59,8 +58,7 @@ export default new Vuex.Store({
         async login({commit}, phone) {
             try {
                 await authService().login(phone)
-                commit('SET_LOGIN_PHONE', phone)
-                await router.push({name: 'LoginCheck'})
+                await commit('SET_LOGIN_PHONE', phone)
             } catch (e) {
                 console.log(e)
             }
@@ -68,9 +66,19 @@ export default new Vuex.Store({
         async loginCheck({state, commit}, code) {
             try {
                 const {data} = await authService().loginCheck(state.loginPhone, code)
-                commit('SET_AUTH', true)
+                await commit('SET_AUTH', true)
                 await authService().setToken(data.token)
-                await router.push({name: 'Dashboard'})
+                await authService().setUser(data.token)
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async logout({commit}) {
+            try {
+                // const {data} = await authService().loginCheck(state.loginPhone, code)
+                await commit('SET_AUTH', false)
+                await authService().removeToken()
+                await authService().removeUser()
             } catch (e) {
                 console.log(e)
             }

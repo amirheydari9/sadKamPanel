@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import jwt_decode from "jwt-decode";
 import axios from "axios";
 
 export function authService() {
@@ -18,23 +20,50 @@ export function authService() {
         }
     }
 
-    const setToken = (token) => {
-        window.localStorage.setItem('sadKamToken', JSON.stringify(token))
+    const decodeToken = (token) => {
+        return jwt_decode(token);
     }
 
-    const RemoveToken = () => {
-        window.localStorage.removeItem('sadKamToken')
+    const setToken = (token) => {
+        const decodedToken = decodeToken(token)
+        Vue.$cookies.set('sadKamToken', token, decodedToken['expires_in'])
+    }
+
+    const removeToken = () => {
+        Vue.$cookies.remove('sadKamToken')
     }
 
     const getToken = () => {
-       return  JSON.parse(window.localStorage.getItem('sadKamToken'))
+        return Vue.$cookies.get('sadKamToken')
+    }
+
+    const existToken = () => {
+        return Vue.$cookies.isKey('sadKamToken')
+    }
+
+    const setUser = (token) => {
+        const decodedToken = decodeToken(token)
+        Vue.$cookies.set('sadKamUser', decodedToken, decodedToken['expires_in'])
+    }
+
+    const removeUser = () => {
+        Vue.$cookies.remove('sadKamUser')
+    }
+
+    const getUser = () => {
+        return Vue.$cookies.get('sadKamUser')
     }
 
     return {
         login,
         loginCheck,
+        decodeToken,
         setToken,
-        RemoveToken,
-        getToken
+        removeToken,
+        getToken,
+        existToken,
+        setUser,
+        removeUser,
+        getUser
     }
 }

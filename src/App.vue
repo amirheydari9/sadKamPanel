@@ -7,10 +7,13 @@
 
 <script>
 
+import {authService} from "./service/authService";
 export default {
   name: 'App',
-
-  components: {}
+  components: {},
+  created() {
+    console.log(authService().existToken(),'ass')
+  }
 
 };
 </script>

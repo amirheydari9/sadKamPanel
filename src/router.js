@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // import store from "./store/store";
+import {authService} from "./service/authService";
 
 Vue.use(Router)
 
@@ -18,7 +19,7 @@ const routes = new Router({
             name: 'Login',
             component: Login,
             meta: {
-                isAuth: false
+                guest: true,
             }
         },
         {
@@ -26,13 +27,18 @@ const routes = new Router({
             name: 'LoginCheck',
             component: LoginCheck,
             meta: {
-                isAuth: false
+                guest: true,
+                phoneVerified: true
             }
         },
         {
             path: '/',
+            name: 'Panel',
             redirect: 'dashboard/basic-dashboard',
             component: DashboardLayout,
+            meta: {
+                auth: true,
+            },
             children: [
                 {
                     name: 'Dashboard',
@@ -50,13 +56,23 @@ const routes = new Router({
     ],
 })
 
-// routes.beforeEach((to, from, next) => {
-//     // if (to.meta.isAuth) {
-//     //     if(store.getters['auth/getIsAuth']){
-//     //        return  next()
-//     //     }
-//     // }
-//     return next()
-// })
+routes.beforeEach((to, from, next) => {
+    if ((to.meta.guest || to.matched.some(parent => parent.meta.guest))
+        && authService().existToken()) {
+        return next({name: 'Panel'});
+    }
+
+    if ((to.meta.auth || to.matched.some(parent => parent.meta.auth))
+        && !authService().existToken()) {
+        return next({name: 'Login'});
+    }
+
+    // if ((to.meta.phoneVerified || to.matched.some(parent => parent.meta.phoneVerified))
+    //     && !store.state.loginPhone) {
+    //     console.log(store.state.loginPhone)
+    //     return next({name: 'Login'});
+    // }
+    return next()
+})
 
 export default routes;

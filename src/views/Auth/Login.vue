@@ -30,12 +30,12 @@
 </template>
 
 <script>
-import {required,moreThan} from "../../plugins/rule";
+import {required, moreThan} from "../../plugins/rule";
 import AuthBanner from '../../components/AuthBanner'
 
 export default {
   name: "Login",
-  components:{
+  components: {
     AuthBanner
   },
   data() {
@@ -50,7 +50,9 @@ export default {
   methods: {
     login() {
       if (this.$refs.loginForm.validate()) {
-        this.$store.dispatch('login', this.form.phone)
+        this.$store.dispatch('login', this.form.phone).then(() => {
+          this.$router.push({name: 'LoginCheck'})
+        })
       }
     }
   }

@@ -51,7 +51,9 @@ export default {
   methods: {
     loginCheck() {
       if (this.$refs.verifyCodeForm.validate()) {
-        this.$store.dispatch('loginCheck', this.form.code)
+        this.$store.dispatch('loginCheck', this.form.code).then(() => {
+          this.$router.push({name: 'Dashboard'})
+        })
       }
     }
   }
