@@ -1,13 +1,10 @@
-import axios from "axios";
-import {authService} from "./authService";
+import axios from '../plugins/axios'
 
 export function userService() {
 
-    const token = `Bearer ${authService().getToken()}`
-
     const getAllUsers = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/users', {headers: {'Authorization': token}})
+            return await axios.get('http://sadkam.lincast.ir/users')
         } catch (e) {
             console.log(e)
         }
@@ -15,7 +12,7 @@ export function userService() {
 
     const createUser = async (user) => {
         try {
-            await axios.put('http://sadkam.lincast.ir/users/login_check', {user}, {headers: {'Authorization': token}})
+            await axios.put('http://sadkam.lincast.ir/users/login_check', {user})
         } catch (e) {
             console.log(e)
         }
@@ -23,7 +20,7 @@ export function userService() {
 
     const updateUser = async (user) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/users', {user}, {headers: {'Authorization': token}})
+            await axios.post('http://sadkam.lincast.ir/users', {user})
         } catch (e) {
             console.log(e)
         }

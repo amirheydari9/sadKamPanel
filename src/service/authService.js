@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import jwt_decode from "jwt-decode";
-import axios from "axios";
+import axios from '../plugins/axios'
 
 export function authService() {
 
@@ -41,19 +41,6 @@ export function authService() {
         return Vue.$cookies.isKey('sadKamToken')
     }
 
-    const setUser = (token) => {
-        const decodedToken = decodeToken(token)
-        Vue.$cookies.set('sadKamUser', decodedToken, decodedToken['expires_in'])
-    }
-
-    const removeUser = () => {
-        Vue.$cookies.remove('sadKamUser')
-    }
-
-    const getUser = () => {
-        return Vue.$cookies.get('sadKamUser')
-    }
-
     return {
         login,
         loginCheck,
@@ -62,8 +49,5 @@ export function authService() {
         removeToken,
         getToken,
         existToken,
-        setUser,
-        removeUser,
-        getUser
     }
 }

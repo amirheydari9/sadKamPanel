@@ -8,11 +8,14 @@
 <script>
 
 import {authService} from "./service/authService";
+
 export default {
   name: 'App',
   components: {},
   created() {
-    console.log(authService().existToken(),'ass')
+    if (authService().existToken()) {
+      this.$store.dispatch('handleCurrentUser', authService().decodeToken(authService().getToken()))
+    }
   }
 
 };

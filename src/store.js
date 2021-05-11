@@ -14,6 +14,7 @@ export default new Vuex.Store({
         SidebarBg: '',
         loginPhone: null,
         isAuth: false,
+        currentUser: null,
         users: [],
         organizations: []
     },
@@ -29,6 +30,9 @@ export default new Vuex.Store({
         },
         getOrganizations(state) {
             return state.organizations
+        },
+        getCurrentUser(state) {
+            return state.currentUser
         },
     },
     mutations: {
@@ -53,12 +57,15 @@ export default new Vuex.Store({
         SET_ORGANIZATIONS(state, payload) {
             state.organizations = payload
         },
+        SET_CURRENT_USER(state, payload) {
+            state.currentUser = payload
+        },
     },
     actions: {
         async login({commit}, phone) {
             try {
                 await authService().login(phone)
-                await commit('SET_LOGIN_PHONE', phone)
+                commit('SET_LOGIN_PHONE', phone)
             } catch (e) {
                 console.log(e)
             }
@@ -66,19 +73,25 @@ export default new Vuex.Store({
         async loginCheck({state, commit}, code) {
             try {
                 const {data} = await authService().loginCheck(state.loginPhone, code)
-                await commit('SET_AUTH', true)
+                commit('SET_CURRENT_USER', authService().decodeToken(data.token))
+                commit('SET_LOGIN_PHONE', null)
                 await authService().setToken(data.token)
-                await authService().setUser(data.token)
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async handleCurrentUser({commit}, decodedToken) {
+            try {
+                await commit('SET_CURRENT_USER', decodedToken)
             } catch (e) {
                 console.log(e)
             }
         },
         async logout({commit}) {
             try {
-                // const {data} = await authService().loginCheck(state.loginPhone, code)
-                await commit('SET_AUTH', false)
+                commit('SET_CURRENT_USER', null)
+                commit('SET_LOGIN_PHONE', null)
                 await authService().removeToken()
-                await authService().removeUser()
             } catch (e) {
                 console.log(e)
             }
