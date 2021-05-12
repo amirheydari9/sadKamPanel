@@ -19,8 +19,8 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title>{{user.nickname}}</v-list-item-title>
-<!--          <v-list-item-subtitle class="caption">Webdesigner</v-list-item-subtitle>-->
+          <v-list-item-title>{{ user.nickname }}</v-list-item-title>
+          <!--          <v-list-item-subtitle class="caption">Webdesigner</v-list-item-subtitle>-->
         </v-list-item-content>
       </v-list-item>
       <!---USer Area -->
@@ -72,7 +72,17 @@ export default {
       {
         title: "مدیریت سازمان ها",
         icon: "mdi-account-circle",
-        to: "/pages/profile"
+        to: "/organizations"
+      },
+      {
+        title: "مدیریت محصولات",
+        icon: "mdi-account-circle",
+        to: "/products"
+      },
+      {
+        title: "مدیریت اپیزودها",
+        icon: "mdi-account-circle",
+        to: "/episodes"
       },
 
       {

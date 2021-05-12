@@ -50,6 +50,21 @@ const routes = new Router({
                     path: '/users',
                     component: () => import('@/views/pages/User/Index.vue'),
                 },
+                {
+                    name: 'Organizations',
+                    path: '/organizations',
+                    component: () => import('@/views/pages/Organization/Index.vue'),
+                },
+                {
+                    name: 'Products',
+                    path: '/products',
+                    component: () => import('@/views/pages/Organization/Index.vue'),
+                },
+                {
+                    name: 'Episodes',
+                    path: '/episodes',
+                    component: () => import('@/views/pages/Episode/Index.vue'),
+                },
 
             ]
         },

@@ -152,6 +152,12 @@
         </v-dialog>
       </v-toolbar>
     </template>
+    <template v-slot:item.active="{ item }">
+      <v-simple-checkbox
+          v-model="item.active"
+          disabled
+      ></v-simple-checkbox>
+    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
           small
@@ -166,7 +172,7 @@
 
 <script>
 import {required, verifyMobilePhone, verifyUserName , multiSelectRequired} from "../../../plugins/rule";
-// import {userService} from "../../../service/userService";
+import {userService} from "../../../service/userService";
 
 export default {
   name: "Index",
@@ -277,24 +283,21 @@ export default {
     },
 
     save() {
-      // if (this.$refs.userForm.validate()) {
+       if (this.$refs.userForm.validate()) {
       if (this.editedIndex > -1) {
-        console.log(this.editedItem, 'editedItem')
-        // userService().updateUser(this.editedItem).then(() => {
-        //   Object.assign(this.users[this.editedIndex], this.editedItem)
-        //   this.close()
-        // })
+        userService().updateUser(this.editedItem).then(() => {
+          Object.assign(this.users[this.editedIndex], this.editedItem)
+          this.close()
+        })
       } else {
-        console.log(this.editedItem, 'editedItem')
-        this.close()
-        // userService().createUser(this.editedItem).then(() => {
-        //   this.users.push(this.editedItem)
-        //   this.close()
-        // })
+        userService().createUser(this.editedItem).then(() => {
+          this.users.push(this.editedItem)
+          this.close()
+        })
       }
     }
   },
-  // },
+   },
 }
 </script>
 
