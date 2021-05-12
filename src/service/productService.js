@@ -1,43 +1,51 @@
 import axios from '../plugins/axios'
 
-export function userService() {
+export function productService() {
 
-    const getAllUsers = async () => {
+    const getAllProducts = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/users')
+            return await axios.get('http://sadkam.lincast.ir/products')
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    const getProduct = async (id) => {
+        try {
+            return await axios.get(`http://sadkam.lincast.ir/products/${id}`)
         } catch (e) {
             console.log(e)
         }
     }
 
-    const createUser = async (user) => {
+    const createProduct = async (product) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/users', user)
+            await axios.put('http://sadkam.lincast.ir/products', product)
         } catch (e) {
             console.log(e)
         }
     }
 
-    const updateUser = async (user) => {
+    const updateProduct = async (product) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/users', user)
+            await axios.post('http://sadkam.lincast.ir/products', product)
         } catch (e) {
             console.log(e)
         }
     }
 
-    const getAllRoles = async () => {
+    const getAllGeneres = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/users/roles')
+            return await axios.get('http://sadkam.lincast.ir/products/related/generes')
         } catch (e) {
             console.log(e)
         }
     }
 
     return {
-        getAllUsers,
-        createUser,
-        updateUser,
-        getAllRoles
+        getAllProducts,
+        getProduct,
+        createProduct,
+        updateProduct,
+        getAllGeneres
     }
 }
