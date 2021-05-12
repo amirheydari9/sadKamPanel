@@ -6,7 +6,7 @@ export function authService() {
 
     const login = async (phone) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/users/login', {phone})
+            await axios.post('http://sadkam.lincast.ir/api/users/login', {phone})
         } catch (e) {
             console.log(e)
         }
@@ -14,7 +14,7 @@ export function authService() {
 
     const loginCheck = async (phone, code) => {
         try {
-            return await axios.post('http://sadkam.lincast.ir/users/login_check', {phone, code})
+            return await axios.post('http://sadkam.lincast.ir/api/users/login_check', {phone, code})
         } catch (e) {
             console.log(e)
         }

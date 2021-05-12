@@ -21,6 +21,7 @@
         <v-dialog
             v-model="dialog"
             persistent
+            max-width="800px"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -44,7 +45,7 @@
                   <v-row>
                     <v-col
                         cols="12"
-                        sm="4"
+                        sm="6"
                     >
                       <v-text-field
                           :rules="[
@@ -56,7 +57,7 @@
                     </v-col>
                     <v-col
                         cols="12"
-                        sm="4"
+                        sm="6"
                     >
                       <v-text-field
                           :rules="[
@@ -64,6 +65,54 @@
                             ]"
                           v-model="editedItem.faTitle"
                           label="نام فارسی"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="3"
+                    >
+                      <v-text-field
+                          :rules="[
+                            length(4,'سال شروع',false),
+                            ]"
+                          v-model="editedItem.startYear"
+                          label="سال شروع"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="3"
+                    >
+                      <v-text-field
+                          :rules="[
+                            length(4,'سال پایان',false)
+                            ]"
+                          v-model="editedItem.endYear"
+                          label="سال پایان"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="3"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          v-model="editedItem.duration"
+                          label="زمان"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="3"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          v-model="editedItem.rate"
+                          label="امتیاز"
                       ></v-text-field>
                     </v-col>
                     <v-col
@@ -126,18 +175,7 @@
                           deletable-chips
                       ></v-combobox>
                     </v-col>
-                    <v-col
-                        cols="12"
-                        sm="4"
-                    >
-                      <v-text-field
-                          :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                          v-model="editedItem.duration"
-                          label="زمان"
-                      ></v-text-field>
-                    </v-col>
+
                     <v-col
                         cols="12"
                         sm="4"
@@ -155,30 +193,6 @@
                           multiple
                           deletable-chips
                       ></v-autocomplete>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="4"
-                    >
-                      <v-text-field
-                          :rules="[
-                            length(4,'سال شروع',false),
-                            ]"
-                          v-model="editedItem.startYear"
-                          label="سال شروع"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="4"
-                    >
-                      <v-text-field
-                          :rules="[
-                            length(4,'سال پایان',false)
-                            ]"
-                          v-model="editedItem.endYear"
-                          label="سال پایان"
-                      ></v-text-field>
                     </v-col>
                     <v-col
                         cols="12"
@@ -283,18 +297,6 @@
                           item-value="type"
                           dense
                       ></v-autocomplete>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="4"
-                    >
-                      <v-text-field
-                          :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                          v-model="editedItem.rate"
-                          label="امتیاز"
-                      ></v-text-field>
                     </v-col>
                     <v-col
                         cols="12"

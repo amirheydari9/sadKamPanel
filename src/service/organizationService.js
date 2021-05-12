@@ -4,7 +4,7 @@ export function organizationService() {
 
     const getAllOrganization = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/organizations')
+            return await axios.get('http://sadkam.lincast.ir/api/organizations')
         } catch (e) {
             console.log(e)
         }
@@ -12,7 +12,7 @@ export function organizationService() {
 
     const createOrganization = async (organization) => {
         try {
-            await axios.put('http://sadkam.lincast.ir/organizations', organization)
+            await axios.put('http://sadkam.lincast.ir/api/organizations', organization)
         } catch (e) {
             console.log(e)
         }
@@ -20,7 +20,7 @@ export function organizationService() {
 
     const updateOrganization = async (organization) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/organizations', organization)
+            await axios.post('http://sadkam.lincast.ir/api/organizations', organization)
         } catch (e) {
             console.log(e)
         }
@@ -28,7 +28,7 @@ export function organizationService() {
 
     const getOrganizationTypes = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/organizations/types')
+            return await axios.get('http://sadkam.lincast.ir/api/organizations/types')
         } catch (e) {
             console.log(e)
         }
