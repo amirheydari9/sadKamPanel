@@ -4,7 +4,8 @@
     <Sidebar :expand-on-hover.sync="expandOnHover"></Sidebar>
     <v-main>
       <v-container class="fill-height" fluid>
-        <router-view />
+        <v-breadcrumbs :items="breadcrumbs"></v-breadcrumbs>
+        <router-view/>
       </v-container>
     </v-main>
 
@@ -16,7 +17,8 @@
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import Footer from "./footer/Footer";
-import { mapState, mapMutations } from "vuex";
+import {mapState, mapMutations} from "vuex";
+
 export default {
   name: "Layout",
 
@@ -33,7 +35,10 @@ export default {
     expandOnHover: false
   }),
   computed: {
-    ...mapState(["Customizer_drawer"])
+    ...mapState(["Customizer_drawer"]),
+    breadcrumbs() {
+      return this.$store.getters['getBreadCrumbs']
+    }
   },
 
   methods: {

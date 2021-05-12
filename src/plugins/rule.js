@@ -10,7 +10,7 @@ export function verifyUserName() {
 
 export function verifyMobilePhone() {
 
-    return value => /^[0-9]{11}$/.test(value) || 'یک نام کاربری معتبر وارد نمایید';
+    return value => /^[0-9]{11}$/.test(value) || 'شماره موبایل معتبر وارد نمایید';
 
 }
 

@@ -16,7 +16,10 @@ export default new Vuex.Store({
         isAuth: false,
         currentUser: null,
         users: [],
-        organizations: []
+        organizations: [],
+        breadcrumbs: [],
+        organizationTypes: [],
+        roles: []
     },
     getters: {
         getLoginPhone(state) {
@@ -33,6 +36,15 @@ export default new Vuex.Store({
         },
         getCurrentUser(state) {
             return state.currentUser
+        },
+        getBreadCrumbs(state) {
+            return state.breadcrumbs
+        },
+        getOrganizationTypes(state) {
+            return state.organizationTypes
+        },
+        getAllRoles(state) {
+            return state.roles
         },
     },
     mutations: {
@@ -59,6 +71,15 @@ export default new Vuex.Store({
         },
         SET_CURRENT_USER(state, payload) {
             state.currentUser = payload
+        },
+        SET_BREADCRUMBS(state, payload) {
+            state.breadcrumbs = payload
+        },
+        SET_ORGANIZATION_TYPES(state, payload) {
+            state.organizationTypes = payload;
+        },
+        SET_ROLES(state, payload) {
+            state.roles = payload
         },
     },
     actions: {
@@ -104,10 +125,33 @@ export default new Vuex.Store({
                 console.log(e)
             }
         },
+        async fetchRoles({commit}) {
+            try {
+                const {data} = await userService().getAllRoles()
+                commit('SET_ROLES', data)
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        // async updateUser({commit}, user) {
+        //     try {
+        //         const {data} = await userService().updateUser(user)
+        //     } catch (e) {
+        //         console.log(e)
+        //     }
+        // },
         async fetchOrganizations({commit}) {
             try {
                 const {data} = await organizationService().getAllOrganization()
                 commit('SET_ORGANIZATIONS', data.data)
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        async fetchOrganizationTypes({commit}) {
+            try {
+                const {data} = await organizationService().getOrganizationTypes()
+                commit('SET_ORGANIZATION_TYPES', data)
             } catch (e) {
                 console.log(e)
             }

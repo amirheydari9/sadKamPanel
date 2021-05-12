@@ -12,7 +12,7 @@ export function userService() {
 
     const createUser = async (user) => {
         try {
-            await axios.put('http://sadkam.lincast.ir/users/login_check', {user})
+            await axios.post('http://sadkam.lincast.ir/users', user)
         } catch (e) {
             console.log(e)
         }
@@ -20,7 +20,15 @@ export function userService() {
 
     const updateUser = async (user) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/users', {user})
+            await axios.post('http://sadkam.lincast.ir/users', user)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const getAllRoles = async () => {
+        try {
+           return await axios.get('http://sadkam.lincast.ir/users/roles')
         } catch (e) {
             console.log(e)
         }
@@ -29,6 +37,7 @@ export function userService() {
     return {
         getAllUsers,
         createUser,
-        updateUser
+        updateUser,
+        getAllRoles
     }
 }

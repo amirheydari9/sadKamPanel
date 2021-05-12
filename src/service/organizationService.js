@@ -1,13 +1,17 @@
-import {authService} from "./authService";
-import axios from "axios";
+import axios from '../plugins/axios'
 
 export function organizationService() {
 
-    const token = `Bearer ${authService().getToken()}`
-
     const getAllOrganization = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/organizations', {headers: {'Authorization': token}})
+            return await axios.get('http://sadkam.lincast.ir/organizations')
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    const getOrganizationTypes = async () => {
+        try {
+            return await axios.get('http://sadkam.lincast.ir/organizations/types')
         } catch (e) {
             console.log(e)
         }
@@ -15,5 +19,6 @@ export function organizationService() {
 
     return {
         getAllOrganization,
+        getOrganizationTypes
     }
 }

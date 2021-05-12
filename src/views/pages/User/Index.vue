@@ -40,68 +40,93 @@
 
             <v-card-text>
               <v-container>
-                <v-row>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="editedItem.name"
-                        label="نام کاربر"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="editedItem.calories"
-                        label="شماره تماس"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="editedItem.carbs"
-                        label="نام سازمان"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="editedItem.protein"
-                        label="نوع سازمان"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-text-field
-                        v-model="editedItem.protein"
-                        label="سطح دسترسی"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                  >
-                    <v-switch
-                        v-model="editedItem.fat"
-                        label="فعال است"
-                    ></v-switch>
-                  </v-col>
-                </v-row>
+                <v-form ref="userForm">
+                  <v-row>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            verifyUserName()
+                            ]"
+                          v-model="editedItem.nickname"
+                          label="نام کاربر"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            verifyMobilePhone()
+                            ]"
+                          v-model="editedItem.phone"
+                          label="شماره تماس"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-autocomplete
+                          v-model="editedItem.organization"
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          label="نام سازمان"
+                          :items="organizationList"
+                          item-text="name"
+                          item-value="_id"
+                          dense
+                      ></v-autocomplete>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-autocomplete
+                          v-model="editedItem.organizationType"
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          label="نوع سازمان"
+                          :items="organizationType"
+                          item-text="fa"
+                          item-value="type"
+                          dense
+                      ></v-autocomplete>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                    >
+                      <v-select
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          v-model="editedItem.organizationRoles"
+                          :items="roles"
+                          item-text="fa"
+                          item-value="role"
+                          chips
+                          label="سطح دسترسی"
+                          multiple
+                      ></v-select>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-switch
+                          v-model="editedItem.active"
+                          label="فعال است"
+                      ></v-switch>
+                    </v-col>
+                  </v-row>
+                </v-form>
               </v-container>
             </v-card-text>
 
@@ -139,6 +164,9 @@
 </template>
 
 <script>
+import {required, verifyMobilePhone, verifyUserName} from "../../../plugins/rule";
+// import {userService} from "../../../service/userService";
+
 export default {
   name: "Index",
   data: () => ({
@@ -155,27 +183,57 @@ export default {
     ],
     editedIndex: -1,
     editedItem: {
-      name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      nickname: '',
+      phone: '',
+      organizationType: '',
+      organizationRoles: [],
+      organization: '',
+      active: false,
     },
     defaultItem: {
-      name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      nickname: '',
+      phone: '',
+      organizationType: '',
+      organizationRoles: [],
+      organization: '',
+      active: false,
     },
+    breadcrumbs: [
+      {
+        text: 'داشبورد',
+        disabled: false,
+        to: {name: 'Panel'},
+        exact: true
+      },
+      {
+        text: 'مدیریت کاربران',
+        disabled: true,
+        exact: true
+      },
+    ],
+    required,
+    verifyMobilePhone,
+    verifyUserName
   }),
   mounted() {
     this.$store.dispatch('fetchUsers')
     this.$store.dispatch('fetchOrganizations')
+    this.$store.dispatch('fetchOrganizationTypes')
+    this.$store.dispatch('fetchRoles')
+    this.$store.commit('SET_BREADCRUMBS', this.breadcrumbs)
   },
   computed: {
     users() {
       return this.$store.getters['getUsers']
+    },
+    organizationList() {
+      return this.$store.getters['getOrganizations']
+    },
+    organizationType() {
+      return this.$store.getters['getOrganizationTypes']
+    },
+    roles() {
+      return this.$store.getters['getAllRoles']
     },
     formTitle() {
       return this.editedIndex === -1 ? 'افزودن کاربر' : 'ویرایش کاربر'
@@ -204,6 +262,8 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
+        this.$refs.userForm.reset()
+        this.$refs.userForm.resetValidation()
       })
     },
 
@@ -216,14 +276,24 @@ export default {
     },
 
     save() {
+      // if (this.$refs.userForm.validate()) {
       if (this.editedIndex > -1) {
-        Object.assign(this.users[this.editedIndex], this.editedItem)
+        console.log(this.editedItem, 'editedItem')
+        // userService().updateUser(this.editedItem).then(() => {
+        //   Object.assign(this.users[this.editedIndex], this.editedItem)
+        //   this.close()
+        // })
       } else {
-        this.users.push(this.editedItem)
+        console.log(this.editedItem, 'editedItem')
+        this.close()
+        // userService().createUser(this.editedItem).then(() => {
+        //   this.users.push(this.editedItem)
+        //   this.close()
+        // })
       }
-      this.close()
-    },
+    }
   },
+  // },
 }
 </script>
 
