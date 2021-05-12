@@ -12,7 +12,7 @@ export function organizationService() {
 
     const createOrganization = async (organization) => {
         try {
-            await axios.put('http://sadkam.lincast.ir/api/organizations', organization)
+            await axios.post('http://sadkam.lincast.ir/api/organizations', organization)
         } catch (e) {
             console.log(e)
         }
@@ -20,7 +20,7 @@ export function organizationService() {
 
     const updateOrganization = async (organization) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/api/organizations', organization)
+            await axios.put('http://sadkam.lincast.ir/api/organizations', organization)
         } catch (e) {
             console.log(e)
         }

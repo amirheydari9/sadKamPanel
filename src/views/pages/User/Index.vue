@@ -98,7 +98,7 @@
                           label="نوع سازمان"
                           :items="organizationType"
                           item-text="fa"
-                          item-value="role"
+                          item-value="type"
                           dense
                       ></v-autocomplete>
                     </v-col>
@@ -154,12 +154,15 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    <!--    <template v-slot:item.organizationType="{ item }">-->
-    <!--      {{transformOrganization(item)}}-->
-    <!--    </template>-->
-    <!--        <template v-slot:item.organizationRoles="{ item }">-->
-    <!--          {{transformRoles(item)}}-->
-    <!--        </template>-->
+    <template v-slot:item.organizationRoles="{ item }">
+      {{ transformRoles(item) }}
+    </template>
+    <template v-slot:item.organizationType="{ item }">
+      {{ transformOrganizationType(item) }}
+    </template>
+    <template v-slot:item.organization="{ item }">
+      {{ transformOrganization(item) }}
+    </template>
     <template v-slot:item.active="{ item }">
       <v-simple-checkbox
           v-model="item.active"
@@ -181,7 +184,7 @@
 <script>
 import {required, verifyMobilePhone, verifyUserName, multiSelectRequired} from "../../../plugins/rule";
 import {userService} from "../../../service/userService";
-import {transformOrganization, transformRoles} from '../../../plugins/transformData'
+import {transformOrganizationType, transformRoles,transformOrganization} from '../../../plugins/transformData'
 import {permission} from "../../../plugins/permission";
 
 export default {
@@ -195,6 +198,7 @@ export default {
       {text: 'شماره تماس', value: 'phone'},
       {text: 'سطح دسترسی', value: 'organizationRoles'},
       {text: 'نوع سازمان', value: 'organizationType'},
+      {text: 'نام سازمان', value: 'organization'},
       {text: 'فعال بودن', value: 'active'},
       {text: 'عملیات', value: 'actions', sortable: false},
     ],
@@ -232,8 +236,9 @@ export default {
     verifyMobilePhone,
     verifyUserName,
     multiSelectRequired,
-    transformOrganization,
-    transformRoles
+    transformOrganizationType,
+    transformRoles,
+    transformOrganization
   }),
   mounted() {
     this.$store.dispatch('fetchUsers')

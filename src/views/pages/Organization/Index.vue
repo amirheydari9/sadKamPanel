@@ -80,7 +80,7 @@
                           label="نوع سازمان"
                           :items="organizationType"
                           item-text="fa"
-                          item-value="role"
+                          item-value="type"
                           dense
                       ></v-autocomplete>
                     </v-col>

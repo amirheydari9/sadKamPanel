@@ -12,7 +12,7 @@ export function userService() {
 
     const createUser = async (user) => {
         try {
-            await axios.put('http://sadkam.lincast.ir/api/users', user)
+            await axios.post('http://sadkam.lincast.ir/api/users', user)
         } catch (e) {
             console.log(e)
         }
@@ -20,7 +20,7 @@ export function userService() {
 
     const updateUser = async (user) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/api/users', user)
+            await axios.put('http://sadkam.lincast.ir/api/users', user)
         } catch (e) {
             console.log(e)
         }

@@ -4,11 +4,11 @@ export const organizationTypes = [
         "fa": "دبیرخانه ساترا"
     },
     {
-        "role": "platform",
+        "type": "platform",
         "fa": "رسانه فراگیر"
     },
     {
-        "role": "brokerage",
+        "type": "brokerage",
         "fa": "کارگزاری"
     }
 ]
