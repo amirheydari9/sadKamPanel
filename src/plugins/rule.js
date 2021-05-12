@@ -2,6 +2,10 @@ export function required(text) {
     return value => !!value || text;
 }
 
+export function multiSelectRequired(text) {
+    return value => value.length > 0 || text;
+}
+
 export function verifyUserName() {
 
     return value => /^[a-z0-9_-]{3,15}$/.test(value) || 'یک نام کاربری معتبر وارد نمایید';

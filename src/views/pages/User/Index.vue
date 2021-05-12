@@ -20,7 +20,7 @@
         <v-spacer></v-spacer>
         <v-dialog
             v-model="dialog"
-            max-width="500px"
+            max-width="600px"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -105,7 +105,7 @@
                     >
                       <v-select
                           :rules="[
-                            required('این فیلد الزامی است'),
+                            multiSelectRequired('این فیلد الزامی است'),
                             ]"
                           v-model="editedItem.organizationRoles"
                           :items="roles"
@@ -114,6 +114,7 @@
                           chips
                           label="سطح دسترسی"
                           multiple
+                          deletable-chips
                       ></v-select>
                     </v-col>
                     <v-col
@@ -164,7 +165,7 @@
 </template>
 
 <script>
-import {required, verifyMobilePhone, verifyUserName} from "../../../plugins/rule";
+import {required, verifyMobilePhone, verifyUserName , multiSelectRequired} from "../../../plugins/rule";
 // import {userService} from "../../../service/userService";
 
 export default {
@@ -213,7 +214,8 @@ export default {
     ],
     required,
     verifyMobilePhone,
-    verifyUserName
+    verifyUserName,
+    multiSelectRequired
   }),
   mounted() {
     this.$store.dispatch('fetchUsers')
@@ -262,7 +264,6 @@ export default {
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
-        this.$refs.userForm.reset()
         this.$refs.userForm.resetValidation()
       })
     },
