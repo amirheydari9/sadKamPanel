@@ -6,11 +6,9 @@ import store from './store/store'
 import './plugins/base'
 import VueCookies from 'vue-cookies'
 import axios from './plugins/axios'
-import Permission from "./plugins/permission";
 
 Vue.use(VueCookies)
 window.axios = axios
-Vue.prototype.$permission = new Permission;
 Vue.config.productionTip = false
 
 new Vue({

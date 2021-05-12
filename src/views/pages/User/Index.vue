@@ -71,7 +71,7 @@
                     <v-col
                         cols="12"
                         sm="6"
-                        v-if="$permission.isSuperAdmin()"
+                        v-if="isSuperAdmin"
                     >
                       <v-autocomplete
                           v-model="editedItem.organization"
@@ -88,7 +88,7 @@
                     <v-col
                         cols="12"
                         sm="6"
-                        v-if="$permission.isSuperAdmin()"
+                        v-if="isSuperAdmin"
                     >
                       <v-autocomplete
                           v-model="editedItem.organizationType"
@@ -157,9 +157,9 @@
     <!--    <template v-slot:item.organizationType="{ item }">-->
     <!--      {{transformOrganization(item)}}-->
     <!--    </template>-->
-<!--        <template v-slot:item.organizationRoles="{ item }">-->
-<!--          {{transformRoles(item)}}-->
-<!--        </template>-->
+    <!--        <template v-slot:item.organizationRoles="{ item }">-->
+    <!--          {{transformRoles(item)}}-->
+    <!--        </template>-->
     <template v-slot:item.active="{ item }">
       <v-simple-checkbox
           v-model="item.active"
@@ -181,7 +181,8 @@
 <script>
 import {required, verifyMobilePhone, verifyUserName, multiSelectRequired} from "../../../plugins/rule";
 import {userService} from "../../../service/userService";
-import {transformOrganization,transformRoles} from '../../../plugins/transformData'
+import {transformOrganization, transformRoles} from '../../../plugins/transformData'
+import {permission} from "../../../plugins/permission";
 
 export default {
   name: "Index",
@@ -242,6 +243,12 @@ export default {
     this.$store.commit('SET_BREADCRUMBS', this.breadcrumbs)
   },
   computed: {
+    isSuperAdmin() {
+      return permission().isSuperAdmin()
+    },
+    isUserManager() {
+      return permission().isUserManager()
+    },
     currentUser() {
       return this.$store.getters['getCurrentUser']
     },
@@ -298,11 +305,11 @@ export default {
 
     save() {
       if (this.$refs.userForm.validate()) {
-        if(!this.$permission.isSuperAdmin() && this.$permission.isUserManager()){
+        if (!this.isSuperAdmin && this.isUserManager) {
           this.editedItem = {
             ...this.editedItem,
-            organization:this.currentUser.organization,
-            organizationType:this.currentUser.organizationType,
+            organization: this.currentUser.organization,
+            organizationType: this.currentUser.organizationType,
           }
         }
         if (this.editedIndex > -1) {

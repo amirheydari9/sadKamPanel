@@ -10,6 +10,7 @@
       :expand-on-hover="expandOnHover"
       app
       id="main-sidebar"
+      v-if="user"
   >
     <v-list dense nav>
       <!---USer Area -->
@@ -18,13 +19,14 @@
           <img src="https://randomuser.me/api/portraits/men/81.jpg"/>
         </v-list-item-avatar>
 
-        <v-list-item-content>
+        <v-list-item-content v-if="user">
           <v-list-item-title>{{ user.nickname }}</v-list-item-title>
           <!--          <v-list-item-subtitle class="caption">Webdesigner</v-list-item-subtitle>-->
         </v-list-item-content>
       </v-list-item>
       <!---USer Area -->
       <!---Sidebar Items -->
+      <template>
       <v-list-item
           v-for="item in items"
           :key="item.title"
@@ -32,7 +34,7 @@
           :active-class="`success white--text`"
           link
       >
-        <template v-if="$permission.can(item.permission)">
+        <template v-if="permission().can(item.permission)">
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -42,6 +44,7 @@
           </v-list-item-content>
         </template>
       </v-list-item>
+      </template>
 
       <!--      <template v-for="(item,index) in items">-->
       <!--        <router-link :key="index" :to="item.to" v-if="new Permission().can(item.permission)">{{item.title}}</router-link>-->
@@ -54,6 +57,7 @@
 
 <script>
 import {mapState} from "vuex";
+import {permission} from '../../plugins/permission'
 
 export default {
   name: "Sidebar",
@@ -64,6 +68,7 @@ export default {
     }
   },
   data: () => ({
+    permission,
     items: [
       {
         title: "داشبورد",
@@ -111,7 +116,7 @@ export default {
     user() {
       console.log(this.$store.getters['getCurrentUser'])
       return this.$store.getters['getCurrentUser']
-    }
+    },
   },
   watch: {
     "$vuetify.breakpoint.smAndDown"(val) {
@@ -119,7 +124,8 @@ export default {
     }
   },
 
-  methods: {}
+  methods: {
+  }
 };
 </script>
 <style lang="scss">

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // import store from "./store/store";
 import {authService} from "./service/authService";
-import Permission from "./plugins/permission";
+import {permission} from "./plugins/permission";
 import store from "./store/store";
 
 Vue.use(Router)
@@ -60,7 +60,7 @@ const routes = new Router({
                     path: '/organizations',
                     component: () => import('@/views/pages/Organization/Index.vue'),
                     meta: {
-                        permission: 'user_manager'
+                        isSuperAdmin: true
                     }
                 },
                 {
@@ -87,6 +87,10 @@ const routes = new Router({
 
 routes.beforeEach(async (to, from, next) => {
 
+    if (authService().existToken() && !store.getters['getCurrentUser']) {
+        await store.dispatch('handleCurrentUser', authService().decodeToken(authService().getToken()))
+    }
+
     if ((to.meta.guest || to.matched.some(parent => parent.meta.guest))
         && authService().existToken()) {
         return next({name: 'Panel'});
@@ -98,7 +102,16 @@ routes.beforeEach(async (to, from, next) => {
     }
 
     if (store.getters['getCurrentUser'] && to.meta.permission) {
-        if ((new Permission).can(to.meta.permission)) {
+        if (permission().can(to.meta.permission)) {
+            return next();
+        } else {
+            await store.dispatch('logout');
+            return next({name: 'Login'});
+        }
+    }
+
+    if (store.getters['getCurrentUser'] && to.meta.isSuperAdmin) {
+        if (permission().isSuperAdmin()) {
             return next();
         } else {
             await store.dispatch('logout');

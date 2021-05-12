@@ -7,16 +7,16 @@
 
 <script>
 
-import {authService} from "./service/authService";
+// import {authService} from "./service/authService";
 
 export default {
   name: 'App',
   components: {},
-  created() {
-    if (authService().existToken()) {
-      this.$store.dispatch('handleCurrentUser', authService().decodeToken(authService().getToken()))
-    }
-  }
+  // created() {
+  //   if (authService().existToken()) {
+  //     this.$store.dispatch('handleCurrentUser', authService().decodeToken(authService().getToken()))
+  //   }
+  // }
 
 };
 </script>
