@@ -42,223 +42,271 @@
               <v-container>
                 <v-form ref="productForm">
                   <v-row>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-text-field
-                           :rules="[
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+                      <v-text-field
+                          :rules="[
                             required('این فیلد الزامی است'),
                             ]"
-                           v-model="editedItem.enTitle"
-                           label="نام انگلیسی"
-                       ></v-text-field>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-text-field
-                           :rules="[
+                          v-model="editedItem.enTitle"
+                          label="نام انگلیسی"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+                      <v-text-field
+                          :rules="[
                             required('این فیلد الزامی است'),
                             ]"
-                           v-model="editedItem.faTitle"
-                           label="نام فارسی"
-                       ></v-text-field>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-autocomplete
-                           :rules="[
+                          v-model="editedItem.faTitle"
+                          label="نام فارسی"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+<!--                      <v-autocomplete-->
+<!--                          :rules="[-->
+<!--                            multiSelectRequired('این فیلد الزامی است'),-->
+<!--                            ]"-->
+<!--                          v-model="editedItem.directors"-->
+<!--                          :items="[]"-->
+<!--                          item-text="fa"-->
+<!--                          item-value="role"-->
+<!--                          chips-->
+<!--                          label="کارگردان"-->
+<!--                          multiple-->
+<!--                          deletable-chips-->
+<!--                      ></v-autocomplete>-->
+                      <v-combobox
+                          :rules="[
                             multiSelectRequired('این فیلد الزامی است'),
                             ]"
-                           v-model="editedItem.directors"
-                           :items="[]"
-                           item-text="fa"
-                           item-value="role"
-                           chips
-                           label="کارگردان"
-                           multiple
-                           deletable-chips
-                       ></v-autocomplete>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-autocomplete
-                           :rules="[
+                          v-model="editedItem.directors"
+                          label="کارگردان"
+                          multiple
+                          chips
+                          append-icon=""
+                          persistent-hint
+                          deletable-chips
+                      ></v-combobox>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+<!--                      <v-autocomplete-->
+<!--                          :rules="[-->
+<!--                            multiSelectRequired('این فیلد الزامی است'),-->
+<!--                            ]"-->
+<!--                          v-model="editedItem.language"-->
+<!--                          :items="[]"-->
+<!--                          item-text="fa"-->
+<!--                          item-value="role"-->
+<!--                          chips-->
+<!--                          label="زبان"-->
+<!--                          multiple-->
+<!--                          deletable-chips-->
+<!--                      ></v-autocomplete>-->
+                      <v-combobox
+                          :rules="[
                             multiSelectRequired('این فیلد الزامی است'),
                             ]"
-                           v-model="editedItem.language"
-                           :items="[]"
-                           item-text="fa"
-                           item-value="role"
-                           chips
-                           label="زبان"
-                           multiple
-                           deletable-chips
-                       ></v-autocomplete>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-text-field
-                           :rules="[
+                          v-model="editedItem.language"
+                          label="زبان"
+                          multiple
+                          chips
+                          append-icon=""
+                          persistent-hint
+                          deletable-chips
+                      ></v-combobox>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+                      <v-text-field
+                          :rules="[
                             required('این فیلد الزامی است'),
                             ]"
-                           v-model="editedItem.duration"
-                           label="زمان"
-                       ></v-text-field>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-autocomplete
-                           :rules="[
+                          v-model="editedItem.duration"
+                          label="زمان"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+                      <v-autocomplete
+                          :rules="[
                             multiSelectRequired('این فیلد الزامی است'),
                             ]"
-                           v-model="editedItem.genres"
-                           :items="generes"
-                           item-text="fa"
-                           item-value="role"
-                           chips
-                           label="ژاتر ها"
-                           multiple
-                           deletable-chips
-                       ></v-autocomplete>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-text-field
-                           :rules="[
+                          v-model="editedItem.genres"
+                          :items="generes"
+                          item-text="fa"
+                          item-value="role"
+                          chips
+                          label="ژاتر ها"
+                          multiple
+                          deletable-chips
+                      ></v-autocomplete>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+                      <v-text-field
+                          :rules="[
                             length(4,'سال شروع',false),
                             ]"
-                           v-model="editedItem.startYear"
-                           label="سال شروع"
-                       ></v-text-field>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-text-field
-                           :rules="[
+                          v-model="editedItem.startYear"
+                          label="سال شروع"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+                      <v-text-field
+                          :rules="[
                             length(4,'سال پایان',false)
                             ]"
-                           v-model="editedItem.endYear"
-                           label="سال پایان"
-                       ></v-text-field>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-autocomplete
-                           :rules="[
+                          v-model="editedItem.endYear"
+                          label="سال پایان"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+<!--                      <v-autocomplete-->
+<!--                          :rules="[-->
+<!--                            multiSelectRequired('این فیلد الزامی است'),-->
+<!--                            ]"-->
+<!--                          v-model="editedItem.writers"-->
+<!--                          :items="[]"-->
+<!--                          item-text="fa"-->
+<!--                          item-value="role"-->
+<!--                          chips-->
+<!--                          label="نویسندگان"-->
+<!--                          multiple-->
+<!--                          deletable-chips-->
+<!--                      ></v-autocomplete>-->
+                      <v-combobox
+                          :rules="[
                             multiSelectRequired('این فیلد الزامی است'),
                             ]"
-                           v-model="editedItem.writers"
-                           :items="[]"
-                           item-text="fa"
-                           item-value="role"
-                           chips
-                           label="نویسندگان"
-                           multiple
-                           deletable-chips
-                       ></v-autocomplete>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-autocomplete
-                           :rules="[
+                          v-model="editedItem.writers"
+                          label="نویسندگان"
+                          multiple
+                          chips
+                          append-icon=""
+                          persistent-hint
+                          deletable-chips
+                      ></v-combobox>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+<!--                      <v-autocomplete-->
+<!--                          :rules="[-->
+<!--                            multiSelectRequired('این فیلد الزامی است'),-->
+<!--                            ]"-->
+<!--                          v-model="editedItem.actors"-->
+<!--                          :items="[]"-->
+<!--                          item-text="fa"-->
+<!--                          item-value="role"-->
+<!--                          chips-->
+<!--                          label="بازیگران"-->
+<!--                          multiple-->
+<!--                          deletable-chips-->
+<!--                      ></v-autocomplete>-->
+                      <v-combobox
+                          :rules="[
                             multiSelectRequired('این فیلد الزامی است'),
                             ]"
-                           v-model="editedItem.actors"
-                           :items="[]"
-                           item-text="fa"
-                           item-value="role"
-                           chips
-                           label="بازیگران"
-                           multiple
-                           deletable-chips
-                       ></v-autocomplete>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-text-field
-                           :rules="[
+                          v-model="editedItem.actors"
+                          label="بازیگران"
+                          multiple
+                          chips
+                          append-icon=""
+                          persistent-hint
+                          deletable-chips
+                      ></v-combobox>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+                      <v-text-field
+                          :rules="[
                             required('این فیلد الزامی است'),
                             ]"
-                           v-model="editedItem.imdbId"
-                           label="آی دی imdb"
-                       ></v-text-field>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-autocomplete
-                           v-model="editedItem.entryType"
-                           :rules="[
+                          v-model="editedItem.imdbId"
+                          label="آی دی imdb"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+                      <v-autocomplete
+                          v-model="editedItem.entryType"
+                          :rules="[
                             required('این فیلد الزامی است'),
                             ]"
-                           label="entryType"
-                           :items="[]"
-                           item-text="fa"
-                           item-value="type"
-                           dense
-                       ></v-autocomplete>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-autocomplete
-                           v-model="editedItem.titleType"
-                           :rules="[
+                          label="entryType"
+                          :items="[]"
+                          item-text="fa"
+                          item-value="type"
+                          dense
+                      ></v-autocomplete>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+                      <v-autocomplete
+                          v-model="editedItem.titleType"
+                          :rules="[
                             required('این فیلد الزامی است'),
                             ]"
-                           label="titleType"
-                           :items="[]"
-                           item-text="fa"
-                           item-value="type"
-                           dense
-                       ></v-autocomplete>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                         sm="4"
-                     >
-                       <v-text-field
-                           :rules="[
+                          label="titleType"
+                          :items="[]"
+                          item-text="fa"
+                          item-value="type"
+                          dense
+                      ></v-autocomplete>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="4"
+                    >
+                      <v-text-field
+                          :rules="[
                             required('این فیلد الزامی است'),
                             ]"
-                           v-model="editedItem.rate"
-                           label="امتیاز"
-                       ></v-text-field>
-                     </v-col>
-                     <v-col
-                         cols="12"
-                     >
-                       <v-text-field
-                           :rules="[
+                          v-model="editedItem.rate"
+                          label="امتیاز"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                    >
+                      <v-text-field
+                          :rules="[
                             required('این فیلد الزامی است'),
                             ]"
-                           v-model="editedItem.description"
-                           label="توضیحات"
-                       ></v-text-field>
-                     </v-col>
+                          v-model="editedItem.description"
+                          label="توضیحات"
+                      ></v-text-field>
+                    </v-col>
                   </v-row>
                 </v-form>
               </v-container>
@@ -304,7 +352,7 @@
 </template>
 
 <script>
-import {required, verifyMobilePhone, verifyUserName, multiSelectRequired,length} from "../../../plugins/rule";
+import {required, verifyMobilePhone, verifyUserName, multiSelectRequired, length} from "../../../plugins/rule";
 import {productService} from "../../../service/productService";
 
 export default {
