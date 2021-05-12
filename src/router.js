@@ -58,7 +58,7 @@ const routes = new Router({
                 {
                     name: 'Products',
                     path: '/products',
-                    component: () => import('@/views/pages/Organization/Index.vue'),
+                    component: () => import('@/views/pages/Product/Index.vue'),
                 },
                 {
                     name: 'Episodes',

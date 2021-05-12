@@ -103,7 +103,7 @@
                     <v-col
                         cols="12"
                     >
-                      <v-select
+                      <v-autocomplete
                           :rules="[
                             multiSelectRequired('این فیلد الزامی است'),
                             ]"
@@ -115,7 +115,7 @@
                           label="سطح دسترسی"
                           multiple
                           deletable-chips
-                      ></v-select>
+                      ></v-autocomplete>
                     </v-col>
                     <v-col
                         cols="12"
