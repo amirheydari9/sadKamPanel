@@ -21,6 +21,7 @@
         <v-dialog
             v-model="dialog"
             max-width="600px"
+            persistent
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -49,7 +50,6 @@
                       <v-text-field
                           :rules="[
                             required('این فیلد الزامی است'),
-                            verifyUserName()
                             ]"
                           v-model="editedItem.name"
                           label="نام سازمان"
@@ -80,7 +80,7 @@
                           label="نوع سازمان"
                           :items="organizationType"
                           item-text="fa"
-                          item-value="type"
+                          item-value="role"
                           dense
                       ></v-autocomplete>
                     </v-col>
@@ -170,8 +170,7 @@ export default {
     editedItem: {
       name: '',
       agent_phone: '',
-      organizationType: '',
-      organization: '',
+      organizationType: [],
       address: '',
       active: false,
     },
@@ -179,7 +178,6 @@ export default {
       name: '',
       agent_phone: '',
       organizationType: '',
-      organization: '',
       address:'',
       active: false,
     },
@@ -254,12 +252,12 @@ export default {
     save() {
       if (this.$refs.organizationForm.validate()) {
         if (this.editedIndex > -1) {
-          organizationService().updateUser(this.editedItem).then(() => {
+          organizationService().updateOrganization(this.editedItem).then(() => {
             Object.assign(this.organizations[this.editedIndex], this.editedItem)
             this.close()
           })
         } else {
-          organizationService().createUser(this.editedItem).then(() => {
+          organizationService().createOrganization(this.editedItem).then(() => {
             this.organizations.push(this.editedItem)
             this.close()
           })

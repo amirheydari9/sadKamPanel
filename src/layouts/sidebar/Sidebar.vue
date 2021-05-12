@@ -32,14 +32,21 @@
           :active-class="`success white--text`"
           link
       >
-        <v-list-item-icon>
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-list-item-icon>
+        <template v-if="$permission.can(item.permission)">
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
 
-        <v-list-item-content>
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item-content>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </template>
       </v-list-item>
+
+      <!--      <template v-for="(item,index) in items">-->
+      <!--        <router-link :key="index" :to="item.to" v-if="new Permission().can(item.permission)">{{item.title}}</router-link>-->
+      <!--      </template>-->
+
       <!---Sidebar Items -->
     </v-list>
   </v-navigation-drawer>
@@ -61,47 +68,34 @@ export default {
       {
         title: "داشبورد",
         icon: "mdi-view-dashboard",
-        to: "/dashboard/basic-dashboard"
+        to: "/dashboard/basic-dashboard",
+        permission: 'user_manager'
       },
       {
         title: "مدیریت کاربران",
         icon: "mdi-account-circle",
-        to: "/users"
+        to: "/users",
+        permission: 'user_manager'
       },
 
       {
         title: "مدیریت سازمان ها",
         icon: "mdi-account-circle",
-        to: "/organizations"
+        to: "/organizations",
+        permission: 'user_manager'
       },
       {
         title: "مدیریت محصولات",
         icon: "mdi-account-circle",
-        to: "/products"
+        to: "/products",
+        permission: 'user_manager'
       },
       {
         title: "مدیریت اپیزودها",
         icon: "mdi-account-circle",
-        to: "/episodes"
+        to: "/episodes",
+        permission: 'user_manager'
       },
-
-      {
-        title: "Alerts",
-        icon: "mdi-alert",
-        to: "/pages/alerts"
-      },
-
-      {
-        title: "Icons",
-        icon: "mdi-emoticon",
-        to: "/pages/icons"
-      },
-
-      {
-        title: "Basic Table",
-        icon: "mdi-table-column-width",
-        to: "/pages/tables-simple"
-      }
     ]
   }),
   computed: {

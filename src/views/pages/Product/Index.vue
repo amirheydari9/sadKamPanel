@@ -20,6 +20,7 @@
         <v-spacer></v-spacer>
         <v-dialog
             v-model="dialog"
+            persistent
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -431,12 +432,12 @@ export default {
     save() {
       if (this.$refs.productForm.validate()) {
         if (this.editedIndex > -1) {
-          productService().updateUser(this.editedItem).then(() => {
+          productService().updateProduct(this.editedItem).then(() => {
             Object.assign(this.products[this.editedIndex], this.editedItem)
             this.close()
           })
         } else {
-          productService().createUser(this.editedItem).then(() => {
+          productService().createProduct(this.editedItem).then(() => {
             this.products.push(this.editedItem)
             this.close()
           })

@@ -12,7 +12,7 @@ export function userService() {
 
     const createUser = async (user) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/users', user)
+            await axios.put('http://sadkam.lincast.ir/users', user)
         } catch (e) {
             console.log(e)
         }

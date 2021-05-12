@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // import store from "./store/store";
 import {authService} from "./service/authService";
+import Permission from "./plugins/permission";
+import store from "./store/store";
 
 Vue.use(Router)
 
@@ -49,21 +51,33 @@ const routes = new Router({
                     name: 'Users',
                     path: '/users',
                     component: () => import('@/views/pages/User/Index.vue'),
+                    meta: {
+                        permission: 'user_manager'
+                    }
                 },
                 {
                     name: 'Organizations',
                     path: '/organizations',
                     component: () => import('@/views/pages/Organization/Index.vue'),
+                    meta: {
+                        permission: 'user_manager'
+                    }
                 },
                 {
                     name: 'Products',
                     path: '/products',
                     component: () => import('@/views/pages/Product/Index.vue'),
+                    meta: {
+                        permission: 'user_manager'
+                    }
                 },
                 {
                     name: 'Episodes',
                     path: '/episodes',
                     component: () => import('@/views/pages/Episode/Index.vue'),
+                    meta: {
+                        permission: 'user_manager'
+                    }
                 },
 
             ]
@@ -71,7 +85,8 @@ const routes = new Router({
     ],
 })
 
-routes.beforeEach((to, from, next) => {
+routes.beforeEach(async (to, from, next) => {
+
     if ((to.meta.guest || to.matched.some(parent => parent.meta.guest))
         && authService().existToken()) {
         return next({name: 'Panel'});
@@ -82,6 +97,14 @@ routes.beforeEach((to, from, next) => {
         return next({name: 'Login'});
     }
 
+    if (store.getters['getCurrentUser'] && to.meta.permission) {
+        if ((new Permission).can(to.meta.permission)) {
+            return next();
+        } else {
+            await store.dispatch('logout');
+            return next({name: 'Login'});
+        }
+    }
     // if ((to.meta.phoneVerified || to.matched.some(parent => parent.meta.phoneVerified))
     //     && !store.state.loginPhone) {
     //     console.log(store.state.loginPhone)
