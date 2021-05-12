@@ -136,6 +136,9 @@
           disabled
       ></v-simple-checkbox>
     </template>
+    <template v-slot:item.organizationType="{ item }">
+      {{ transformOrganizationType(item) }}
+    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
           small
@@ -151,6 +154,7 @@
 <script>
 import {required, verifyMobilePhone, verifyUserName} from "../../../plugins/rule";
 import {organizationService} from "../../../service/organizationService";
+import {transformOrganizationType} from "../../../plugins/transformData";
 
 export default {
   name: "Index",
@@ -196,7 +200,8 @@ export default {
     ],
     required,
     verifyMobilePhone,
-    verifyUserName
+    verifyUserName,
+    transformOrganizationType
   }),
   mounted() {
     this.$store.dispatch('fetchOrganizations')
