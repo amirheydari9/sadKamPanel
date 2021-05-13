@@ -27,7 +27,7 @@ export function productService() {
 
     const createProduct = async (product) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/api/products', product)
+           return await axios.post('http://sadkam.lincast.ir/api/products', product)
         } catch (e) {
             console.log(e)
         }

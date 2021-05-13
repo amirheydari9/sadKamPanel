@@ -27,7 +27,7 @@ export const actions = {
             console.log(e)
         }
     },
-    async fetchAssessmentRequest({commit}, id) {
+    async fetchAssessmentRequest(context, id) {
         try {
             return await assessmentRequestService().getAssessmentRequest(id)
         } catch (e) {
@@ -35,7 +35,7 @@ export const actions = {
         }
     },
 
-    async fetchAssessmentRequestByEpisode({commit}, id) {
+    async fetchAssessmentRequestByEpisode(context, id) {
         try {
             return await assessmentRequestService().getAssessmentRequestByEpisode(id)
         } catch (e) {
@@ -43,7 +43,7 @@ export const actions = {
         }
     },
 
-    async createAssessmentRequest({commit}, assessmentRequests) {
+    async createAssessmentRequest(context, assessmentRequests) {
         try {
             return await assessmentRequestService().createAssessmentRequest(assessmentRequests)
         } catch (e) {
