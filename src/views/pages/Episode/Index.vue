@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100">
+  <div class="w-100 d-flex flex-column justify-start">
     <v-col cols="12" sm="4">
       <v-autocomplete
           :items="filteredProducts"
@@ -14,6 +14,7 @@
       ></v-autocomplete>
     </v-col>
     <v-data-table
+        v-show="productIsAvailable"
         :headers="headers"
         :items="episodes"
         :search="search"
@@ -247,6 +248,7 @@ export default {
     isLoading: false,
     productSearch: null,
     filteredProducts: [],
+    productIsAvailable: false,
     search: '',
     headers: [
       {text: 'نام انگلسیی', value: 'enTitle',},
@@ -338,6 +340,7 @@ export default {
     },
     productSearch(value) {
       if (this.episodes.length) {
+        this.productIsAvailable = false
         this.$store.commit('episode/SET_EPISODES', [])
       }
       if (value && value.length <= 0) return;
@@ -359,6 +362,7 @@ export default {
       } else {
         this.entryTypeIsMultiple = true
       }
+      this.productIsAvailable = true
       this.$store.dispatch('episode/fetchAllEpisodes', event._id)
     },
     editItem(item) {
