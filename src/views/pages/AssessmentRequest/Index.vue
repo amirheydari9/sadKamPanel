@@ -307,17 +307,17 @@
         max-width="600px"
         persistent
     >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-            color="primary"
-            dark
-            class="mb-2"
-            v-bind="attrs"
-            v-on="on"
-        >
-          افزودن اپیزود جدید
-        </v-btn>
-      </template>
+      <!--      <template v-slot:activator="{ on, attrs }">-->
+      <!--        <v-btn-->
+      <!--            color="primary"-->
+      <!--            dark-->
+      <!--            class="mb-2"-->
+      <!--            v-bind="attrs"-->
+      <!--            v-on="on"-->
+      <!--        >-->
+      <!--          افزودن اپیزود جدید1-->
+      <!--        </v-btn>-->
+      <!--      </template>-->
       <v-card>
         <v-card-title>
           <span class="headline">ایجاد اپیزود</span>
@@ -767,9 +767,11 @@ export default {
     saveEpisode() {
       if (this.$refs.episodeForm.validate()) {
         console.log(this.episodeEditedItem, 'amir')
-        // episodeService().createEpisode(this.episodeEditedItem).then(() => {
-        //
-        // })
+        episodeService().createEpisode(this.episodeEditedItem).then(() => {
+          episodeService().getAllEpisodes(this.episodeEditedItem.parent).then(({data}) => {
+            this.episodes = data.data
+          })
+        })
       }
     },
 
