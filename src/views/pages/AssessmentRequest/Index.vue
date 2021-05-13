@@ -511,7 +511,7 @@
                       color="primary"
                       dark
                       class="mb-2"
-                      @click="episodeDialog = true"
+                      @click="handleOpenEpisodeDialog"
                   >
                     افزودن اپیزود جدید
                   </v-btn>
@@ -525,7 +525,7 @@
               <v-icon
                   small
                   class="mr-2"
-                  @click="editItem(item)"
+                  @click="assessmentRequest(item)"
               >
                 mdi-pencil
               </v-icon>
@@ -743,10 +743,14 @@ export default {
       })
     },
     closeEpisodeList() {
-      this.episodes =[];
+      this.episodes = [];
       this.episodeListDialog = false
     },
 
+    handleOpenEpisodeDialog() {
+      this.episodeEditedItem.parent = this.episodes[0].parent
+      this.episodeDialog = true;
+    },
     saveProduct() {
       if (this.$refs.productForm.validate()) {
         productService().createProduct(this.productEditedItem).then(() => {
@@ -762,9 +766,10 @@ export default {
 
     saveEpisode() {
       if (this.$refs.episodeForm.validate()) {
-        episodeService().createEpisode(this.episodeEditedItem).then(() => {
-
-        })
+        console.log(this.episodeEditedItem, 'amir')
+        // episodeService().createEpisode(this.episodeEditedItem).then(() => {
+        //
+        // })
       }
     },
 
