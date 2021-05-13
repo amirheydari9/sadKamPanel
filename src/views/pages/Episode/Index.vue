@@ -2,13 +2,10 @@
   <div class="w-100">
     <v-col cols="12" sm="4">
       <v-autocomplete
-          v-model="myModel"
           :items="filteredProducts"
           :loading="isLoading"
           :search-input.sync="productSearch"
           @change="findEpisodes"
-          hide-no-data
-          hide-selected
           item-text="enTitle"
           item-value="_id"
           label="جستجو در محصولات"
@@ -248,7 +245,6 @@ export default {
     dialogDelete: false,
     entryTypeIsMultiple: true,
     isLoading: false,
-    myModel: null,
     productSearch: null,
     filteredProducts: [],
     search: '',
@@ -341,6 +337,9 @@ export default {
       val || this.closeDelete()
     },
     productSearch(value) {
+      if (this.episodes.length) {
+        this.$store.commit('episode/SET_EPISODES', [])
+      }
       if (value && value.length <= 0) return;
       if (this.isLoading) return;
       this.isLoading = true;
@@ -357,7 +356,7 @@ export default {
       console.log(event, 'event', event.entryType)
       if (event.entryType === 'single') {
         this.entryTypeIsMultiple = false
-      }else{
+      } else {
         this.entryTypeIsMultiple = true
       }
       this.$store.dispatch('episode/fetchAllEpisodes', event._id)
