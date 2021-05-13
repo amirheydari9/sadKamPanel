@@ -4,7 +4,7 @@ import {authService} from "../service/authService";
 import {userService} from "../service/userService";
 import {organizationService} from "../service/organizationService";
 import * as product from './modules/product'
-import * as episode from './modules/product'
+import * as episode from './modules/episode'
 
 Vue.use(Vuex)
 
