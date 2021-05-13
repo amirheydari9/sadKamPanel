@@ -551,18 +551,53 @@
     <v-dialog
         v-model="tabsDialog"
         persistent
+        max-width="600px"
     >
-      <v-card-text></v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-            color="blue darken-1"
-            text
-            @click="closeTabs"
-        >
-          انصراف
-        </v-btn>
-      </v-card-actions>
+      <v-card>
+        <v-card-text>
+          <v-tabs class="mt-5" color="grey darken-3" v-model="tabsMenu">
+            <v-tab href="#assessment"
+            >ارزیابی
+            </v-tab>
+            <v-tab
+                href="#chat"
+            >فراگیر
+            </v-tab>
+            <v-tab
+                href="#file"
+            >فایل
+            </v-tab>
+          </v-tabs>
+          <v-divider></v-divider>
+
+          <v-tabs-items v-model="tabsMenu">
+
+            <v-tab-item class="mt-5" value="assessment">
+              <p>تب 1</p>
+            </v-tab-item>
+
+            <v-tab-item class="mt-5" value="chat">
+              <p>تب 2</p>
+            </v-tab-item>
+
+            <v-tab-item class="mt-5" value="file">
+              <p>تب 3</p>
+            </v-tab-item>
+
+          </v-tabs-items>
+
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="blue darken-1"
+              text
+              @click="closeTabs"
+          >
+            انصراف
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
     <!--    تب ها-->
 
@@ -590,6 +625,7 @@ export default {
     filteredProducts: [],
     episodes: [],
     productIdForHandleEpisode: null,
+    tabsMenu:null,
     search: '',
     productHeaders: [
       {text: 'نام انگلسیی', value: 'enTitle',},
