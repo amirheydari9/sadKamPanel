@@ -2,9 +2,9 @@ import axios from '../plugins/axios'
 
 export function episodeService() {
 
-    const getAllEpisodes = async () => {
+    const getAllEpisodes = async (id) => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/api/episodes')
+            return await axios.get(`http://sadkam.lincast.ir/api/episodes/ofParent/${id}`)
         } catch (e) {
             console.log(e)
         }

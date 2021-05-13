@@ -19,9 +19,9 @@ export const getters = {
 }
 
 export const actions = {
-    async fetchAllEpisodes({commit}) {
+    async fetchAllEpisodes({commit}, productId) {
         try {
-            const {data} = await episodeService().getAllEpisodes()
+            const {data} = await episodeService().getAllEpisodes(productId)
             commit('SET_EPISODES', data.data)
         } catch (e) {
             console.log(e)
