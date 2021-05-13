@@ -522,11 +522,11 @@
             <!--      <template v-slot:item.organizationType="{ item }">-->
             <!--        {{ transformOrganizationType(item) }}-->
             <!--      </template>-->
-            <template v-slot:item.actions="{}">
+            <template v-slot:item.actions="{item}">
               <v-icon
                   small
                   class="mr-2"
-                  @click="handleTabsDialog"
+                  @click="handleTabsDialogInEpisodeList(item)"
               >
                 mdi-pencil
               </v-icon>
@@ -556,7 +556,9 @@
       <v-card>
         <v-card-text>
           <v-tabs class="mt-5" color="grey darken-3" v-model="tabsMenu">
-            <v-tab href="#assessment"
+            <v-tab
+                href="#assessment"
+                @click="handleTab1"
             >ارزیابی
             </v-tab>
             <v-tab
@@ -612,6 +614,7 @@ import axios from 'axios'
 import {productService} from "../../../service/productService";
 import {entryType} from "../../../plugins/constant";
 import {episodeService} from "../../../service/episodeService";
+import {assessmentRequestService} from "../../../service/assessmentRequestService";
 
 export default {
   name: "Index",
@@ -625,7 +628,7 @@ export default {
     filteredProducts: [],
     episodes: [],
     productIdForHandleEpisode: null,
-    tabsMenu:null,
+    tabsMenu: null,
     search: '',
     productHeaders: [
       {text: 'نام انگلسیی', value: 'enTitle',},
@@ -719,12 +722,13 @@ export default {
         exact: true
       },
     ],
+    episodeIdForTab1: null,
     required,
     verifyMobilePhone,
     verifyUserName,
     transformOrganizationType,
     multiSelectRequired,
-    entryType
+    entryType,
   }),
   mounted() {
     this.$store.dispatch('fetchOrganizations')
@@ -781,6 +785,12 @@ export default {
     episodeListDialog(val) {
       val || this.closeEpisodeList()
     },
+    tabsDialog(val) {
+      if (val) {
+        this.handleTab1()
+      }
+      val || this.closeTabs()
+    },
   },
 
   methods: {
@@ -836,8 +846,12 @@ export default {
     },
 
     assessmentRequest(item) {
+      console.log(item, 'item')
       if (item.entryType === 'single') {
-        this.tabsDialog = true
+        episodeService().getAllEpisodes(item._id).then(({data}) => {
+          this.episodeIdForTab1 = data.data[0]._id
+          this.tabsDialog = true
+        })
       } else if (item.entryType === 'multiple') {
         episodeService().getAllEpisodes(item._id).then(({data}) => {
           this.productIdForHandleEpisode = item._id;
@@ -847,10 +861,17 @@ export default {
       }
     },
 
-    handleTabsDialog(){
-      this.tabsDialog = true;
+    handleTab1() {
+      assessmentRequestService().getAssessmentRequestByEpisode(this.episodeIdForTab1).then((data) => {
+        console.log(data)
+      })
+    },
+    handleTabsDialogInEpisodeList(item) {
+      this.episodeIdForTab1 = item._id
+      this.tabsDialog = true
     },
     closeTabs() {
+      this.episodeIdForTab1 = null;
       this.tabsDialog = false;
     }
   },
