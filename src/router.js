@@ -76,7 +76,15 @@ const routes = new Router({
                     path: '/episodes',
                     component: () => import('@/views/pages/Episode/Index.vue'),
                     meta: {
-                        permission: 'user_manager'
+                        permission: 'orders'
+                    }
+                },
+                {
+                    name: 'AssessmentRequest',
+                    path: '/assessmentRequest',
+                    component: () => import('@/views/pages/AssessmentRequest/Index.vue'),
+                    meta: {
+                        permission: 'orders'
                     }
                 },
 

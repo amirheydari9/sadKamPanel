@@ -101,6 +101,12 @@ export default {
         to: "/episodes",
         permission: 'user_manager'
       },
+      {
+        title: "درخواست ارزیابی",
+        icon: "mdi-account-circle",
+        to: "/assessmentRequest",
+        permission: 'user_manager'
+      },
     ]
   }),
   computed: {
