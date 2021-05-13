@@ -575,7 +575,19 @@
           <v-tabs-items v-model="tabsMenu">
 
             <v-tab-item class="mt-5" value="assessment">
-              <p>تب 1</p>
+              <v-col cols="12">
+                <template v-if="!episodeHasAssessmentRequest">
+                  <v-text-field
+                      v-model="tab1Desc"
+                      outlined
+                      label="توضیحات"
+                  ></v-text-field>
+                  <v-btn
+                      @click="createAssessmentRequest">
+                    درخواست ارزیابی
+                  </v-btn>
+                </template>
+              </v-col>
             </v-tab-item>
 
             <v-tab-item class="mt-5" value="chat">
@@ -723,6 +735,10 @@ export default {
       },
     ],
     episodeIdForTab1: null,
+    episodeHasAssessmentRequest: false,
+    tab1Desc: null,
+    dialogs: [],
+    files: [],
     required,
     verifyMobilePhone,
     verifyUserName,
@@ -862,8 +878,29 @@ export default {
     },
 
     handleTab1() {
-      assessmentRequestService().getAssessmentRequestByEpisode(this.episodeIdForTab1).then((data) => {
-        console.log(data)
+      assessmentRequestService().getAssessmentRequestByEpisode(this.episodeIdForTab1).then(({data}) => {
+        if (data.data.length === 0) {
+          this.episodeHasAssessmentRequest = false
+        } else {
+          this.episodeHasAssessmentRequest = true
+          assessmentRequestService().getAssessmentRequest(data.data[0]._id).then((res) => {
+            this.files = res.data.data.files
+            this.dialogs = res.data.data.dialogs
+          })
+        }
+      })
+    },
+    createAssessmentRequest() {
+      const assessmentRequest = {
+        episode: this.episodeIdForTab1,
+        description: this.tab1Desc
+      }
+      assessmentRequestService().createAssessmentRequest(assessmentRequest).then(({data}) => {
+        this.episodeHasAssessmentRequest = true;
+        assessmentRequestService().getAssessmentRequest(data.data.id).then((res) => {
+          this.files = res.data.data.files
+          this.dialogs = res.data.data.dialogs
+        })
       })
     },
     handleTabsDialogInEpisodeList(item) {
@@ -872,6 +909,8 @@ export default {
     },
     closeTabs() {
       this.episodeIdForTab1 = null;
+      this.dialogs = [];
+      this.files = [];
       this.tabsDialog = false;
     }
   },

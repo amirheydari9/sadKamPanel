@@ -7,7 +7,6 @@
           <span class="blue--text font-weight-bold">ورود به حساب کاربری</span>
           <v-text-field label="شماره موبایل"
                         outlined
-                        readonly
                         rounded
                         class="mt-9"
                         v-model="form.phone"
@@ -41,7 +40,8 @@ export default {
   data() {
     return {
       form: {
-        phone: '09129329989',
+        // phone: '09129329989',
+        phone: '',
       },
       required,
       moreThan
