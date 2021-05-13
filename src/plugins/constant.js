@@ -27,3 +27,14 @@ export const organizationRoles = [
         "fa": "مدیریت سفارش و محصولات"
     }
 ]
+
+export const entryType = [
+    {
+        "en": "single",
+        "fa": "تکی"
+    },
+    {
+        "en": "multiple",
+        "fa": "چندتایی"
+    }
+]

@@ -68,7 +68,7 @@ const routes = new Router({
                     path: '/products',
                     component: () => import('@/views/pages/Product/Index.vue'),
                     meta: {
-                        permission: 'user_manager'
+                        permission: 'orders'
                     }
                 },
                 {

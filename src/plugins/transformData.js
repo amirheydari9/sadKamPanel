@@ -1,4 +1,15 @@
 import store from "../store/store";
+// import {entryType} from "./constant";
+const entryTypes = [
+    {
+        "en": "single",
+        "fa": "تکی"
+    },
+    {
+        "en": "multiple",
+        "fa": "چندتایی"
+    }
+]
 
 export const transformRoles = (value) => {
     const roles = []
@@ -17,4 +28,13 @@ export const transformOrganizationType = (value) => {
 export const transformOrganization = (value) => {
     const organization = store.getters['getOrganizations'].find(item => item._id === value.organization)
     return organization ? organization.name : value.organization
+}
+
+export const transformEntryType = (value) => {
+    const entryType = entryTypes.find(item => item.en === value.entryType)
+    return entryType ? entryType.fa : value.entryType
+}
+export const transformTitleType = (value) => {
+    const titleType = store.getters['product/getTitleTypes'].find(item => item.en === value.titleType)
+    return titleType ? titleType.fa : value.titleType
 }
