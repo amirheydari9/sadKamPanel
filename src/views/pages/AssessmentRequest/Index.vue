@@ -522,11 +522,11 @@
             <!--      <template v-slot:item.organizationType="{ item }">-->
             <!--        {{ transformOrganizationType(item) }}-->
             <!--      </template>-->
-            <template v-slot:item.actions="{ item }">
+            <template v-slot:item.actions="{}">
               <v-icon
                   small
                   class="mr-2"
-                  @click="assessmentRequest(item)"
+                  @click="tabsDialog=true"
               >
                 mdi-pencil
               </v-icon>
@@ -547,6 +547,25 @@
     </v-dialog>
     <!--    لیست اپیزود-->
 
+    <!--    تب ها-->
+    <v-dialog
+        v-model="tabsDialog"
+        persistent
+    >
+      <v-card-text></v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+            color="blue darken-1"
+            text
+            @click="closeTabs"
+        >
+          انصراف
+        </v-btn>
+      </v-card-actions>
+    </v-dialog>
+    <!--    تب ها-->
+
   </div>
 </template>
 
@@ -565,6 +584,7 @@ export default {
     productDialog: false,
     episodeListDialog: false,
     episodeDialog: false,
+    tabsDialog: false,
     isLoading: false,
     productSearch: null,
     filteredProducts: [],
@@ -780,17 +800,19 @@ export default {
     },
 
     assessmentRequest(item) {
-      console.log(item)
       if (item.entryType === 'single') {
-        console.log('sas')
+        this.tabsDialog = true
       } else if (item.entryType === 'multiple') {
         episodeService().getAllEpisodes(item._id).then(({data}) => {
           this.productIdForHandleEpisode = item._id;
-          console.log(data.data)
           this.episodes = data.data
           this.episodeListDialog = true
         })
       }
+    },
+
+    closeTabs() {
+      this.tabsDialog = false;
     }
   },
 }
