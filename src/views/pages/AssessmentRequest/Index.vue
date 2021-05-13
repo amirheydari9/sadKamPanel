@@ -526,7 +526,7 @@
               <v-icon
                   small
                   class="mr-2"
-                  @click="tabsDialog=true"
+                  @click="handleTabsDialog"
               >
                 mdi-pencil
               </v-icon>
@@ -811,6 +811,9 @@ export default {
       }
     },
 
+    handleTabsDialog(){
+      this.tabsDialog = true;
+    },
     closeTabs() {
       this.tabsDialog = false;
     }
