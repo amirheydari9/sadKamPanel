@@ -428,6 +428,7 @@
                       item-text="faTitle"
                       item-value="_id"
                       dense
+                      disabled
                   ></v-autocomplete>
                 </v-col>
                 <v-col
@@ -568,6 +569,7 @@ export default {
     productSearch: null,
     filteredProducts: [],
     episodes: [],
+    productIdForHandleEpisode: null,
     search: '',
     productHeaders: [
       {text: 'نام انگلسیی', value: 'enTitle',},
@@ -744,11 +746,12 @@ export default {
     },
     closeEpisodeList() {
       this.episodes = [];
+      this.productIdForHandleEpisode = null;
       this.episodeListDialog = false
     },
 
     handleOpenEpisodeDialog() {
-      this.episodeEditedItem.parent = this.episodes[0].parent
+      this.episodeEditedItem.parent = this.productIdForHandleEpisode
       this.episodeDialog = true;
     },
     saveProduct() {
@@ -770,6 +773,7 @@ export default {
         episodeService().createEpisode(this.episodeEditedItem).then(() => {
           episodeService().getAllEpisodes(this.episodeEditedItem.parent).then(({data}) => {
             this.episodes = data.data
+            this.closeEpisode()
           })
         })
       }
@@ -781,6 +785,7 @@ export default {
         console.log('sas')
       } else if (item.entryType === 'multiple') {
         episodeService().getAllEpisodes(item._id).then(({data}) => {
+          this.productIdForHandleEpisode = item._id;
           console.log(data.data)
           this.episodes = data.data
           this.episodeListDialog = true
