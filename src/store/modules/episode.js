@@ -1,45 +1,30 @@
-// import {productService} from "../../service/productService";
-//
-// export const namespaced = true;
-//
-// export const state = {
-//     episodes: [],
-//     generes: []
-// };
-//
-// export const mutations = {
-//     SET_PRODUCTS(state, payload) {
-//         state.episodes = payload
-//     },
-//     SET_GENERES(state, payload) {
-//         state.generes = payload
-//     }
-// };
-//
-// export const getters = {
-//     getProducts(state) {
-//         return state.episodes
-//     },
-//     getGeneres(state) {
-//         return state.generes
-//     }
-// }
-//
-// export const actions = {
-//     async fetchAllProducts({commit}) {
-//         try {
-//             const {data} = await productService().getAllProducts()
-//             commit('SET_PRODUCTS', data.data)
-//         } catch (e) {
-//             console.log(e)
-//         }
-//     },
-//     async fetchAllGeneres({commit}) {
-//         try {
-//             const {data} = await productService().getAllGeneres()
-//             commit('SET_GENERES', data.data)
-//         } catch (e) {
-//             console.log(e)
-//         }
-//     },
-// };
+import {episodeService} from "../../service/episodeService";
+
+export const namespaced = true;
+
+export const state = {
+    episodes: [],
+};
+
+export const mutations = {
+    SET_EPISODES(state, payload) {
+        state.episodes = payload
+    },
+};
+
+export const getters = {
+    getEpisodes(state) {
+        return state.episodes
+    },
+}
+
+export const actions = {
+    async fetchAllEpisodes({commit}) {
+        try {
+            const {data} = await episodeService().getAllEpisodes()
+            commit('SET_EPISODES', data.data)
+        } catch (e) {
+            console.log(e)
+        }
+    },
+};
