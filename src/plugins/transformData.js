@@ -39,3 +39,6 @@ export const transformTitleType = (value) => {
 export const transformDateToJalali = (value) => {
     return moment(value).format('jYYYY/jMM/jDD')
 }
+export const transformJalaliDateToGeorgian = (value) => {
+    return moment(value,'jYYYY/jMM/jDD').format('YYYY/MM/DD')
+}

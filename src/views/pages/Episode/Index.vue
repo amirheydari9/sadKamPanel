@@ -140,15 +140,14 @@
                       <v-col
                           cols="12"
                           sm="6"
+                          style="margin-top: 20px"
                       >
-                        <v-text-field
-                            :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.releaseDate"
-                            label="زمان انتشار"
-                        ></v-text-field>
+                        <date-picker
+                            :autoSubmit="true"
+                            placeholder='زمان انتشار'
+                            v-model="editedItem.releaseDate" style="margin-top: 20px !important;"></date-picker>
                       </v-col>
+
                       <v-col
                           cols="12"
                           sm="6"
@@ -240,14 +239,26 @@
 
 <script>
 import {required, verifyMobilePhone, verifyUserName} from "../../../plugins/rule";
-import {transformOrganization, transformDateToJalali} from "../../../plugins/transformData";
+import {
+  transformOrganization,
+  transformDateToJalali,
+  transformJalaliDateToGeorgian
+} from "../../../plugins/transformData";
 import {permission} from "../../../plugins/permission";
 import axios from 'axios'
 import {episodeService} from "../../../service/episodeService";
+import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 
 export default {
   name: "Index",
+  components: {
+    datePicker: VuePersianDatetimePicker
+  },
   data: () => ({
+    menu: false,
+    modal: false,
+    menu2: false,
+
     dialog: false,
     dialogDelete: false,
     entryTypeIsMultiple: true,
@@ -398,9 +409,9 @@ export default {
       this.$store.dispatch('episode/fetchAllEpisodes', event._id)
     },
     editItem(item) {
-      console.log(this.episodes, 'edit')
       this.editedIndex = this.episodes.indexOf(item)
       this.editedItem = Object.assign({}, item)
+      this.editedItem = {...this.editedItem, releaseDate: transformDateToJalali(item.releaseDate)}
       this.dialog = true
     },
 
@@ -423,6 +434,7 @@ export default {
 
     save() {
       if (this.$refs.episodeForm.validate()) {
+        this.editedItem = {...this.editedItem,releaseDate:new Date(transformJalaliDateToGeorgian(this.editedItem.releaseDate)).getTime()}
         if (this.editedIndex > -1) {
           episodeService().updateEpisode(this.editedItem).then(() => {
             Object.assign(this.episodes[this.editedIndex], this.editedItem)
@@ -444,6 +456,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.vpd-main {
+  margin-top: 20px !important;
+}
 </style>
