@@ -643,6 +643,8 @@
                           v-model="dialogEditedItem.targetFile"
                           label="شناسه کوتاه"
                           :items="targetFiles"
+                          item-text="title"
+                          item-value="id"
                           dense
                       ></v-autocomplete>
                     </v-col>
@@ -807,7 +809,12 @@
 
 <script>
 import {required, verifyMobilePhone, verifyUserName, multiSelectRequired} from "../../../plugins/rule";
-import {transformOrganization,transformDateToJalali,transformTitleType,transformEntryType} from "../../../plugins/transformData";
+import {
+  transformOrganization,
+  transformDateToJalali,
+  transformTitleType,
+  transformEntryType
+} from "../../../plugins/transformData";
 import {permission} from "../../../plugins/permission";
 import axios from 'axios'
 import {productService} from "../../../service/productService";
@@ -1136,7 +1143,10 @@ export default {
     },
     handleTab2() {
       this.handleTab1()
-      this.files.forEach(item => this.targetFiles.push(item.humanId))
+      this.files.forEach(item => {
+        const row = {title: item.humanId, id: item._id}
+        this.targetFiles.push(row)
+      })
     },
     saveDialog() {
       if (this.$refs.dialogForm.validate()) {
@@ -1173,11 +1183,11 @@ export default {
         this.assessmentRequestInfoObject = null;
         this.fileEditedItem = Object.assign({}, this.fileEditedDefaultItem)
         this.dialogEditedItem = Object.assign({}, this.dialogEditedDefaultItem)
-        if(this.$refs.dialogForm){
+        if (this.$refs.dialogForm) {
           this.$refs.dialogForm.reset();
           this.$refs.dialogForm.resetValidation();
         }
-        if(this.$refs.fileForm){
+        if (this.$refs.fileForm) {
           this.$refs.fileForm.reset();
           this.$refs.fileForm.resetValidation();
         }
