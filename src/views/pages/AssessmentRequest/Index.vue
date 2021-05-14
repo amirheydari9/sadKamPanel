@@ -552,6 +552,7 @@
         v-model="tabsDialog"
         persistent
         max-width="800px"
+       height="500px"
     >
       <v-card>
         <v-card-text>
@@ -586,6 +587,7 @@
                       label="توضیحات"
                   ></v-text-field>
                   <v-btn
+                      color="primary"
                       @click="createAssessmentRequest">
                     درخواست ارزیابی
                   </v-btn>
@@ -984,10 +986,10 @@ export default {
           this.assessmentRequestInfoObject = null
         } else {
           this.episodeHasAssessmentRequest = true
-          this.assessmentRequestInfoObject = data.data[0]
           assessmentRequestService().getAssessmentRequest(data.data[0]._id).then((res) => {
             this.files = res.data.data.files
             this.dialogs = res.data.data.dialogs
+            this.assessmentRequestInfoObject = res.data.data
           })
         }
       })
@@ -1000,6 +1002,7 @@ export default {
       assessmentRequestService().createAssessmentRequest(assessmentRequest).then(({data}) => {
         this.episodeHasAssessmentRequest = true;
         assessmentRequestService().getAssessmentRequest(data.data.id).then((res) => {
+          this.assessmentRequestInfoObject = res.data.data._id
           this.files = res.data.data.files
           this.dialogs = res.data.data.dialogs
         })
