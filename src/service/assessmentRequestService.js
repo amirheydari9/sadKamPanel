@@ -40,11 +40,20 @@ export function assessmentRequestService() {
         }
     }
 
+    const createDialog = async (dialog) => {
+        try {
+            return await axios.post('http://sadkam.lincast.ir/api/assessmentRequest/dialog', dialog)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     return {
         getAllAssessmentRequests,
         getAssessmentRequest,
         getAssessmentRequestByEpisode,
         createAssessmentRequest,
+        createDialog,
         createFile
     }
 }

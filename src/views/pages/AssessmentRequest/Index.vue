@@ -578,6 +578,7 @@
             <v-tab
                 href="#chat"
                 v-if="assessmentRequestInfoObject"
+                @click="handleTab2"
             >فراگیر
             </v-tab>
             <v-tab
@@ -609,7 +610,63 @@
             </v-tab-item>
 
             <v-tab-item class="mt-1" value="chat">
-
+              <v-container>
+                <v-form ref="dialogForm">
+                  <v-row>
+                    <v-col
+                        cols="12"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          v-model="dialogEditedItem.message"
+                          label="متن"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="3"
+                    >
+                      <v-autocomplete
+                          v-model="dialogEditedItem.targetFile"
+                          label="شناسه کوتاه"
+                          :items="targetFiles"
+                          dense
+                      ></v-autocomplete>
+                    </v-col>
+                    <v-btn
+                        color="primary"
+                        depressed
+                        @click="saveDialog"
+                        class="mr-auto"
+                    >
+                      ایجاد پیام
+                    </v-btn>
+                  </v-row>
+                </v-form>
+              </v-container>
+              <v-data-table
+                  :headers="dialogHeaders"
+                  :items="dialogs"
+                  :search="dialogSearch"
+                  no-results-text="اطلاعاتی یافت نشد"
+                  class="elevation-1 w-100 mt-3"
+              >
+                <template v-slot:top>
+                  <v-toolbar
+                      flat
+                  >
+                    <v-text-field
+                        v-model="dialogSearch"
+                        label="جست جو"
+                        single-line
+                        hide-details
+                        autofocus
+                    ></v-text-field>
+                  </v-toolbar>
+                </template>
+              </v-data-table>
             </v-tab-item>
 
             <v-tab-item class="mt-1" value="file">
@@ -781,6 +838,12 @@ export default {
       {text: 'تایید توسط', value: 'submittedBy'},
       {text: 'عملیات', value: 'actions', sortable: false},
     ],
+    dialogHeaders: [
+      {text: 'متن پیام', value: 'message'},
+      {text: 'ارسال کننده', value: 'user.nickname'},
+      {text: 'تاریخ ارسال', value: 'submitDate'},
+      {text: 'شناسه کوتاه', value: 'humanId'},
+    ],
     fileHeaders: [
       {text: 'آدرس فایل', value: 'fileUrl'},
       {text: 'آپلود کننده', value: 'user.nickname'},
@@ -858,6 +921,14 @@ export default {
       accessKey: '',
       secretKey: '',
     },
+    dialogEditedItem: {
+      message: '',
+      targetFile: '',
+    },
+    dialogEditedDefaultItem: {
+      message: '',
+      targetFile: '',
+    },
     breadcrumbs: [
       {
         text: 'داشبورد',
@@ -876,6 +947,7 @@ export default {
     tab1Desc: null,
     assessmentRequestInfoObject: null,
     dialogs: [],
+    targetFiles: [],
     files: [],
     required,
     verifyMobilePhone,
@@ -1021,9 +1093,9 @@ export default {
         } else {
           this.episodeHasAssessmentRequest = true
           assessmentRequestService().getAssessmentRequest(data.data[0]._id).then((res) => {
+            this.assessmentRequestInfoObject = res.data.data
             this.files = res.data.data.files
             this.dialogs = res.data.data.dialogs
-            this.assessmentRequestInfoObject = res.data.data
           })
         }
       })
@@ -1036,11 +1108,25 @@ export default {
       assessmentRequestService().createAssessmentRequest(assessmentRequest).then(({data}) => {
         this.episodeHasAssessmentRequest = true;
         assessmentRequestService().getAssessmentRequest(data.data.id).then((res) => {
-          this.assessmentRequestInfoObject = res.data.data._id
+          this.assessmentRequestInfoObject = res.data.data
           this.files = res.data.data.files
           this.dialogs = res.data.data.dialogs
         })
       })
+    },
+    handleTab2() {
+      this.handleTab1()
+      this.files.forEach(item => this.targetFiles.push(item.humanId))
+    },
+    saveDialog() {
+      if (this.$refs.dialogForm.validate()) {
+        const dialog = {...this.dialogEditedItem, _id: this.assessmentRequestInfoObject._id}
+        assessmentRequestService().createDialog(dialog).then(() => {
+          this.handleTab1()
+          this.$refs.dialogForm.reset();
+          this.$refs.dialogForm.resetValidation();
+        })
+      }
     },
 
     handleTab3() {
@@ -1066,7 +1152,13 @@ export default {
         this.episodeIdForTab1 = null;
         this.assessmentRequestInfoObject = null;
         this.fileEditedItem = Object.assign({}, this.fileEditedDefaultItem)
+        this.dialogEditedItem = Object.assign({}, this.dialogEditedDefaultItem)
+        this.$refs.dialogForm.reset();
+        this.$refs.dialogForm.resetValidation();
+        this.$refs.fileForm.reset();
+        this.$refs.fileForm.resetValidation();
         this.dialogs = [];
+        this.targetFiles = [];
         this.files = [];
         this.tabsDialog = false;
       })
