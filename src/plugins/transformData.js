@@ -1,20 +1,10 @@
 import store from "../store/store";
-// import {entryType} from "./constant";
+import {entryType} from './constant';
 import moment from 'moment-jalaali'
 
 moment.loadPersian({
     usePersianDigits: true
 })
-const entryTypes = [
-    {
-        "en": "single",
-        "fa": "تکی"
-    },
-    {
-        "en": "multiple",
-        "fa": "چندتایی"
-    }
-]
 
 export const transformRoles = (value) => {
     const roles = []
@@ -38,8 +28,8 @@ export const transformOrganization = (value) => {
 }
 
 export const transformEntryType = (value) => {
-    const entryType = entryTypes.find(item => item.en === value)
-    return entryType ? entryType.fa : value
+    const enType = entryType.find(item => item.en === value)
+    return enType ? entryType.fa : value
 }
 export const transformTitleType = (value) => {
     const titleType = store.getters['product/getTitleTypes'].find(item => item.en === value)
