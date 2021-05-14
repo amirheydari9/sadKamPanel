@@ -40,8 +40,8 @@ export default {
   data() {
     return {
       form: {
-        phone: '09129329989',
-        // phone: '',
+        // phone: '09129329989',
+        phone: '',
       },
       required,
       moreThan
