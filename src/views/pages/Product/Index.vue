@@ -470,8 +470,13 @@ export default {
     isSuperAdmin() {
       return permission().isSuperAdmin()
     },
-    products() {
-      return this.$store.getters['product/getProducts']
+    products:{
+      get() {
+        return this.$store.getters['product/getProducts']
+      },
+      set(value) {
+        return this.$store.commit('product/SET_PRODUCTS', value)
+      }
     },
     generes() {
       return this.$store.getters['product/getGeneres']
@@ -531,8 +536,9 @@ export default {
           })
         } else {
           productService().createProduct(this.editedItem).then(() => {
-            this.products.push(this.editedItem)
-            this.close()
+            this.$store.dispatch('product/fetchAllProducts').then(() => {
+              this.close()
+            })
           })
         }
       }

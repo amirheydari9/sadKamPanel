@@ -4,7 +4,7 @@ export function organizationService() {
 
     const getAllOrganization = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/api/organizations')
+            return await axios.get('http://sadkam.lincast.ir/api/organizations?count=100')
         } catch (e) {
             console.log(e)
         }

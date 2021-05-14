@@ -209,8 +209,13 @@ export default {
     this.$store.commit('SET_BREADCRUMBS', this.breadcrumbs)
   },
   computed: {
-    organizations() {
-      return this.$store.getters['getOrganizations']
+    organizations:{
+      get() {
+        return this.$store.getters['getOrganizations']
+      },
+      set(value) {
+        return this.$store.commit('SET_ORGANIZATIONS', value)
+      }
     },
     organizationType() {
       return this.$store.getters['getOrganizationTypes']
@@ -263,8 +268,9 @@ export default {
           })
         } else {
           organizationService().createOrganization(this.editedItem).then(() => {
-            this.organizations.push(this.editedItem)
-            this.close()
+            this.$store.dispatch('fetchOrganizations').then(() => {
+              this.close()
+            })
           })
         }
       }

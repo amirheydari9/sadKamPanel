@@ -321,8 +321,14 @@ export default {
     isSuperAdmin() {
       return permission().isSuperAdmin()
     },
-    episodes() {
-      return this.$store.getters['episode/getEpisodes']
+    episodes:{
+      // return this.$store.getters['episode/getEpisodes']
+      get() {
+        return this.$store.getters['episode/getEpisodes']
+      },
+      set(value) {
+        return this.$store.commit('episode/SET_EPISODES', value)
+      }
     },
     products() {
       return this.$store.getters['product/getProducts']
@@ -402,7 +408,7 @@ export default {
           })
         } else {
           episodeService().createEpisode(this.editedItem).then(() => {
-            this.episodes.push(this.editedItem)
+            this.$store.dispatch('episode/fetchAllEpisodes',this.editedItem.parent)
             this.close()
           })
         }

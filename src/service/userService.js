@@ -4,7 +4,7 @@ export function userService() {
 
     const getAllUsers = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/api/users')
+            return await axios.get('http://sadkam.lincast.ir/api/users?count=100')
         } catch (e) {
             console.log(e)
         }
