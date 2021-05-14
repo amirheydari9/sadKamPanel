@@ -304,7 +304,7 @@
     <!--    ایجاد اپیزود-->
     <v-dialog
         v-model="episodeDialog"
-        max-width="600px"
+        max-width="800px"
         persistent
     >
       <!--      <template v-slot:activator="{ on, attrs }">-->
@@ -551,7 +551,7 @@
     <v-dialog
         v-model="tabsDialog"
         persistent
-        max-width="600px"
+        max-width="800px"
     >
       <v-card>
         <v-card-text>
@@ -563,10 +563,12 @@
             </v-tab>
             <v-tab
                 href="#chat"
+                v-if="assessmentRequestInfoObject"
             >فراگیر
             </v-tab>
             <v-tab
                 href="#file"
+                v-if="assessmentRequestInfoObject"
                 @click="handleTab3"
             >فایل
             </v-tab>
@@ -662,13 +664,19 @@
                   class="elevation-1 w-100 mt-3"
               >
                 <template v-slot:item.actions="{ item }">
-                  <v-icon
+                  <v-btn
                       small
-                      class="mr-2"
-                      @click="downloadFile(item)"
+                      download
+                      :href="item.fileUrl"
+                      class="ma-2"
+                      outlined
                   >
-                    mdi-cloud
-                  </v-icon>
+                   <v-icon
+                       small
+                   >
+                     mdi-cloud
+                   </v-icon>
+                  </v-btn>
                 </template>
               </v-data-table>
             </v-tab-item>
@@ -742,8 +750,10 @@ export default {
     ],
     fileHeaders: [
       {text: 'آدرس فایل', value: 'fileUrl'},
-      {text: 'accessKey', value: 'accessKey'},
-      {text: 'secretKey', value: 'secretKey'},
+      {text: 'آپلود کننده', value: 'user.nickname'},
+      {text: 'تاریخ ارسال', value: 'submitDate'},
+      {text: 'شناسه کوتاه', value: 'humanId'},
+      {text: 'مدت زمان', value: 'duration'},
       {text: 'توضیحات', value: 'dec'},
       {text: 'عملیات', value: 'actions', sortable: false},
     ],
@@ -825,6 +835,7 @@ export default {
     episodeIdForTab1: null,
     episodeHasAssessmentRequest: false,
     tab1Desc: null,
+    assessmentRequestInfoObject: null,
     dialogs: [],
     files: [],
     required,
@@ -969,8 +980,10 @@ export default {
       assessmentRequestService().getAssessmentRequestByEpisode(this.episodeIdForTab1).then(({data}) => {
         if (data.data.length === 0) {
           this.episodeHasAssessmentRequest = false
+          this.assessmentRequestInfoObject = null
         } else {
           this.episodeHasAssessmentRequest = true
+          this.assessmentRequestInfoObject = data.data[0]
           assessmentRequestService().getAssessmentRequest(data.data[0]._id).then((res) => {
             this.files = res.data.data.files
             this.dialogs = res.data.data.dialogs
@@ -992,20 +1005,20 @@ export default {
       })
     },
 
-    handleTab3(){
+    handleTab3() {
       this.handleTab1()
     },
     uploadFile() {
       if (this.$refs.fileForm.validate()) {
-        const file = {...this.fileEditedItem, _id:this.episodeIdForTab1}
+        const file = {...this.fileEditedItem, _id: this.assessmentRequestInfoObject._id}
         assessmentRequestService().createFile(file).then(() => {
           this.handleTab1()
         })
       }
     },
 
-    downloadFile(item){
-      console.log(item,'file')
+    downloadFile(item) {
+      console.log(item, 'file')
     },
     handleTabsDialogInEpisodeList(item) {
       this.episodeIdForTab1 = item._id
@@ -1013,6 +1026,7 @@ export default {
     },
     closeTabs() {
       this.episodeIdForTab1 = null;
+      this.assessmentRequestInfoObject = null;
       this.dialogs = [];
       this.files = [];
       this.tabsDialog = false;
