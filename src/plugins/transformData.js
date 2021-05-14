@@ -1,6 +1,7 @@
 import store from "../store/store";
 // import {entryType} from "./constant";
 import moment from 'moment-jalaali'
+
 moment.loadPersian({
     usePersianDigits: true
 })
@@ -19,7 +20,9 @@ export const transformRoles = (value) => {
     const roles = []
     value.forEach(item => {
         const role = store.getters['getAllRoles'].find(i => i.role === item)
-        roles.push(role.fa)
+        if (role) {
+            roles.push(role.fa)
+        }
     })
     return roles.length ? roles.join(',') : value.organizationRoles
 }

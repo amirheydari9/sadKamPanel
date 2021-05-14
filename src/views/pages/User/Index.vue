@@ -184,7 +184,7 @@
 <script>
 import {required, verifyMobilePhone, verifyUserName, multiSelectRequired} from "../../../plugins/rule";
 import {userService} from "../../../service/userService";
-import {transformOrganizationType, transformRoles,transformOrganization} from '../../../plugins/transformData'
+import {transformOrganizationType, transformRoles, transformOrganization} from '../../../plugins/transformData'
 import {permission} from "../../../plugins/permission";
 
 export default {
@@ -257,8 +257,13 @@ export default {
     currentUser() {
       return this.$store.getters['getCurrentUser']
     },
-    users() {
-      return this.$store.getters['getUsers']
+    users: {
+      get() {
+        return this.$store.getters['getUsers']
+      },
+      set(value) {
+        return this.$store.commit('SET_USERS', value)
+      }
     },
     organizationList() {
       return this.$store.getters['getOrganizations']
@@ -324,8 +329,9 @@ export default {
           })
         } else {
           userService().createUser(this.editedItem).then(() => {
-            this.users.push(this.editedItem)
-            this.close()
+            this.$store.dispatch('fetchUsers').then(() => {
+              this.close()
+            })
           })
         }
       }
