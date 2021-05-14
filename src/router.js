@@ -17,6 +17,11 @@ const routes = new Router({
     base: process.env.BASE_URL,
     routes: [
         {
+            path: '/test',
+            name: 'Test',
+            component: () => import('@/views/pages/Test.vue'),
+        },
+        {
             path: '/login',
             name: 'Login',
             component: Login,

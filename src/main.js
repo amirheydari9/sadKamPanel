@@ -6,6 +6,12 @@ import store from './store/store'
 import './plugins/base'
 import VueCookies from 'vue-cookies'
 import axios from './plugins/axios'
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast,{
+    position: 'top'
+});
 
 Vue.use(VueCookies)
 window.axios = axios
