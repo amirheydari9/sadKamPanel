@@ -29,7 +29,7 @@ export const transformOrganization = (value) => {
 
 export const transformEntryType = (value) => {
     const enType = entryType.find(item => item.en === value)
-    return enType ? entryType.fa : value
+    return enType ? enType.fa : value
 }
 export const transformTitleType = (value) => {
     const titleType = store.getters['product/getTitleTypes'].find(item => item.en === value)

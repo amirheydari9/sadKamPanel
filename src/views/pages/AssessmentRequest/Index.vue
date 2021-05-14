@@ -428,13 +428,17 @@
                     cols="12"
                     sm="6"
                 >
-                  <v-text-field
-                      :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                      v-model="episodeEditedItem.releaseDate"
-                      label="زمان انتشار"
-                  ></v-text-field>
+<!--                  <v-text-field-->
+<!--                      :rules="[-->
+<!--                            required('این فیلد الزامی است'),-->
+<!--                            ]"-->
+<!--                      v-model="episodeEditedItem.releaseDate"-->
+<!--                      label="زمان انتشار"-->
+<!--                  ></v-text-field>-->
+                  <date-picker
+                      :autoSubmit="true"
+                      placeholder='زمان انتشار'
+                      v-model="episodeEditedItem.releaseDate" style="margin-top: 20px !important;"></date-picker>
                 </v-col>
                 <v-col
                     cols="12"
@@ -838,7 +842,7 @@ import {
   transformOrganization,
   transformDateToJalali,
   transformTitleType,
-  transformEntryType
+  transformEntryType, transformJalaliDateToGeorgian
 } from "../../../plugins/transformData";
 import {permission} from "../../../plugins/permission";
 import axios from 'axios'
@@ -846,9 +850,14 @@ import {productService} from "../../../service/productService";
 import {entryType} from "../../../plugins/constant";
 import {episodeService} from "../../../service/episodeService";
 import {assessmentRequestService} from "../../../service/assessmentRequestService";
+import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
+
 
 export default {
   name: "Index",
+  components: {
+    datePicker: VuePersianDatetimePicker
+  },
   data: () => ({
     productDialog: false,
     episodeListDialog: false,
@@ -1113,6 +1122,7 @@ export default {
 
     saveEpisode() {
       if (this.$refs.episodeForm.validate()) {
+        this.episodeEditedItem = {...this.episodeEditedItem,releaseDate:new Date(transformJalaliDateToGeorgian(this.episodeEditedItem.releaseDate)).getTime()}
         episodeService().createEpisode(this.episodeEditedItem).then(() => {
           episodeService().getAllEpisodes(this.episodeEditedItem.parent).then(({data}) => {
             this.episodes = data.data
