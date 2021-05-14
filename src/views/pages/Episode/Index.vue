@@ -45,6 +45,7 @@
                   class="mb-2"
                   v-bind="attrs"
                   v-on="on"
+                  v-show="entryTypeIsMultiple"
               >
                 افزودن اپیزود جدید
               </v-btn>
@@ -147,43 +148,23 @@
                             v-model="editedItem.releaseDate"
                             label="زمان انتشار"
                         ></v-text-field>
-<!--                        <v-menu-->
-<!--                            v-model="editedItem.releaseDate"-->
-<!--                            :close-on-content-click="false"-->
-<!--                            lazy-->
-<!--                            transition="scale-transition"-->
-<!--                            offset-y-->
-<!--                            full-width-->
-<!--                            max-width="290px"-->
-<!--                            min-width="290px"-->
-<!--                        >-->
-<!--                          <template v-slot:activator="{ on }">-->
-<!--                            <v-text-field-->
-<!--                                label="زمان انتشار"-->
-<!--                                readonly-->
-<!--                                v-on="on"-->
-<!--                            ></v-text-field>-->
-<!--                          </template>-->
-<!--                          <v-date-picker-->
-<!--                              no-title-->
-<!--                              @input="fromDateMenu = false"-->
-<!--                          ></v-date-picker>-->
-<!--                        </v-menu>-->
                       </v-col>
                       <v-col
                           cols="12"
                           sm="6"
                       >
                         <v-autocomplete
-                            v-model="editedItem.parent"
                             :rules="[
                             required('این فیلد الزامی است'),
                             ]"
+                            :loading="isDialogLoading"
+                            :items="dialogFilteredProducts"
+                            :search-input.sync="dialogProductSearch"
+                            item-text="enTitle"
+                            :item-value="editedItem.parent"
                             label="نام محصول"
-                            :items="products"
-                            item-text="faTitle"
-                            item-value="_id"
-                            dense
+                            return-object
+                            @change="handleDialogProductName"
                         ></v-autocomplete>
                       </v-col>
                       <v-col
@@ -259,7 +240,7 @@
 
 <script>
 import {required, verifyMobilePhone, verifyUserName} from "../../../plugins/rule";
-import {transformOrganization,transformDateToJalali} from "../../../plugins/transformData";
+import {transformOrganization, transformDateToJalali} from "../../../plugins/transformData";
 import {permission} from "../../../plugins/permission";
 import axios from 'axios'
 import {episodeService} from "../../../service/episodeService";
@@ -271,8 +252,11 @@ export default {
     dialogDelete: false,
     entryTypeIsMultiple: true,
     isLoading: false,
+    isDialogLoading: false,
     productSearch: null,
+    dialogProductSearch: null,
     filteredProducts: [],
+    dialogFilteredProducts: [],
     productIsAvailable: false,
     search: '',
     headers: [
@@ -343,7 +327,7 @@ export default {
     isSuperAdmin() {
       return permission().isSuperAdmin()
     },
-    episodes:{
+    episodes: {
       // return this.$store.getters['episode/getEpisodes']
       get() {
         return this.$store.getters['episode/getEpisodes']
@@ -380,9 +364,25 @@ export default {
       this.isLoading = true;
       axios.get(`http://sadkam.lincast.ir/api/products/search/${value}`)
           .then(({data}) => {
-            this.filteredProducts = data.data
+            if (data.data && data.data.length) {
+              const filteredData = data.data.filter(item => item.entryType === 'multiple')
+              this.filteredProducts = filteredData
+            }
           })
           .finally(() => this.isLoading = false)
+    },
+    dialogProductSearch(value) {
+      if (value && value.length <= 0) return;
+      if (this.isDialogLoading) return;
+      this.isDialogLoading = true;
+      axios.get(`http://sadkam.lincast.ir/api/products/search/${value}`)
+          .then(({data}) => {
+            if (data.data && data.data.length) {
+              const filteredData = data.data.filter(item => item.entryType === 'multiple')
+              this.dialogFilteredProducts = filteredData
+            }
+          })
+          .finally(() => this.isDialogLoading = false)
     }
   },
 
@@ -398,7 +398,7 @@ export default {
       this.$store.dispatch('episode/fetchAllEpisodes', event._id)
     },
     editItem(item) {
-      console.log(this.episodes)
+      console.log(this.episodes, 'edit')
       this.editedIndex = this.episodes.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
@@ -430,12 +430,16 @@ export default {
           })
         } else {
           episodeService().createEpisode(this.editedItem).then(() => {
-            this.$store.dispatch('episode/fetchAllEpisodes',this.editedItem.parent)
+            this.$store.dispatch('episode/fetchAllEpisodes', this.editedItem.parent)
             this.close()
           })
         }
       }
     },
+    handleDialogProductName(event) {
+      console.log(event, 'event');
+      this.editedItem.parent = event._id
+    }
   },
 }
 </script>
