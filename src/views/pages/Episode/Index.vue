@@ -147,6 +147,28 @@
                             v-model="editedItem.releaseDate"
                             label="زمان انتشار"
                         ></v-text-field>
+<!--                        <v-menu-->
+<!--                            v-model="editedItem.releaseDate"-->
+<!--                            :close-on-content-click="false"-->
+<!--                            lazy-->
+<!--                            transition="scale-transition"-->
+<!--                            offset-y-->
+<!--                            full-width-->
+<!--                            max-width="290px"-->
+<!--                            min-width="290px"-->
+<!--                        >-->
+<!--                          <template v-slot:activator="{ on }">-->
+<!--                            <v-text-field-->
+<!--                                label="زمان انتشار"-->
+<!--                                readonly-->
+<!--                                v-on="on"-->
+<!--                            ></v-text-field>-->
+<!--                          </template>-->
+<!--                          <v-date-picker-->
+<!--                              no-title-->
+<!--                              @input="fromDateMenu = false"-->
+<!--                          ></v-date-picker>-->
+<!--                        </v-menu>-->
                       </v-col>
                       <v-col
                           cols="12"
