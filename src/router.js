@@ -84,7 +84,7 @@ const routes = new Router({
                     path: '/assessmentRequest',
                     component: () => import('@/views/pages/AssessmentRequest/Index.vue'),
                     meta: {
-                        permission: 'orders'
+                        hasAssessmentRequestPermission: true
                     }
                 },
 
@@ -120,6 +120,14 @@ routes.beforeEach(async (to, from, next) => {
 
     if (store.getters['getCurrentUser'] && to.meta.isSuperAdmin) {
         if (permission().isSuperAdmin()) {
+            return next();
+        } else {
+            await store.dispatch('logout');
+            return next({name: 'Login'});
+        }
+    }
+    if (store.getters['getCurrentUser'] && to.meta.hasAssessmentRequestPermission) {
+        if (permission().hasAssessmentRequestPermission()) {
             return next();
         } else {
             await store.dispatch('logout');

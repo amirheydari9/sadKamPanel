@@ -108,6 +108,26 @@ export function permission() {
         }
     }
 
+    const isSecretariant = () => {
+        if (store.getters['getCurrentUser']) {
+            return (
+                store.getters['getCurrentUser'].organizationType === 'secretariant'
+            )
+        } else {
+            return false
+        }
+    }
+
+    const hasAssessmentRequestPermission = () => {
+        if (store.getters['getCurrentUser']) {
+            return (
+                store.getters['getCurrentUser'].organizationType !== 'secretariant'
+            )
+        } else {
+            return false
+        }
+    }
+
     return {
         can,
         isSuperAdmin,
@@ -115,5 +135,7 @@ export function permission() {
         isUserManager,
         isFinancial,
         isOrders,
+        isSecretariant,
+        hasAssessmentRequestPermission
     }
 }
