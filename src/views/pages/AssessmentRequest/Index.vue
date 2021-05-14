@@ -670,6 +670,7 @@
                       :href="item.fileUrl"
                       class="ma-2"
                       outlined
+                      flat
                   >
                    <v-icon
                        small
@@ -1013,6 +1014,8 @@ export default {
         const file = {...this.fileEditedItem, _id: this.assessmentRequestInfoObject._id}
         assessmentRequestService().createFile(file).then(() => {
           this.handleTab1()
+          this.$refs.fileForm.reset();
+          this.$refs.fileForm.resetValidation();
         })
       }
     },
