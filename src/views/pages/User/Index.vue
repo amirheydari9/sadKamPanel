@@ -155,13 +155,13 @@
       </v-toolbar>
     </template>
     <template v-slot:item.organizationRoles="{ item }">
-      {{ transformRoles(item) }}
+      {{ transformRoles(item.organizationRoles) }}
     </template>
     <template v-slot:item.organizationType="{ item }">
-      {{ transformOrganizationType(item) }}
+      {{ transformOrganizationType(item.organizationType) }}
     </template>
     <template v-slot:item.organization="{ item }">
-      {{ transformOrganization(item) }}
+      {{ transformOrganization(item.organization) }}
     </template>
     <template v-slot:item.active="{ item }">
       <v-simple-checkbox
@@ -198,7 +198,7 @@ export default {
       {text: 'شماره تماس', value: 'phone'},
       {text: 'سطح دسترسی', value: 'organizationRoles'},
       {text: 'نوع سازمان', value: 'organizationType'},
-      {text: 'نام سازمان', value: 'organization'},
+      {text: 'نام سازمان', value: 'organization.name'},
       {text: 'فعال بودن', value: 'active'},
       {text: 'عملیات', value: 'actions', sortable: false},
     ],

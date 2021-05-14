@@ -303,6 +303,15 @@
           ></v-text-field>
         </v-toolbar>
       </template>
+      <template v-slot:item.entryType="{ item }">
+        {{ transformEntryType(item.entryType) }}
+      </template>
+      <template v-slot:item.titleType="{ item }">
+        {{ transformTitleType(item.titleType) }}
+      </template>
+      <template v-slot:item.lastUpdate="{ item }">
+        {{ transformDateToJalali(item.lastUpdate) }}
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-icon
             small
@@ -532,9 +541,12 @@
                 </template>
               </v-toolbar>
             </template>
-            <!--      <template v-slot:item.organizationType="{ item }">-->
-            <!--        {{ transformOrganizationType(item) }}-->
-            <!--      </template>-->
+            <template v-slot:item.submittedBy="{ item }">
+              {{ transformOrganization(item.submittedBy) }}
+            </template>
+            <template v-slot:item.releaseDate="{ item }">
+              {{ transformDateToJalali(item.releaseDate) }}
+            </template>
             <template v-slot:item.actions="{item}">
               <v-icon
                   small
@@ -565,7 +577,6 @@
         v-model="tabsDialog"
         persistent
         max-width="800px"
-        height="500px"
     >
       <v-card>
         <v-card-text>
@@ -666,6 +677,9 @@
                     ></v-text-field>
                   </v-toolbar>
                 </template>
+                <template v-slot:item.submitDate="{ item }">
+                  {{ transformDateToJalali(item.submitDate) }}
+                </template>
               </v-data-table>
             </v-tab-item>
 
@@ -749,6 +763,9 @@
                     ></v-text-field>
                   </v-toolbar>
                 </template>
+                <template v-slot:item.submitDate="{ item }">
+                  {{ transformDateToJalali(item.submitDate) }}
+                </template>
                 <template v-slot:item.actions="{ item }">
                   <v-btn
                       small
@@ -790,7 +807,7 @@
 
 <script>
 import {required, verifyMobilePhone, verifyUserName, multiSelectRequired} from "../../../plugins/rule";
-import {transformOrganizationType} from "../../../plugins/transformData";
+import {transformOrganization,transformDateToJalali,transformTitleType,transformEntryType} from "../../../plugins/transformData";
 import {permission} from "../../../plugins/permission";
 import axios from 'axios'
 import {productService} from "../../../service/productService";
@@ -952,8 +969,11 @@ export default {
     required,
     verifyMobilePhone,
     verifyUserName,
-    transformOrganizationType,
+    transformOrganization,
     multiSelectRequired,
+    transformDateToJalali,
+    transformTitleType,
+    transformEntryType,
     entryType,
   }),
   mounted() {
@@ -1153,10 +1173,14 @@ export default {
         this.assessmentRequestInfoObject = null;
         this.fileEditedItem = Object.assign({}, this.fileEditedDefaultItem)
         this.dialogEditedItem = Object.assign({}, this.dialogEditedDefaultItem)
-        this.$refs.dialogForm.reset();
-        this.$refs.dialogForm.resetValidation();
-        this.$refs.fileForm.reset();
-        this.$refs.fileForm.resetValidation();
+        if(this.$refs.dialogForm){
+          this.$refs.dialogForm.reset();
+          this.$refs.dialogForm.resetValidation();
+        }
+        if(this.$refs.fileForm){
+          this.$refs.fileForm.reset();
+          this.$refs.fileForm.resetValidation();
+        }
         this.dialogs = [];
         this.targetFiles = [];
         this.files = [];

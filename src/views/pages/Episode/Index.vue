@@ -216,9 +216,12 @@
           </v-dialog>
         </v-toolbar>
       </template>
-      <!--      <template v-slot:item.organizationType="{ item }">-->
-      <!--        {{ transformOrganizationType(item) }}-->
-      <!--      </template>-->
+      <template v-slot:item.submittedBy="{ item }">
+        {{ transformOrganization(item.submittedBy) }}
+      </template>
+      <template v-slot:item.releaseDate="{ item }">
+        {{ transformDateToJalali(item.releaseDate) }}
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-icon
             small
@@ -234,7 +237,7 @@
 
 <script>
 import {required, verifyMobilePhone, verifyUserName} from "../../../plugins/rule";
-import {transformOrganizationType} from "../../../plugins/transformData";
+import {transformOrganization,transformDateToJalali} from "../../../plugins/transformData";
 import {permission} from "../../../plugins/permission";
 import axios from 'axios'
 import {episodeService} from "../../../service/episodeService";
@@ -303,7 +306,8 @@ export default {
     required,
     verifyMobilePhone,
     verifyUserName,
-    transformOrganizationType
+    transformOrganization,
+    transformDateToJalali
   }),
   mounted() {
     this.$store.dispatch('product/fetchAllProducts')

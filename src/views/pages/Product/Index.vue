@@ -349,10 +349,13 @@
       </v-toolbar>
     </template>
     <template v-slot:item.entryType="{ item }">
-      {{ transformEntryType(item) }}
+      {{ transformEntryType(item.entryType) }}
     </template>
     <template v-slot:item.titleType="{ item }">
-      {{ transformTitleType(item) }}
+      {{ transformTitleType(item.titleType) }}
+    </template>
+    <template v-slot:item.lastUpdate="{ item }">
+      {{ transformDateToJalali(item.lastUpdate) }}
     </template>
     <template v-slot:item.active="{ item }">
       <v-simple-checkbox
@@ -376,7 +379,7 @@
 import {required, verifyMobilePhone, verifyUserName, multiSelectRequired, length} from "../../../plugins/rule";
 import {productService} from "../../../service/productService";
 import {entryType} from '../../../plugins/constant'
-import {transformEntryType,transformTitleType} from '../../../plugins/transformData'
+import {transformEntryType,transformTitleType,transformDateToJalali} from '../../../plugins/transformData'
 import {permission} from "../../../plugins/permission";
 
 export default {
@@ -453,7 +456,8 @@ export default {
     length,
     entryType,
     transformEntryType,
-    transformTitleType
+    transformTitleType,
+    transformDateToJalali
   }),
   mounted() {
     this.$store.dispatch('fetchOrganizations')

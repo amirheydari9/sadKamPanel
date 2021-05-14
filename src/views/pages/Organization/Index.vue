@@ -137,7 +137,7 @@
       ></v-simple-checkbox>
     </template>
     <template v-slot:item.organizationType="{ item }">
-      {{ transformOrganizationType(item) }}
+      {{ transformOrganizationType(item.organizationType) }}
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
