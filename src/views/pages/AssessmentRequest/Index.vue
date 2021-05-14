@@ -605,7 +605,32 @@
 
             <v-tab-item class="mt-5" value="assessment">
               <v-col cols="12">
-                <template v-if="!episodeHasAssessmentRequest">
+                <template v-if="assessmentRequestInfoObject">
+                  <v-row>
+                    <v-col cols="12" sm="4">
+                      <v-text-field
+                          v-model="assessmentRequestInfoObject.status"
+                          label="وضعیت"
+                          readonly
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="4">
+                      <v-text-field
+                          :value="transformDateToJalali(assessmentRequestInfoObject.submitDate)"
+                          label="تاریخ ثبت درخواست"
+                          readonly
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="4">
+                      <v-text-field
+                          v-model="assessmentRequestInfoObject.description"
+                          label="توضیحات"
+                          readonly
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </template>
+                <template v-else>
                   <v-text-field
                       v-model="tab1Desc"
                       outlined
