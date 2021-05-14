@@ -567,6 +567,7 @@
             </v-tab>
             <v-tab
                 href="#file"
+                @click="handleTab3"
             >فایل
             </v-tab>
           </v-tabs>
@@ -590,12 +591,86 @@
               </v-col>
             </v-tab-item>
 
-            <v-tab-item class="mt-5" value="chat">
-              <p>تب 2</p>
+            <v-tab-item class="mt-1" value="chat">
+
             </v-tab-item>
 
-            <v-tab-item class="mt-5" value="file">
-              <p>تب 3</p>
+            <v-tab-item class="mt-1" value="file">
+              <v-container>
+                <v-form ref="fileForm">
+                  <v-row>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          v-model="fileEditedItem.fileUrl"
+                          label="آدرس فایل"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          v-model="fileEditedItem.accessKey"
+                          label="accessKey"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          v-model="fileEditedItem.secretKey"
+                          label="secretKey"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-text-field
+                          v-model="fileEditedItem.dec"
+                          label="توضیحات"
+                      ></v-text-field>
+                    </v-col>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="primary"
+                        depressed
+                        @click="uploadFile"
+                    >
+                      ارسال فایل
+                    </v-btn>
+                  </v-row>
+                </v-form>
+              </v-container>
+              <v-data-table
+                  :headers="fileHeaders"
+                  :items="files"
+                  no-results-text="اطلاعاتی یافت نشد"
+                  class="elevation-1 w-100 mt-3"
+              >
+                <template v-slot:item.actions="{ item }">
+                  <v-icon
+                      small
+                      class="mr-2"
+                      @click="downloadFile(item)"
+                  >
+                    mdi-cloud
+                  </v-icon>
+                </template>
+              </v-data-table>
             </v-tab-item>
 
           </v-tabs-items>
@@ -665,6 +740,13 @@ export default {
       {text: 'تایید توسط', value: 'submittedBy'},
       {text: 'عملیات', value: 'actions', sortable: false},
     ],
+    fileHeaders: [
+      {text: 'آدرس فایل', value: 'fileUrl'},
+      {text: 'accessKey', value: 'accessKey'},
+      {text: 'secretKey', value: 'secretKey'},
+      {text: 'توضیحات', value: 'dec'},
+      {text: 'عملیات', value: 'actions', sortable: false},
+    ],
     productEditedIndex: -1,
     episodeEditedIndex: -1,
     productEditedItem: {
@@ -720,6 +802,12 @@ export default {
       episodeNumber: '',
       rate: '',
       description: ''
+    },
+    fileEditedItem: {
+      dec: '',
+      fileUrl: '',
+      accessKey: '',
+      secretKey: '',
     },
     breadcrumbs: [
       {
@@ -902,6 +990,22 @@ export default {
           this.dialogs = res.data.data.dialogs
         })
       })
+    },
+
+    handleTab3(){
+      this.handleTab1()
+    },
+    uploadFile() {
+      if (this.$refs.fileForm.validate()) {
+        const file = {...this.fileEditedItem, _id:this.episodeIdForTab1}
+        assessmentRequestService().createFile(file).then(() => {
+          this.handleTab1()
+        })
+      }
+    },
+
+    downloadFile(item){
+      console.log(item,'file')
     },
     handleTabsDialogInEpisodeList(item) {
       this.episodeIdForTab1 = item._id

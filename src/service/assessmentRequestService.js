@@ -26,7 +26,15 @@ export function assessmentRequestService() {
 
     const createAssessmentRequest = async (assessmentRequest) => {
         try {
-           return await axios.post('http://sadkam.lincast.ir/api/assessmentRequest', assessmentRequest)
+            return await axios.post('http://sadkam.lincast.ir/api/assessmentRequest', assessmentRequest)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const createFile = async (file) => {
+        try {
+            return await axios.post('http://sadkam.lincast.ir/api/assessmentRequest/file', file)
         } catch (e) {
             console.log(e)
         }
@@ -37,5 +45,6 @@ export function assessmentRequestService() {
         getAssessmentRequest,
         getAssessmentRequestByEpisode,
         createAssessmentRequest,
+        createFile
     }
 }
