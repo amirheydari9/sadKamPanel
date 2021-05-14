@@ -290,6 +290,19 @@
         no-results-text="اطلاعاتی یافت نشد"
         class="elevation-1 w-100"
     >
+      <template v-slot:top>
+        <v-toolbar
+            flat
+        >
+          <v-text-field
+              v-model="search"
+              label="جست جو"
+              single-line
+              hide-details
+              autofocus
+          ></v-text-field>
+        </v-toolbar>
+      </template>
       <template v-slot:item.actions="{ item }">
         <v-icon
             small
@@ -491,7 +504,7 @@
           <v-data-table
               :headers="episodeHeaders"
               :items="episodes"
-              :search="search"
+              :search="episodeSearch"
               no-results-text="اطلاعاتی یافت نشد"
               class="elevation-1 w-100"
           >
@@ -500,7 +513,7 @@
                   flat
               >
                 <v-text-field
-                    v-model="search"
+                    v-model="episodeSearch"
                     label="جست جو"
                     single-line
                     hide-details
@@ -648,11 +661,11 @@
                           label="توضیحات"
                       ></v-text-field>
                     </v-col>
-                    <v-spacer></v-spacer>
                     <v-btn
                         color="primary"
                         depressed
                         @click="saveFile"
+                        class="mr-auto"
                     >
                       ارسال فایل
                     </v-btn>
@@ -662,9 +675,23 @@
               <v-data-table
                   :headers="fileHeaders"
                   :items="files"
+                  :search="fileSearch"
                   no-results-text="اطلاعاتی یافت نشد"
                   class="elevation-1 w-100 mt-3"
               >
+                <template v-slot:top>
+                  <v-toolbar
+                      flat
+                  >
+                    <v-text-field
+                        v-model="fileSearch"
+                        label="جست جو"
+                        single-line
+                        hide-details
+                        autofocus
+                    ></v-text-field>
+                  </v-toolbar>
+                </template>
                 <template v-slot:item.actions="{ item }">
                   <v-btn
                       small
@@ -728,6 +755,9 @@ export default {
     productIdForHandleEpisode: null,
     tabsMenu: null,
     search: '',
+    episodeSearch: '',
+    dialogSearch: '',
+    fileSearch: '',
     productHeaders: [
       {text: 'نام انگلسیی', value: 'enTitle',},
       {text: 'نام فارسی', value: 'faTitle'},
