@@ -552,7 +552,7 @@
         v-model="tabsDialog"
         persistent
         max-width="800px"
-       height="500px"
+        height="500px"
     >
       <v-card>
         <v-card-text>
@@ -652,7 +652,7 @@
                     <v-btn
                         color="primary"
                         depressed
-                        @click="uploadFile"
+                        @click="saveFile"
                     >
                       ارسال فایل
                     </v-btn>
@@ -674,11 +674,11 @@
                       outlined
                       flat
                   >
-                   <v-icon
-                       small
-                   >
-                     mdi-cloud
-                   </v-icon>
+                    <v-icon
+                        small
+                    >
+                      mdi-cloud
+                    </v-icon>
                   </v-btn>
                 </template>
               </v-data-table>
@@ -822,6 +822,12 @@ export default {
       accessKey: '',
       secretKey: '',
     },
+    fileEditedDefaultItem: {
+      dec: '',
+      fileUrl: '',
+      accessKey: '',
+      secretKey: '',
+    },
     breadcrumbs: [
       {
         text: 'داشبورد',
@@ -953,7 +959,6 @@ export default {
 
     saveEpisode() {
       if (this.$refs.episodeForm.validate()) {
-        console.log(this.episodeEditedItem, 'amir')
         episodeService().createEpisode(this.episodeEditedItem).then(() => {
           episodeService().getAllEpisodes(this.episodeEditedItem.parent).then(({data}) => {
             this.episodes = data.data
@@ -964,7 +969,6 @@ export default {
     },
 
     assessmentRequest(item) {
-      console.log(item, 'item')
       if (item.entryType === 'single') {
         episodeService().getAllEpisodes(item._id).then(({data}) => {
           this.episodeIdForTab1 = data.data[0]._id
@@ -1012,7 +1016,7 @@ export default {
     handleTab3() {
       this.handleTab1()
     },
-    uploadFile() {
+    saveFile() {
       if (this.$refs.fileForm.validate()) {
         const file = {...this.fileEditedItem, _id: this.assessmentRequestInfoObject._id}
         assessmentRequestService().createFile(file).then(() => {
@@ -1023,19 +1027,19 @@ export default {
       }
     },
 
-    downloadFile(item) {
-      console.log(item, 'file')
-    },
     handleTabsDialogInEpisodeList(item) {
       this.episodeIdForTab1 = item._id
       this.tabsDialog = true
     },
     closeTabs() {
-      this.episodeIdForTab1 = null;
-      this.assessmentRequestInfoObject = null;
-      this.dialogs = [];
-      this.files = [];
-      this.tabsDialog = false;
+      this.$nextTick(() => {
+        this.episodeIdForTab1 = null;
+        this.assessmentRequestInfoObject = null;
+        this.fileEditedItem = Object.assign({}, this.fileEditedDefaultItem)
+        this.dialogs = [];
+        this.files = [];
+        this.tabsDialog = false;
+      })
     }
   },
 }
