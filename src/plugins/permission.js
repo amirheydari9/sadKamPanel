@@ -142,6 +142,8 @@ export function permission() {
         if (store.getters['getCurrentUser']) {
             return (
                 store.getters['getCurrentUser'].organizationType !== 'secretariant'
+                &&
+                store.getters['getCurrentUser'].organizationRoles.indexOf('orders') !== -1
             )
         } else {
             return false

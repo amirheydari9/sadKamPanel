@@ -53,6 +53,6 @@ export const transformVideoTimeToSecond = (format) => {
 }
 
 export const transformAssessmentRequestStatus = (status) => {
-    const statusObj = assessmentRequestStatus.find(item => item.code == status)
+    const statusObj = assessmentRequestStatus.find(item => item.code === status)
     return statusObj ? statusObj.fa : status
 }

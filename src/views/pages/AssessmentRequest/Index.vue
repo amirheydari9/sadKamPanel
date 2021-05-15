@@ -613,7 +613,7 @@
                   <v-row>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                          v-model="assessmentRequestInfoObject.status"
+                          :value="transformAssessmentRequestStatus(assessmentRequestInfoObject.status)"
                           label="وضعیت"
                           readonly
                       ></v-text-field>
@@ -873,7 +873,8 @@ import {
   transformOrganization,
   transformDateToJalali,
   transformTitleType,
-  transformEntryType, transformJalaliDateToGeorgian
+  transformEntryType, transformJalaliDateToGeorgian,
+  transformAssessmentRequestStatus
 } from "../../../plugins/transformData";
 import {permission} from "../../../plugins/permission";
 import axios from 'axios'
@@ -1054,6 +1055,7 @@ export default {
     transformDateToJalali,
     transformTitleType,
     transformEntryType,
+    transformAssessmentRequestStatus,
     entryType,
   }),
   mounted() {
