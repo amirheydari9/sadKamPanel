@@ -122,7 +122,7 @@
                 mdi-cloud
               </v-icon>
             </template>
-             <template v-slot:item.status="{ item }">
+            <template v-slot:item.status="{ item }">
               {{ transformAssessmentRequestStatus(item.status) }}
             </template>
             <template v-slot:item.submitDate="{ item }">
@@ -170,7 +170,7 @@
                 mdi-cloud
               </v-icon>
             </template>
-             <template v-slot:item.status="{ item }">
+            <template v-slot:item.status="{ item }">
               {{ transformAssessmentRequestStatus(item.status) }}
             </template>
             <template v-slot:item.submitDate="{ item }">
@@ -218,7 +218,7 @@
                 mdi-cloud
               </v-icon>
             </template>
-             <template v-slot:item.status="{ item }">
+            <template v-slot:item.status="{ item }">
               {{ transformAssessmentRequestStatus(item.status) }}
             </template>
             <template v-slot:item.submitDate="{ item }">
@@ -266,7 +266,7 @@
                 mdi-cloud
               </v-icon>
             </template>
-             <template v-slot:item.status="{ item }">
+            <template v-slot:item.status="{ item }">
               {{ transformAssessmentRequestStatus(item.status) }}
             </template>
             <template v-slot:item.submitDate="{ item }">
@@ -314,7 +314,7 @@
                 mdi-cloud
               </v-icon>
             </template>
-             <template v-slot:item.status="{ item }">
+            <template v-slot:item.status="{ item }">
               {{ transformAssessmentRequestStatus(item.status) }}
             </template>
             <template v-slot:item.submitDate="{ item }">
@@ -370,9 +370,9 @@
       <v-card>
         <v-card-text>
           <v-select
-              :items="assessmentRequestStatus"
-              item-text="fa"
-              item-value="code"
+              :items="brokerage"
+              item-text="name"
+              item-value="_id"
               v-model="brokerageValue"
           ></v-select>
         </v-card-text>
@@ -426,14 +426,16 @@ export default {
       currentItem: null,
       currentTab: null,
       assessmentRequestStatus,
-      statusSelectValue: null,
+      statusSelectValue: 0,
       brokerageValue: null,
       transformDateToJalali,
       transformAssessmentRequestStatus,
     }
   },
   computed: {
-
+    brokerage() {
+      return this.$store.getters['getBrokerage']
+    },
     submitted: {
       get() {
         return this.$store.getters['assessmentRequest/getSubmitted']
@@ -548,6 +550,10 @@ export default {
     },
     async saveBrokerage() {
       try {
+        if (!this.brokerageValue) {
+          this.$toast.error('کارگزاری را انتخاب کنید')
+          return false
+        }
         const brokerage = {
           brokerageId: this.brokerageValue,
           assessmentRequestId: this.item._id

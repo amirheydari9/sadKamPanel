@@ -75,7 +75,6 @@ export default new Vuex.Store({
             state.users = payload
         },
         SET_ORGANIZATIONS(state, payload) {
-            console.log(payload)
             state.organizations = payload
         },
         SET_CURRENT_USER(state, payload) {
