@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <v-row>
+      <v-row v-if="hasPermission">
         <v-col cols="8">
           <video ref="video" src="/1.mp4" controls/>
         </v-col>
@@ -109,7 +109,7 @@
                 <v-spacer></v-spacer>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{ item }">
+            <template v-slot:item.actions="{ item }" v-if="hasPermission">
               <v-icon
                   small
                   class="mr-2"
@@ -238,6 +238,7 @@
 <script>
 import {required} from "../plugins/rule";
 import {transformVideoTimeFormat, transformVideoTimeToSecond} from '../plugins/transformData'
+import {permission} from "../plugins/permission";
 
 export default {
   name: "VideoTag",
@@ -290,6 +291,9 @@ export default {
     }
   },
   computed: {
+    hasPermission() {
+      return (permission().isBrokerage() && permission().isOrders())
+    },
     rulesOfFile: {
       get() {
         return this.$store.getters['rule/getListRulesOfFile']
@@ -310,15 +314,19 @@ export default {
   },
   mounted() {
     this.$store.dispatch('rule/fetchAllListRulesOfFile', this.file)
-    this.$store.dispatch('staticData/fetchRulesList')
-    this.$refs.video.addEventListener('play', this.handlePlayVideo)
-    this.$refs.video.addEventListener('timeupdate', this.handleTimeUpdateVideo)
-    this.$refs.video.addEventListener('pause', this.handlePauseVideo)
+    if (this.hasPermission) {
+      this.$store.dispatch('staticData/fetchRulesList')
+      this.$refs.video.addEventListener('play', this.handlePlayVideo)
+      this.$refs.video.addEventListener('timeupdate', this.handleTimeUpdateVideo)
+      this.$refs.video.addEventListener('pause', this.handlePauseVideo)
+    }
   },
   beforeDestroy() {
     this.$store.commit('rule/SET_LIST_RULES_OF_FILE', [])
     this.$refs.video.removeEventListener('play', this.handlePlayVideo)
     this.$refs.video.removeEventListener('pause', this.handlePauseVideo)
+    this.startTime = null
+    this.endTime = null
   },
   methods: {
     addRule() {

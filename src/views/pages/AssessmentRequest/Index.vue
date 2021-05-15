@@ -802,22 +802,22 @@
                       small
                       @click="handleFileRule(item)"
                   >
-                    mdi-cloud
+                    mdi-pen
                   </v-icon>
-                  <v-btn
-                      small
-                      download
-                      :href="item.fileUrl"
-                      class="ma-2"
-                      outlined
-                      text
-                  >
-                    <v-icon
-                        small
-                    >
-                      mdi-cloud
-                    </v-icon>
-                  </v-btn>
+<!--                  <v-btn-->
+<!--                      small-->
+<!--                      download-->
+<!--                      :href="item.fileUrl"-->
+<!--                      class="ma-2"-->
+<!--                      outlined-->
+<!--                      text-->
+<!--                  >-->
+<!--                    <v-icon-->
+<!--                        small-->
+<!--                    >-->
+<!--                      mdi-cloud-->
+<!--                    </v-icon>-->
+<!--                  </v-btn>-->
                 </template>
               </v-data-table>
             </v-tab-item>
@@ -1277,10 +1277,8 @@ export default {
 
     handleFileRule(item) {
       this.videoUrl = item.fileUrl
-      // this.videoUrl = '/1.mp4'
       this.assessmentId = this.assessmentRequestInfoObject._id
       this.fileId = item._id
-      // console.log(this.videoUrl, this.assessmentId, this.fileId,this.assessmentRequestInfoObject,'kol')
       this.videoTagDialog = true
     },
     closeVideoTags() {

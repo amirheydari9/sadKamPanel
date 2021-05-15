@@ -118,6 +118,26 @@ export function permission() {
         }
     }
 
+    const isPlatform = () => {
+        if (store.getters['getCurrentUser']) {
+            return (
+                store.getters['getCurrentUser'].organizationType === 'platform'
+            )
+        } else {
+            return false
+        }
+    }
+
+    const isBrokerage = () => {
+        if (store.getters['getCurrentUser']) {
+            return (
+                store.getters['getCurrentUser'].organizationType === 'brokerage'
+            )
+        } else {
+            return false
+        }
+    }
+
     const hasAssessmentRequestPermission = () => {
         if (store.getters['getCurrentUser']) {
             return (
@@ -136,6 +156,8 @@ export function permission() {
         isFinancial,
         isOrders,
         isSecretariant,
+        isPlatform,
+        isBrokerage,
         hasAssessmentRequestPermission
     }
 }
