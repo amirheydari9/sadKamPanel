@@ -6,6 +6,8 @@ import {organizationService} from "../service/organizationService";
 import * as product from './modules/product'
 import * as episode from './modules/episode'
 import * as assessmentRequest from './modules/assessmentRequest'
+import * as staticData from './modules/static'
+import * as rule from './modules/rule'
 
 Vue.use(Vuex)
 
@@ -163,6 +165,8 @@ export default new Vuex.Store({
     modules: {
         product,
         episode,
-        assessmentRequest
+        assessmentRequest,
+        staticData,
+        rule
     }
 })

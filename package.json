@@ -19,6 +19,7 @@
     "moment-jalaali": "^0.9.2",
     "vee-validate": "^2.1.4",
     "vue": "^2.6.12",
+    "vue-confirm-dialog": "^1.0.2",
     "vue-cookies": "^1.7.4",
     "vue-i18n": "^8.22.0",
     "vue-persian-datetime-picker": "^2.6.0",

@@ -3,7 +3,7 @@
     <v-container>
       <v-row>
         <v-col cols="8">
-          <video ref="video" :src="url" controls/>
+          <video ref="video" src="/1.mp4" controls/>
         </v-col>
         <v-col cols="4">
           <v-card>
@@ -86,6 +86,54 @@
           </v-card>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col cols="12">
+          <v-data-table
+              :headers="headers"
+              :items="rulesOfFile"
+              :search="search"
+              no-results-text="اطلاعاتی یافت نشد"
+              class="elevation-1 w-100"
+          >
+            <template v-slot:top>
+              <v-toolbar
+                  flat
+              >
+                <v-text-field
+                    v-model="search"
+                    label="جست جو"
+                    single-line
+                    hide-details
+                    autofocus
+                ></v-text-field>
+                <v-spacer></v-spacer>
+              </v-toolbar>
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="editItem(item)"
+              >
+                mdi-pencil
+              </v-icon>
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="deleteItem(item)"
+              >
+                mdi-cloud
+              </v-icon>
+            </template>
+            <template v-slot:item.fromTime="{ item }">
+              {{ transformVideoTimeFormat(item.fromTime) }}
+            </template>
+            <template v-slot:item.toTime="{ item }">
+              {{ transformVideoTimeFormat(item.toTime) }}
+            </template>
+          </v-data-table>
+        </v-col>
+      </v-row>
     </v-container>
     <v-dialog
         v-model="dialog"
@@ -101,7 +149,65 @@
           <v-container>
             <v-form ref="ruleForm">
               <v-row>
-
+                <v-col cols="12" sm="6">
+                  <v-autocomplete
+                      v-model="editedItem.subject"
+                      :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                      label="موضوع"
+                      :items="subjects"
+                  ></v-autocomplete>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-autocomplete
+                      v-model="editedItem.action"
+                      :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                      label="موضوع"
+                      :items="actions"
+                  ></v-autocomplete>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-autocomplete
+                      v-model="editedItem.type"
+                      :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                      label="نوع"
+                      :items="types"
+                  ></v-autocomplete>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-autocomplete
+                      v-model="editedItem.priority"
+                      :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                      label="اولویت"
+                      :items="priority"
+                  ></v-autocomplete>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                      v-model="editedItem.message"
+                      :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                      label="پیام"
+                      :items="priority"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                      v-model="editedItem.desc"
+                      :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                      label="توضیحات"
+                  ></v-text-field>
+                </v-col>
               </v-row>
             </v-form>
           </v-container>
@@ -131,12 +237,14 @@
 
 <script>
 import {required} from "../plugins/rule";
-import moment from 'moment'
+import {transformVideoTimeFormat, transformVideoTimeToSecond} from '../plugins/transformData'
 
 export default {
   name: "VideoTag",
   props: {
-    url: {String, isRequired: true}
+    url: {String, isRequired: true},
+    assessmentRequestId: {String, isRequired: false},
+    fileId: {String, isRequired: false},
   },
   data() {
     return {
@@ -146,14 +254,69 @@ export default {
       formIsValid: false,
       videoIsPlaying: false,
       dialog: false,
+      priority: [1, 2, 3, 4, 5],
+      search: '',
+      headers: [
+        {text: 'شماره', value: 'rowNumber'},
+        {text: 'از', value: 'fromTime',},
+        {text: 'تا', value: 'toTime'},
+        {text: 'موضوع', value: 'subject'},
+        {text: 'نوع', value: 'type'},
+        {text: 'عملیات', value: 'action'},
+        {text: 'اولویت', value: 'priority'},
+        {text: 'پیغام', value: 'message'},
+        {text: 'توضیحات', value: 'desc'},
+        {text: 'عملیات', value: 'actions', sortable: false},
+      ],
+      editedIndex: -1,
+      editedItem: {
+        subject: '',
+        type: '',
+        action: '',
+        priority: '',
+        message: '',
+        desc: ''
+      },
+      defaultItem: {
+        subject: '',
+        type: '',
+        action: '',
+        priority: '',
+        message: '',
+        desc: ''
+      },
+      transformVideoTimeFormat,
+      transformVideoTimeToSecond
+    }
+  },
+  computed: {
+    rulesOfFile: {
+      get() {
+        return this.$store.getters['rule/getListRulesOfFile']
+      },
+      set(value) {
+        return this.$store.commit('rule/SET_LIST_RULES_OF_FILE', value)
+      }
+    },
+    subjects() {
+      return this.$store.getters['staticData/getSubjectsRule']
+    },
+    actions() {
+      return this.$store.getters['staticData/getActionsRule']
+    },
+    types() {
+      return this.$store.getters['staticData/getTypesRule']
     }
   },
   mounted() {
+    this.$store.dispatch('rule/fetchAllListRulesOfFile', '609e244e73b7cb0a079204d3')
+    this.$store.dispatch('staticData/fetchRulesList')
     this.$refs.video.addEventListener('play', this.handlePlayVideo)
     this.$refs.video.addEventListener('timeupdate', this.handleTimeUpdateVideo)
     this.$refs.video.addEventListener('pause', this.handlePauseVideo)
   },
   beforeDestroy() {
+    this.$store.commit('rule/SET_LIST_RULES_OF_FILE', [])
     this.$refs.video.removeEventListener('play', this.handlePlayVideo)
     this.$refs.video.removeEventListener('pause', this.handlePauseVideo)
   },
@@ -224,18 +387,71 @@ export default {
       this.endTime = null
       this.formIsValid = false
     },
-    saveRule() {
-
+    editItem(item) {
+      this.editedIndex = this.rulesOfFile.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialog = true;
     },
     close() {
       this.dialog = false
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+        this.$refs.ruleForm.resetValidation()
+      })
     },
-    transformVideoTimeFormat(seconds) {
-      return new Date(seconds * 1000).toISOString().substr(11, 8)
+    deleteItem(item) {
+      this.$confirm(
+          {
+            message: `آیا از حذف این رکورد اظمینان دارید ؟`,
+            button: {
+              no: 'خیر',
+              yes: 'بله'
+            },
+            callback: async confirm => {
+              if (confirm) {
+                try {
+                  await this.$store.dispatch('rule/deleteRule', item._id)
+                  await this.$store.dispatch('rule/fetchAllListRulesOfFile', '609e244e73b7cb0a079204d3')
+                  this.successAction()
+                } catch (e) {
+                  this.failAction()
+                }
+              }
+            }
+          }
+      )
     },
-    transformVideoTimeToSecond(format) {
-      return moment.duration(format).asSeconds();
-    }
+    async saveRule() {
+      if (this.$refs.ruleForm.validate()) {
+        try {
+          const rule = {
+            ...this.editedItem,
+            fromTime: this.transformVideoTimeToSecond(this.startTime),
+            toTime: this.transformVideoTimeToSecond(this.endTime),
+            rowNumber: this.rulesOfFile.length ? this.rulesOfFile.length + 1 : 1,
+            assessmentRequestId: '609d48d0e617ba75eacc352e',
+            file: '609e244e73b7cb0a079204d3'
+          }
+          if (this.editedIndex > -1) {
+            await this.$store.dispatch('rule/updateRule', rule)
+          } else {
+            await this.$store.dispatch('rule/createRuleForAssessmentRequest', rule)
+          }
+          await this.$store.dispatch('rule/fetchAllListRulesOfFile', '609e244e73b7cb0a079204d3')
+          this.successAction()
+        } catch (e) {
+          this.failAction()
+        }
+      }
+    },
+    successAction() {
+      this.$toast.success('عملیات با موفیت انجام شد')
+      this.close();
+    },
+    failAction() {
+      this.$toast.error('عملیات انجام نشد')
+    },
   }
 }
 </script>

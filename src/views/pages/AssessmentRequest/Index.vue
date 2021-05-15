@@ -428,13 +428,13 @@
                     cols="12"
                     sm="6"
                 >
-<!--                  <v-text-field-->
-<!--                      :rules="[-->
-<!--                            required('این فیلد الزامی است'),-->
-<!--                            ]"-->
-<!--                      v-model="episodeEditedItem.releaseDate"-->
-<!--                      label="زمان انتشار"-->
-<!--                  ></v-text-field>-->
+                  <!--                  <v-text-field-->
+                  <!--                      :rules="[-->
+                  <!--                            required('این فیلد الزامی است'),-->
+                  <!--                            ]"-->
+                  <!--                      v-model="episodeEditedItem.releaseDate"-->
+                  <!--                      label="زمان انتشار"-->
+                  <!--                  ></v-text-field>-->
                   <date-picker
                       :autoSubmit="true"
                       placeholder='زمان انتشار'
@@ -798,13 +798,19 @@
                   {{ transformDateToJalali(item.submitDate) }}
                 </template>
                 <template v-slot:item.actions="{ item }">
+                  <v-icon
+                      small
+                      @click="handleFileRule(item)"
+                  >
+                    mdi-cloud
+                  </v-icon>
                   <v-btn
                       small
                       download
                       :href="item.fileUrl"
                       class="ma-2"
                       outlined
-                      flat
+                      text
                   >
                     <v-icon
                         small
@@ -833,6 +839,15 @@
     </v-dialog>
     <!--    تب ها-->
 
+    <!--    ویدیو تگ-->
+    <video-tag
+        v-model="videoTagDialog"
+        persistent
+    >
+      <video-tag :url="videoUrl" :fileid="'609e244e73b7cb0a079204d3'"/>
+    </video-tag>
+    <!--    ویدیو تگ-->
+
   </div>
 </template>
 
@@ -851,18 +866,22 @@ import {entryType} from "../../../plugins/constant";
 import {episodeService} from "../../../service/episodeService";
 import {assessmentRequestService} from "../../../service/assessmentRequestService";
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
+import VideoTag from "../../../components/VideoTag";
 
 
 export default {
   name: "Index",
   components: {
-    datePicker: VuePersianDatetimePicker
+    VideoTag,
+    datePicker: VuePersianDatetimePicker,
+
   },
   data: () => ({
     productDialog: false,
     episodeListDialog: false,
     episodeDialog: false,
     tabsDialog: false,
+    videoTagDialog: false,
     isLoading: false,
     productSearch: null,
     filteredProducts: [],
@@ -969,13 +988,13 @@ export default {
     },
     fileEditedItem: {
       dec: '',
-      fileUrl: '',
+      fileUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
       accessKey: '',
       secretKey: '',
     },
     fileEditedDefaultItem: {
       dec: '',
-      fileUrl: '',
+      fileUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
       accessKey: '',
       secretKey: '',
     },
@@ -1007,6 +1026,8 @@ export default {
     dialogs: [],
     targetFiles: [],
     files: [],
+    showVideoTag: false,
+    videoUrl: null,
     required,
     verifyMobilePhone,
     verifyUserName,
@@ -1122,7 +1143,10 @@ export default {
 
     saveEpisode() {
       if (this.$refs.episodeForm.validate()) {
-        this.episodeEditedItem = {...this.episodeEditedItem,releaseDate:new Date(transformJalaliDateToGeorgian(this.episodeEditedItem.releaseDate)).getTime()}
+        this.episodeEditedItem = {
+          ...this.episodeEditedItem,
+          releaseDate: new Date(transformJalaliDateToGeorgian(this.episodeEditedItem.releaseDate)).getTime()
+        }
         episodeService().createEpisode(this.episodeEditedItem).then(() => {
           episodeService().getAllEpisodes(this.episodeEditedItem.parent).then(({data}) => {
             this.episodes = data.data
@@ -1231,6 +1255,12 @@ export default {
         this.files = [];
         this.tabsDialog = false;
       })
+    },
+
+    handleFileRule(item) {
+      this.videoUrl = item.fileUrl
+      this.videoTagDialog = true
+      console.log(this.videoUrl)
     }
   },
 }

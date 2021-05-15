@@ -1,8 +1,9 @@
 import store from "../store/store";
 import {entryType} from './constant';
-import moment from 'moment-jalaali'
+import Jmoment from 'moment-jalaali'
+import moment from 'moment'
 
-moment.loadPersian({
+Jmoment.loadPersian({
     usePersianDigits: true
 })
 
@@ -37,8 +38,16 @@ export const transformTitleType = (value) => {
 }
 
 export const transformDateToJalali = (value) => {
-    return moment(value).format('jYYYY/jMM/jDD')
+    return Jmoment(value).format('jYYYY/jMM/jDD')
 }
 export const transformJalaliDateToGeorgian = (value) => {
-    return moment(value,'jYYYY/jMM/jDD').format('YYYY/MM/DD')
+    return Jmoment(value, 'jYYYY/jMM/jDD').format('YYYY/MM/DD')
+}
+
+export const transformVideoTimeFormat = (seconds) => {
+    return new Date(seconds * 1000).toISOString().substr(11, 8)
+}
+
+export const transformVideoTimeToSecond = (format) => {
+    return moment.duration(format).asSeconds();
 }

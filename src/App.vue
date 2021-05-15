@@ -1,5 +1,6 @@
 <template>
   <v-app id="materialpro" :class="`${!$vuetify.breakpoint.smAndDown ? 'full-sidebar' : 'mini-sidebar'}`">
+    <vue-confirm-dialog></vue-confirm-dialog>
     <router-view/>
   </v-app>
 
