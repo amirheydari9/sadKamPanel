@@ -83,7 +83,7 @@ export const assessmentRequestFile = [
 export const assessmentRequestStatus = [
     {
         code:0,
-        fa:'ارسال شده',
+        fa:'ایجاد شده',
         en:'submitted'
     },
     {

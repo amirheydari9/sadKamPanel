@@ -62,17 +62,20 @@
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeStatus(item)"
+                  @click="changeStatus(item,0)"
               >
                 mdi-eye
               </v-icon>
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeBrokerage(item)"
+                  @click="changeBrokerage(item,0)"
               >
                 mdi-cloud
               </v-icon>
+            </template>
+            <template v-slot:item.status="{ item }">
+              {{ transformAssessmentRequestStatus(item.status) }}
             </template>
             <template v-slot:item.submitDate="{ item }">
               {{ transformDateToJalali(item.submitDate) }}
@@ -103,21 +106,27 @@
                 ></v-text-field>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{}">
+            <template v-slot:item.actions="{item}">
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeStatus"
+                  @click="changeStatus(item,1)"
               >
                 mdi-eye
               </v-icon>
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeBrokerage"
+                  @click="changeBrokerage(item,1)"
               >
                 mdi-cloud
               </v-icon>
+            </template>
+             <template v-slot:item.status="{ item }">
+              {{ transformAssessmentRequestStatus(item.status) }}
+            </template>
+            <template v-slot:item.submitDate="{ item }">
+              {{ transformDateToJalali(item.submitDate) }}
             </template>
           </v-data-table>
         </v-col>
@@ -145,21 +154,27 @@
                 ></v-text-field>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{}">
+            <template v-slot:item.actions="{item}">
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeStatus"
+                  @click="changeStatus(item,2)"
               >
                 mdi-eye
               </v-icon>
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeBrokerage"
+                  @click="changeBrokerage(item,2)"
               >
                 mdi-cloud
               </v-icon>
+            </template>
+             <template v-slot:item.status="{ item }">
+              {{ transformAssessmentRequestStatus(item.status) }}
+            </template>
+            <template v-slot:item.submitDate="{ item }">
+              {{ transformDateToJalali(item.submitDate) }}
             </template>
           </v-data-table>
         </v-col>
@@ -187,21 +202,27 @@
                 ></v-text-field>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{}">
+            <template v-slot:item.actions="{item}">
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeStatus"
+                  @click="changeStatus(item,3)"
               >
                 mdi-eye
               </v-icon>
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeBrokerage"
+                  @click="changeBrokerage(item,3)"
               >
                 mdi-cloud
               </v-icon>
+            </template>
+             <template v-slot:item.status="{ item }">
+              {{ transformAssessmentRequestStatus(item.status) }}
+            </template>
+            <template v-slot:item.submitDate="{ item }">
+              {{ transformDateToJalali(item.submitDate) }}
             </template>
           </v-data-table>
         </v-col>
@@ -229,21 +250,27 @@
                 ></v-text-field>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{}">
+            <template v-slot:item.actions="{item}">
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeStatus"
+                  @click="changeStatus(item,4)"
               >
                 mdi-eye
               </v-icon>
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeBrokerage"
+                  @click="changeBrokerage(item,4)"
               >
                 mdi-cloud
               </v-icon>
+            </template>
+             <template v-slot:item.status="{ item }">
+              {{ transformAssessmentRequestStatus(item.status) }}
+            </template>
+            <template v-slot:item.submitDate="{ item }">
+              {{ transformDateToJalali(item.submitDate) }}
             </template>
           </v-data-table>
         </v-col>
@@ -271,27 +298,34 @@
                 ></v-text-field>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{}">
+            <template v-slot:item.actions="{item}">
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeStatus"
+                  @click="changeStatus(item,5)"
               >
                 mdi-eye
               </v-icon>
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeBrokerage"
+                  @click="changeBrokerage(item,5)"
               >
                 mdi-cloud
               </v-icon>
+            </template>
+             <template v-slot:item.status="{ item }">
+              {{ transformAssessmentRequestStatus(item.status) }}
+            </template>
+            <template v-slot:item.submitDate="{ item }">
+              {{ transformDateToJalali(item.submitDate) }}
             </template>
           </v-data-table>
         </v-col>
       </v-tab-item>
     </v-tabs-items>
 
+    <!--    statusDialog-->
     <v-dialog
         v-model="statusDialog"
         persistent
@@ -311,7 +345,7 @@
           <v-btn
               color="blue darken-1"
               text
-              @click="saveStatus(1)"
+              @click="saveStatus()"
           >
             تایید
           </v-btn>
@@ -325,12 +359,49 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!--    statusDialog-->
+
+    <!--    brokerage-->
+    <v-dialog
+        v-model="brokerageDialog"
+        persistent
+        max-width="300px"
+    >
+      <v-card>
+        <v-card-text>
+          <v-select
+              :items="assessmentRequestStatus"
+              item-text="fa"
+              item-value="code"
+              v-model="brokerageValue"
+          ></v-select>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="blue darken-1"
+              text
+              @click="saveBrokerage"
+          >
+            تایید
+          </v-btn>
+          <v-btn
+              color="blue darken-1"
+              text
+              @click="closeBrokerage"
+          >
+            انصراف
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!--    brokerage-->
 
   </v-container>
 </template>
 
 <script>
-import {transformDateToJalali} from '../../../plugins/transformData'
+import {transformDateToJalali, transformAssessmentRequestStatus} from '../../../plugins/transformData'
 import {assessmentRequestStatus} from "../../../plugins/constant";
 
 export default {
@@ -352,10 +423,13 @@ export default {
       ],
       statusDialog: false,
       brokerageDialog: false,
-      transformDateToJalali,
       currentItem: null,
+      currentTab: null,
       assessmentRequestStatus,
-      statusSelectValue: null
+      statusSelectValue: null,
+      brokerageValue: null,
+      transformDateToJalali,
+      transformAssessmentRequestStatus,
     }
   },
   computed: {
@@ -448,13 +522,15 @@ export default {
     handleTab6() {
       this.fetchAssessmentListByStatus(5)
     },
-    changeStatus(item) {
+    changeStatus(item, currentTab) {
       this.statusDialog = true
       this.item = item
+      this.currentTab = currentTab
     },
-    changeBrokerage(item) {
+    changeBrokerage(item, currentTab) {
       this.brokerageDialog = true
       this.item = item
+      this.currentTab = currentTab
     },
     async saveStatus() {
       try {
@@ -463,8 +539,23 @@ export default {
           assessmentRequestId: this.item._id
         }
         await this.$store.dispatch('assessmentRequest/setStatusOfAssessmentRequest', assessment)
-        await this.$store.dispatch('assessmentRequest/setStatusOfAssessmentRequest', this.fetchAssessmentListByStatus(0))
+        await this.$store.dispatch('assessmentRequest/setStatusOfAssessmentRequest', this.fetchAssessmentListByStatus(this.currentTab))
         this.$toast.success('عملیات با موفقیا انجام شد')
+        this.closeStatus()
+      } catch (e) {
+        this.$toast.error('عملیات انجام نشد')
+      }
+    },
+    async saveBrokerage() {
+      try {
+        const brokerage = {
+          brokerageId: this.brokerageValue,
+          assessmentRequestId: this.item._id
+        }
+        await this.$store.dispatch('assessmentRequest/assignAssessmentRequestToBrokerage', brokerage)
+        await this.$store.dispatch('assessmentRequest/setStatusOfAssessmentRequest', this.fetchAssessmentListByStatus(this.currentTab))
+        this.$toast.success('عملیات با موفقیا انجام شد')
+        this.closeBrokerage()
       } catch (e) {
         this.$toast.error('عملیات انجام نشد')
       }
@@ -472,10 +563,12 @@ export default {
     closeStatus() {
       this.statusDialog = false
       this.item = null
+      this.currentTab = null
     },
     closeBrokerage() {
       this.brokerageDialog = false
       this.item = null
+      this.currentTab = null
     }
   }
 }

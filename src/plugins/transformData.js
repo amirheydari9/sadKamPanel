@@ -1,5 +1,5 @@
 import store from "../store/store";
-import {entryType} from './constant';
+import {entryType, assessmentRequestStatus} from './constant';
 import Jmoment from 'moment-jalaali'
 import moment from 'moment'
 
@@ -50,4 +50,9 @@ export const transformVideoTimeFormat = (seconds) => {
 
 export const transformVideoTimeToSecond = (format) => {
     return moment.duration(format).asSeconds();
+}
+
+export const transformAssessmentRequestStatus = (status) => {
+    const statusObj = assessmentRequestStatus.find(item => item.code == status)
+    return statusObj ? statusObj.fa : status
 }
