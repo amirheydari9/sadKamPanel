@@ -48,6 +48,9 @@ export default new Vuex.Store({
         getOrganizationTypes(state) {
             return state.organizationTypes
         },
+        getBrokerage(state) {
+            return state.organizations.filter(item => item.organizationType === 'brokerage')
+        },
         getAllRoles(state) {
             return state.roles
         },
@@ -72,6 +75,7 @@ export default new Vuex.Store({
             state.users = payload
         },
         SET_ORGANIZATIONS(state, payload) {
+            console.log(payload)
             state.organizations = payload
         },
         SET_CURRENT_USER(state, payload) {

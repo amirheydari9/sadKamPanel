@@ -107,6 +107,12 @@ export default {
         to: "/assessmentRequest",
         permission: 'user_manager'
       },
+      {
+        title: "مشاهده درخواست ارزیابی",
+        icon: "mdi-account-circle",
+        to: "/viewAssessmentRequest",
+        permission: 'user_manager'
+      },
     ]
   }),
   computed: {

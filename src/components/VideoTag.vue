@@ -243,8 +243,8 @@ export default {
   name: "VideoTag",
   props: {
     url: {String, isRequired: true},
-    assessmentRequestId: {String, isRequired: false},
-    fileId: {String, isRequired: false},
+    assessment: {String, isRequired: true},
+    file: {String, isRequired: false},
   },
   data() {
     return {
@@ -309,7 +309,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('rule/fetchAllListRulesOfFile', '609e244e73b7cb0a079204d3')
+    this.$store.dispatch('rule/fetchAllListRulesOfFile', this.file)
     this.$store.dispatch('staticData/fetchRulesList')
     this.$refs.video.addEventListener('play', this.handlePlayVideo)
     this.$refs.video.addEventListener('timeupdate', this.handleTimeUpdateVideo)
@@ -412,7 +412,7 @@ export default {
               if (confirm) {
                 try {
                   await this.$store.dispatch('rule/deleteRule', item._id)
-                  await this.$store.dispatch('rule/fetchAllListRulesOfFile', '609e244e73b7cb0a079204d3')
+                  await this.$store.dispatch('rule/fetchAllListRulesOfFile', this.file)
                   this.successAction()
                 } catch (e) {
                   this.failAction()
@@ -430,15 +430,15 @@ export default {
             fromTime: this.transformVideoTimeToSecond(this.startTime),
             toTime: this.transformVideoTimeToSecond(this.endTime),
             rowNumber: this.rulesOfFile.length ? this.rulesOfFile.length + 1 : 1,
-            assessmentRequestId: '609d48d0e617ba75eacc352e',
-            file: '609e244e73b7cb0a079204d3'
+            assessmentRequestId: this.assessment,
+            file: this.file
           }
           if (this.editedIndex > -1) {
             await this.$store.dispatch('rule/updateRule', rule)
           } else {
             await this.$store.dispatch('rule/createRuleForAssessmentRequest', rule)
           }
-          await this.$store.dispatch('rule/fetchAllListRulesOfFile', '609e244e73b7cb0a079204d3')
+          await this.$store.dispatch('rule/fetchAllListRulesOfFile', this.file)
           this.successAction()
         } catch (e) {
           this.failAction()

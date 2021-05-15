@@ -48,12 +48,39 @@ export function assessmentRequestService() {
         }
     }
 
+    const getAssessmentListByStatus = async (status) => {
+        try {
+            return await axios.get(`http://sadkam.lincast.ir/api/assessmentRequest/find/byStatus/${status}`)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const assignAssessmentRequestToBrokerage = async (assign) => {
+        try {
+            return await axios.patch(`http://sadkam.lincast.ir/api/assessmentRequest/assign`, assign)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const setStatusOfAssessmentRequest = async (status) => {
+        try {
+            return await axios.patch(`http://sadkam.lincast.ir/api/assessmentRequest/status`, status)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     return {
         getAllAssessmentRequests,
         getAssessmentRequest,
         getAssessmentRequestByEpisode,
         createAssessmentRequest,
         createDialog,
-        createFile
+        createFile,
+        getAssessmentListByStatus,
+        assignAssessmentRequestToBrokerage,
+        setStatusOfAssessmentRequest
     }
 }

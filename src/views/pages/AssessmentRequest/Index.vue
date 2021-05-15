@@ -838,14 +838,30 @@
       </v-card>
     </v-dialog>
     <!--    تب ها-->
+    <!--    <video-tag url="/1.mp4" :file="'609e244e73b7cb0a079204d3'" :assessment="'609d48d0e617ba75eacc352e'"/>-->
+    <!--    <video-tag url="/1.mp4" :file="fileId" :assessment="assessmentId"/>-->
 
     <!--    ویدیو تگ-->
-    <video-tag
+    <v-dialog
         v-model="videoTagDialog"
         persistent
     >
-      <video-tag :url="videoUrl" :fileid="'609e244e73b7cb0a079204d3'"/>
-    </video-tag>
+      <v-card>
+        <v-card-text>
+          <video-tag :url="videoUrl" :file="fileId" :assessment="assessmentId"/>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="blue darken-1"
+              text
+              @click="closeVideoTags"
+          >
+            انصراف
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <!--    ویدیو تگ-->
 
   </div>
@@ -1027,6 +1043,8 @@ export default {
     targetFiles: [],
     files: [],
     showVideoTag: false,
+    assessmentId: null,
+    fileId: null,
     videoUrl: null,
     required,
     verifyMobilePhone,
@@ -1259,8 +1277,19 @@ export default {
 
     handleFileRule(item) {
       this.videoUrl = item.fileUrl
+      // this.videoUrl = '/1.mp4'
+      this.assessmentId = this.assessmentRequestInfoObject._id
+      this.fileId = item._id
+      // console.log(this.videoUrl, this.assessmentId, this.fileId,this.assessmentRequestInfoObject,'kol')
       this.videoTagDialog = true
-      console.log(this.videoUrl)
+    },
+    closeVideoTags() {
+      this.videoTagDialog = false
+      this.$nextTick(() => {
+        this.videoUrl = null
+        this.assessmentId = null
+        this.fileId = null
+      })
     }
   },
 }

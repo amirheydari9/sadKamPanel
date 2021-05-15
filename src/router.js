@@ -92,6 +92,14 @@ const routes = new Router({
                         hasAssessmentRequestPermission: true
                     }
                 },
+                {
+                    name: 'ViewAssessmentRequest',
+                    path: '/viewAssessmentRequest',
+                    component: () => import('@/views/pages/ViewAssessmentRequest/Index.vue'),
+                    meta: {
+                        isSuperAdmin: true
+                    }
+                },
 
             ]
         },

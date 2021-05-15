@@ -80,7 +80,7 @@ export const assessmentRequestFile = [
     },
 ]
 
-export const assessmentRequest = [
+export const assessmentRequestStatus = [
     {
         code:0,
         fa:'ارسال شده',
