@@ -442,6 +442,12 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
+                  <v-row v-if="!assessmentInfo && canAssignTome">
+                    <v-btn
+                        @click="createAssessment"
+                    >ارزیابی
+                    </v-btn>
+                  </v-row>
                 </template>
               </v-col>
             </v-tab-item>
@@ -747,6 +753,7 @@ export default {
       videoTagDialog: false,
       videoUrl: null,
       fileId: null,
+      currentEpisode: null,
       assessmentId: null,
 
     }
@@ -951,9 +958,10 @@ export default {
         this.tabsDialog = true
         if (data.data.assessment) {
           this.assessmentInfo = data.data.assessment
-        }else{
-          if(this.canAssignTome){
-            this.$toast.info('حداقل یک فیال بارگزاری کنید')
+          this.currentEpisode = item._id
+        } else {
+          if (this.canAssignTome) {
+            this.$toast.info('حداقل یک فایل بارگزاری کنید')
           }
         }
       }).catch(() => this.$toast.error('خطایی رخ داده است'))
@@ -1015,6 +1023,19 @@ export default {
       this.tabsDialog = false;
       this.assessmentRequestInfoObject = null
       this.assessmentInfo = null
+      this.currentEpisode = null
+    },
+
+    async createAssessment() {
+      try {
+        const data = {
+          episode: this.currentEpisode,
+          assessmentRequest: this.assessmentRequestInfoObject._id
+        }
+        await this.$store.dispatch('assessment/createAssessment', data)
+      } catch (e) {
+        this.$toast.error('عملیات انجام نشد')
+      }
     }
   },
 }

@@ -8,6 +8,7 @@ import * as episode from './modules/episode'
 import * as assessmentRequest from './modules/assessmentRequest'
 import * as staticData from './modules/static'
 import * as rule from './modules/rule'
+import * as assessment from './modules/assessment'
 
 Vue.use(Vuex)
 
@@ -170,6 +171,7 @@ export default new Vuex.Store({
         episode,
         assessmentRequest,
         staticData,
-        rule
+        rule,
+        assessment
     }
 })

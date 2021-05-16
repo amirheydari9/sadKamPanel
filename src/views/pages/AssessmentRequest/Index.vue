@@ -633,7 +633,7 @@
                     </v-col>
                   </v-row>
                 </template>
-                <template v-else>
+                <template v-if="!assessmentRequestInfoObject">
                   <v-text-field
                       v-model="tab1Desc"
                       outlined
@@ -644,6 +644,14 @@
                       @click="createAssessmentRequest">
                     درخواست ارزیابی
                   </v-btn>
+                </template>
+                <template>
+                  <v-row v-if="assessmentRequestInfoObject && (!assessmentInfo && canCreateAssessment)">
+                    <v-btn
+                        @click="createAssessment"
+                    >ارزیابی
+                    </v-btn>
+                  </v-row>
                 </template>
               </v-col>
             </v-tab-item>
@@ -1065,7 +1073,7 @@ export default {
   //   this.$store.commit('episode/SET_EPISODES', [])
   // },
   computed: {
-    canCreateAssessment(){
+    canCreateAssessment() {
       return permission().isBrokerage() && permission().isOrders()
     },
     canUploadFile() {
@@ -1218,9 +1226,9 @@ export default {
             this.dialogs = res.data.data.dialogs
             if (res.data.data.assessment) {
               this.assessmentInfo = data.data.assessment
-            }else{
-              if(this.canCreateAssessment){
-                this.$toast.info('حداقل یک فیال بارگزاری کنید')
+            } else {
+              if (this.canCreateAssessment) {
+                this.$toast.info('حداقل یک فایل بارگزاری کنید')
               }
             }
           })
@@ -1252,9 +1260,9 @@ export default {
           this.dialogs = res.data.data.dialogs
           if (res.data.data.assessment) {
             this.assessmentInfo = data.data.assessment
-          }else{
-            if(this.canCreateAssessment){
-              this.$toast.info('حداقل یک فیال بارگزاری کنید')
+          } else {
+            if (this.canCreateAssessment) {
+              this.$toast.info('حداقل یک فایل بارگزاری کنید')
             }
           }
         })
@@ -1337,6 +1345,17 @@ export default {
         this.assessmentId = null
         this.fileId = null
       })
+    },
+    async createAssessment() {
+      try {
+        const data = {
+          episode: this.episodeIdForTab1,
+          assessmentRequest: this.assessmentRequestInfoObject._id
+        }
+        await this.$store.dispatch('assessment/createAssessment', data)
+      } catch (e) {
+        this.$toast.error('عملیات انجام نشد')
+      }
     }
   },
 }
