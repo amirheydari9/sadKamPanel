@@ -435,27 +435,26 @@
                   <!--                      v-model="episodeEditedItem.releaseDate"-->
                   <!--                      label="زمان انتشار"-->
                   <!--                  ></v-text-field>-->
-                  <date-picker
-                      :autoSubmit="true"
-                      placeholder='زمان انتشار'
-                      v-model="episodeEditedItem.releaseDate" style="margin-top: 20px !important;"></date-picker>
-                </v-col>
-                <v-col
-                    cols="12"
-                    sm="6"
-                >
-                  <v-autocomplete
-                      v-model="episodeEditedItem.parent"
+                  <v-text-field
+                      id="my-custom-input"
+                      persistent-hint
+                      readonly
+                      v-model="episodeEditedItem.releaseDate"
+                      label="زمان انتشار"
                       :rules="[
                             required('این فیلد الزامی است'),
                             ]"
-                      label="نام محصول"
-                      :items="products"
-                      item-text="faTitle"
-                      item-value="_id"
-                      dense
-                      disabled
-                  ></v-autocomplete>
+                  ></v-text-field>
+                  <date-picker
+                      auto-submit
+                      v-model="episodeEditedItem.releaseDate"
+                      element="my-custom-input"
+                  >
+                  </date-picker>
+<!--                  <date-picker-->
+<!--                      :autoSubmit="true"-->
+<!--                      placeholder='زمان انتشار'-->
+<!--                      v-model="episodeEditedItem.releaseDate" style="margin-top: 20px !important;"></date-picker>-->
                 </v-col>
                 <v-col
                     cols="12"
@@ -921,13 +920,11 @@ export default {
     episodeHeaders: [
       {text: 'نام انگلسیی', value: 'enTitle'},
       {text: 'نام فارسی', value: 'faTitle'},
-      {text: 'نام محصول', value: 'parent'},
       {text: 'شماره فصل', value: 'seasonNumber'},
       {text: 'شماره قسمت', value: 'episodeNumber'},
       {text: 'زمان', value: 'duration'},
       {text: 'امتیاز', value: 'rate'},
       {text: 'تاریخ انتشار', value: 'releaseDate'},
-      {text: 'تایید توسط', value: 'submittedBy'},
       {text: 'عملیات', value: 'actions', sortable: false},
     ],
     dialogHeaders: [
