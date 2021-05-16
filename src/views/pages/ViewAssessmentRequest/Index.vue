@@ -636,6 +636,29 @@
     </v-dialog>
     <!--    تب ها-->
 
+    <!--    ویدیو تگ-->
+    <v-dialog
+        v-model="videoTagDialog"
+        persistent
+    >
+      <v-card>
+        <v-card-text>
+          <video-tag :url="videoUrl" :file="fileId" :assessment="assessmentId"/>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="blue darken-1"
+              text
+              @click="closeVideoTags"
+          >
+            انصراف
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!--    ویدیو تگ-->
+
   </v-container>
 </template>
 
@@ -645,9 +668,13 @@ import {assessmentRequestStatus} from "../../../plugins/constant";
 import {permission} from "../../../plugins/permission";
 import {assessmentRequestService} from "../../../service/assessmentRequestService";
 import {required} from "../../../plugins/rule";
+import VideoTag from "../../../components/VideoTag";
 
 export default {
   name: "Index",
+  components:{
+    VideoTag
+  },
   data() {
     return {
       tabsMenu: null,
@@ -716,6 +743,10 @@ export default {
         accessKey: '',
         secretKey: '',
       },
+      videoTagDialog: false,
+      videoUrl: null,
+      fileId: null,
+      assessmentId: null
     }
   },
   computed: {
@@ -905,9 +936,9 @@ export default {
               return item._id === value.targetFile
             }
           })
-          if(obj){
+          if (obj) {
             value['humanId'] = obj.humanId
-          }else{
+          } else {
             value['humanId'] = 'ندارد'
           }
         })
@@ -924,7 +955,7 @@ export default {
         const row = {title: item.humanId, id: item._id}
         this.targetFiles.push(row)
       })
-      console.log(this.dialogs,'a')
+      console.log(this.dialogs, 'a')
     },
     handleDetailTab3() {
       this.seeDetails(this.assessmentRequestInfoObject)
@@ -951,10 +982,18 @@ export default {
     },
     handleFileRule(item) {
       console.log(item);
-      // this.videoUrl = item.fileUrl
-      // this.assessmentId = this.assessmentRequestInfoObject._id
-      // this.fileId = item._id
-      // this.videoTagDialog = true
+      this.videoUrl = item.fileUrl
+      this.assessmentId = this.assessmentRequestInfoObject._id
+      this.fileId = item._id
+      this.videoTagDialog = true
+    },
+    closeVideoTags() {
+      this.videoTagDialog = false
+      this.$nextTick(() => {
+        this.videoUrl = null
+        this.assessmentId = null
+        this.fileId = null
+      })
     },
     closeDetailsTabs() {
       this.tabsDialog = false;
