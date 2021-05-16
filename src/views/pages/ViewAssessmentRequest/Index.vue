@@ -387,6 +387,255 @@
     </v-dialog>
     <!--    brokerage-->
 
+    <!--    تب ها-->
+    <v-dialog
+        v-model="tabsDialog"
+        persistent
+        max-width="800px"
+    >
+      <v-card>
+        <v-card-text>
+          <v-tabs class="mt-5" color="grey darken-3" v-model="detailsTabsMenu">
+            <v-tab
+                href="#assessment"
+                @click="handleDetailTab1"
+            >ارزیابی
+            </v-tab>
+            <v-tab
+                href="#chat"
+                @click="handleDetailTab2"
+            >گفتگوها
+            </v-tab>
+            <v-tab
+                href="#file"
+                @click="handleDetailTab3"
+            >فایل
+            </v-tab>
+          </v-tabs>
+          <v-divider></v-divider>
+
+          <v-tabs-items v-model="detailsTabsMenu">
+
+            <v-tab-item class="mt-5" value="assessment">
+              <v-col cols="12">
+                <template>
+                  <v-row v-if="assessmentRequestInfoObject">
+                    <v-col cols="12" sm="4">
+                      <v-text-field
+                          :value="transformAssessmentRequestStatus(assessmentRequestInfoObject.status)"
+                          label="وضعیت"
+                          readonly
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="4">
+                      <v-text-field
+                          :value="transformDateToJalali(assessmentRequestInfoObject.submitDate)"
+                          label="تاریخ ثبت درخواست"
+                          readonly
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="4">
+                      <v-text-field
+                          v-model="assessmentRequestInfoObject.description"
+                          label="توضیحات"
+                          readonly
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </template>
+              </v-col>
+            </v-tab-item>
+
+            <v-tab-item class="mt-1" value="chat">
+              <v-container>
+                <v-form ref="dialogForm">
+                  <v-row>
+                    <v-col
+                        cols="12"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          v-model="dialogEditedItem.message"
+                          label="متن"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="3"
+                    >
+                      <v-autocomplete
+                          v-model="dialogEditedItem.targetFile"
+                          label="شناسه کوتاه"
+                          :items="targetFiles"
+                          item-text="title"
+                          item-value="id"
+                          dense
+                      ></v-autocomplete>
+                    </v-col>
+                    <v-btn
+                        color="primary"
+                        depressed
+                        @click="saveDialog"
+                        class="mr-auto"
+                    >
+                      ایجاد پیام
+                    </v-btn>
+                  </v-row>
+                </v-form>
+              </v-container>
+              <v-data-table
+                  :headers="dialogHeaders"
+                  :items="dialogs"
+                  :search="dialogSearch"
+                  no-results-text="اطلاعاتی یافت نشد"
+                  class="elevation-1 w-100 mt-3"
+              >
+                <template v-slot:top>
+                  <v-toolbar
+                      flat
+                  >
+                    <v-text-field
+                        v-model="dialogSearch"
+                        label="جست جو"
+                        single-line
+                        hide-details
+                        autofocus
+                    ></v-text-field>
+                  </v-toolbar>
+                </template>
+                <template v-slot:item.submitDate="{ item }">
+                  {{ transformDateToJalali(item.submitDate) }}
+                </template>
+              </v-data-table>
+            </v-tab-item>
+
+            <v-tab-item class="mt-1" value="file">
+              <v-container>
+                <v-form ref="fileForm">
+                  <v-row>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          v-model="fileEditedItem.fileUrl"
+                          label="آدرس فایل"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          v-model="fileEditedItem.accessKey"
+                          label="accessKey"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-text-field
+                          :rules="[
+                            required('این فیلد الزامی است'),
+                            ]"
+                          v-model="fileEditedItem.secretKey"
+                          label="secretKey"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                        cols="12"
+                        sm="6"
+                    >
+                      <v-text-field
+                          v-model="fileEditedItem.dec"
+                          label="توضیحات"
+                      ></v-text-field>
+                    </v-col>
+                    <v-btn
+                        color="primary"
+                        depressed
+                        @click="saveFile"
+                        class="mr-auto"
+                    >
+                      ارسال فایل
+                    </v-btn>
+                  </v-row>
+                </v-form>
+              </v-container>
+              <v-data-table
+                  :headers="fileHeaders"
+                  :items="files"
+                  :search="fileSearch"
+                  no-results-text="اطلاعاتی یافت نشد"
+                  class="elevation-1 w-100 mt-3"
+              >
+                <template v-slot:top>
+                  <v-toolbar
+                      flat
+                  >
+                    <v-text-field
+                        v-model="fileSearch"
+                        label="جست جو"
+                        single-line
+                        hide-details
+                        autofocus
+                    ></v-text-field>
+                  </v-toolbar>
+                </template>
+                <template v-slot:item.submitDate="{ item }">
+                  {{ transformDateToJalali(item.submitDate) }}
+                </template>
+                <template v-slot:item.actions="{ item }">
+                  <v-icon
+                      small
+                      @click="handleFileRule(item)"
+                  >
+                    mdi-pen
+                  </v-icon>
+                  <!--                  <v-btn-->
+                  <!--                      small-->
+                  <!--                      download-->
+                  <!--                      :href="item.fileUrl"-->
+                  <!--                      class="ma-2"-->
+                  <!--                      outlined-->
+                  <!--                      text-->
+                  <!--                  >-->
+                  <!--                    <v-icon-->
+                  <!--                        small-->
+                  <!--                    >-->
+                  <!--                      mdi-cloud-->
+                  <!--                    </v-icon>-->
+                  <!--                  </v-btn>-->
+                </template>
+              </v-data-table>
+            </v-tab-item>
+
+          </v-tabs-items>
+
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="blue darken-1"
+              text
+              @click="closeDetailsTabs"
+          >
+            انصراف
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!--    تب ها-->
+
   </v-container>
 </template>
 
@@ -394,6 +643,8 @@
 import {transformDateToJalali, transformAssessmentRequestStatus} from '../../../plugins/transformData'
 import {assessmentRequestStatus} from "../../../plugins/constant";
 import {permission} from "../../../plugins/permission";
+import {assessmentRequestService} from "../../../service/assessmentRequestService";
+import {required} from "../../../plugins/rule";
 
 export default {
   name: "Index",
@@ -421,6 +672,50 @@ export default {
       brokerageValue: null,
       transformDateToJalali,
       transformAssessmentRequestStatus,
+      required,
+      tabsDialog: false,
+      detailsTabsMenu: null,
+      dialogs: [],
+      files: [],
+      assessmentRequestInfoObject: null,
+      dialogEditedItem: {
+        message: '',
+        targetFile: '',
+      },
+      dialogEditedDefaultItem: {
+        message: '',
+        targetFile: '',
+      },
+      targetFiles: [],
+      dialogHeaders: [
+        {text: 'متن پیام', value: 'message'},
+        {text: 'ارسال کننده', value: 'user.nickname'},
+        {text: 'تاریخ ارسال', value: 'submitDate'},
+        {text: 'شناسه کوتاه', value: 'humanId'},
+      ],
+      fileHeaders: [
+        {text: 'آدرس فایل', value: 'fileUrl'},
+        {text: 'آپلود کننده', value: 'user.nickname'},
+        {text: 'تاریخ ارسال', value: 'submitDate'},
+        {text: 'شناسه کوتاه', value: 'humanId'},
+        {text: 'مدت زمان', value: 'duration'},
+        {text: 'توضیحات', value: 'dec'},
+        {text: 'عملیات', value: 'actions', sortable: false},
+      ],
+      dialogSearch: '',
+      fileSearch: '',
+      fileEditedItem: {
+        dec: '',
+        fileUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
+        accessKey: '',
+        secretKey: '',
+      },
+      fileEditedDefaultItem: {
+        dec: '',
+        fileUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
+        accessKey: '',
+        secretKey: '',
+      },
     }
   },
   computed: {
@@ -600,8 +895,58 @@ export default {
         this.$toast.error('عملیات انجام نشد')
       }
     },
-    seeDetails() {
-
+    seeDetails(item) {
+      assessmentRequestService().getAssessmentRequest(item._id).then(({data}) => {
+        this.assessmentRequestInfoObject = data.data
+        console.log(this.assessmentRequestInfoObject)
+        this.files = data.data.files
+        this.dialogs = data.data.dialogs
+        this.tabsDialog = true
+      }).catch(() => this.$toast.error('خطایی رخ داده است'))
+    },
+    handleDetailTab1() {
+      this.seeDetails(this.assessmentRequestInfoObject._id)
+    },
+    handleDetailTab2() {
+      this.seeDetails(this.assessmentRequestInfoObject._id)
+      this.files.forEach(item => {
+        const row = {title: item.humanId, id: item._id}
+        this.targetFiles.push(row)
+      })
+    },
+    handleDetailTab3() {
+      this.seeDetails(this.assessmentRequestInfoObject._id)
+    },
+    saveDialog() {
+      if (this.$refs.dialogForm.validate()) {
+        const dialog = {...this.dialogEditedItem, _id: this.assessmentRequestInfoObject._id}
+        assessmentRequestService().createDialog(dialog).then(() => {
+          this.seeDetails(this.assessmentRequestInfoObject)
+          this.$refs.dialogForm.reset();
+          this.$refs.dialogForm.resetValidation();
+        })
+      }
+    },
+    saveFile() {
+      if (this.$refs.fileForm.validate()) {
+        const file = {...this.fileEditedItem, _id: this.assessmentRequestInfoObject._id}
+        assessmentRequestService().createFile(file).then(() => {
+          this.seeDetails(this.assessmentRequestInfoObject)
+          this.$refs.fileForm.reset();
+          this.$refs.fileForm.resetValidation();
+        })
+      }
+    },
+    handleFileRule(item) {
+      console.log(item);
+      // this.videoUrl = item.fileUrl
+      // this.assessmentId = this.assessmentRequestInfoObject._id
+      // this.fileId = item._id
+      // this.videoTagDialog = true
+    },
+    closeDetailsTabs() {
+      this.tabsDialog = false;
+      this.assessmentRequestInfoObject = null
     }
   },
 }

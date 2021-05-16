@@ -838,8 +838,6 @@
       </v-card>
     </v-dialog>
     <!--    تب ها-->
-    <!--    <video-tag url="/1.mp4" :file="'609e244e73b7cb0a079204d3'" :assessment="'609d48d0e617ba75eacc352e'"/>-->
-    <!--    <video-tag url="/1.mp4" :file="fileId" :assessment="assessmentId"/>-->
 
     <!--    ویدیو تگ-->
     <v-dialog
