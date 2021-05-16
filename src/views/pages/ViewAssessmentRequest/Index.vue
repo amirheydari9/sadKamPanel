@@ -75,6 +75,13 @@
               >
                 mdi-cloud
               </v-icon>
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="seeDetails(item,0)"
+              >
+                mdi-pencil
+              </v-icon>
             </template>
             <template v-slot:item.status="{ item }">
               {{ transformAssessmentRequestStatus(item.status) }}
@@ -116,6 +123,13 @@
                   v-if="canAssignTome"
               >
                 mdi-cloud
+              </v-icon>
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="seeDetails(item,0)"
+              >
+                mdi-pencil
               </v-icon>
             </template>
             <template v-slot:item.status="{ item }">
@@ -159,6 +173,13 @@
               >
                 mdi-eye
               </v-icon>
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="seeDetails(item,0)"
+              >
+                mdi-pencil
+              </v-icon>
             </template>
             <template v-slot:item.status="{ item }">
               {{ transformAssessmentRequestStatus(item.status) }}
@@ -198,6 +219,15 @@
             <template v-slot:item.submitDate="{ item }">
               {{ transformDateToJalali(item.submitDate) }}
             </template>
+            <template v-slot:item.actions="{item}">
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="seeDetails(item,0)"
+              >
+                mdi-pencil
+              </v-icon>
+            </template>
           </v-data-table>
         </v-col>
       </v-tab-item>
@@ -230,6 +260,15 @@
             <template v-slot:item.submitDate="{ item }">
               {{ transformDateToJalali(item.submitDate) }}
             </template>
+            <template v-slot:item.actions="{item}">
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="seeDetails(item,0)"
+              >
+                mdi-pencil
+              </v-icon>
+            </template>
           </v-data-table>
         </v-col>
       </v-tab-item>
@@ -261,6 +300,15 @@
             </template>
             <template v-slot:item.submitDate="{ item }">
               {{ transformDateToJalali(item.submitDate) }}
+            </template>
+            <template v-slot:item.actions="{item}">
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="seeDetails(item,0)"
+              >
+                mdi-pencil
+              </v-icon>
             </template>
           </v-data-table>
         </v-col>
@@ -551,6 +599,9 @@ export default {
       } catch (e) {
         this.$toast.error('عملیات انجام نشد')
       }
+    },
+    seeDetails() {
+
     }
   },
 }
