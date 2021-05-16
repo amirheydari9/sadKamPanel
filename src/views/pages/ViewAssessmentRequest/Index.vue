@@ -542,7 +542,10 @@ export default {
     },
     async unAssignMe(item, index) {
       try {
-        await this.$store.dispatch('assessmentRequest/unAssignAssessmentRequestToBrokerage', item._id)
+        const data = {
+          assessmentRequestId: item._id
+        }
+        await this.$store.dispatch('assessmentRequest/unAssignAssessmentRequestToBrokerage', data)
         this.fetchAssessmentListByStatus(index)
         this.$toast.success('عملیات با موفقیت انجام شد')
       } catch (e) {
