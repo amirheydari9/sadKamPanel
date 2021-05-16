@@ -1,11 +1,11 @@
 <template>
   <div>
     <v-container>
-      <v-row v-if="hasPermission">
+      <v-row>
         <v-col cols="8">
           <video ref="video" :src="url" controls/>
         </v-col>
-        <v-col cols="4">
+        <v-col v-if="hasPermission" cols="4">
           <v-card>
             <v-card-text>
               <v-form ref="videoTagForm">
@@ -109,11 +109,12 @@
                 <v-spacer></v-spacer>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{ item }" v-if="hasPermission">
+            <template v-slot:item.actions="{ item }">
               <v-icon
                   small
                   class="mr-2"
                   @click="editItem(item)"
+                  v-if="hasPermission"
               >
                 mdi-pencil
               </v-icon>
@@ -121,6 +122,7 @@
                   small
                   class="mr-2"
                   @click="deleteItem(item)"
+                  v-if="hasPermission"
               >
                 mdi-cloud
               </v-icon>
@@ -320,7 +322,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('rule/fetchAllListRulesOfFile', this.file)
+    // this.$store.dispatch('rule/fetchAllListRulesOfFile', this.file)
     if (this.hasPermission) {
       this.$store.dispatch('staticData/fetchRulesList')
       this.$refs.video.addEventListener('play', this.handlePlayVideo)

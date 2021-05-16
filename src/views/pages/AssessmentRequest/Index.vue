@@ -451,10 +451,10 @@
                       element="my-custom-input"
                   >
                   </date-picker>
-<!--                  <date-picker-->
-<!--                      :autoSubmit="true"-->
-<!--                      placeholder='زمان انتشار'-->
-<!--                      v-model="episodeEditedItem.releaseDate" style="margin-top: 20px !important;"></date-picker>-->
+                  <!--                  <date-picker-->
+                  <!--                      :autoSubmit="true"-->
+                  <!--                      placeholder='زمان انتشار'-->
+                  <!--                      v-model="episodeEditedItem.releaseDate" style="margin-top: 20px !important;"></date-picker>-->
                 </v-col>
                 <v-col
                     cols="12"
@@ -665,11 +665,11 @@
                     </v-col>
                     <v-col
                         cols="12"
-                        sm="3"
+                        sm="6"
                     >
                       <v-autocomplete
                           v-model="dialogEditedItem.targetFile"
-                          label="شناسه کوتاه"
+                          label="فایل"
                           :items="targetFiles"
                           item-text="title"
                           item-value="id"
@@ -715,7 +715,7 @@
 
             <v-tab-item class="mt-1" value="file">
               <v-container>
-                <v-form ref="fileForm">
+                <v-form v-if="canUploadFile" ref="fileForm">
                   <v-row>
                     <v-col
                         cols="12"
@@ -803,20 +803,20 @@
                   >
                     mdi-pen
                   </v-icon>
-<!--                  <v-btn-->
-<!--                      small-->
-<!--                      download-->
-<!--                      :href="item.fileUrl"-->
-<!--                      class="ma-2"-->
-<!--                      outlined-->
-<!--                      text-->
-<!--                  >-->
-<!--                    <v-icon-->
-<!--                        small-->
-<!--                    >-->
-<!--                      mdi-cloud-->
-<!--                    </v-icon>-->
-<!--                  </v-btn>-->
+                  <!--                  <v-btn-->
+                  <!--                      small-->
+                  <!--                      download-->
+                  <!--                      :href="item.fileUrl"-->
+                  <!--                      class="ma-2"-->
+                  <!--                      outlined-->
+                  <!--                      text-->
+                  <!--                  >-->
+                  <!--                    <v-icon-->
+                  <!--                        small-->
+                  <!--                    >-->
+                  <!--                      mdi-cloud-->
+                  <!--                    </v-icon>-->
+                  <!--                  </v-btn>-->
                 </template>
               </v-data-table>
             </v-tab-item>
@@ -1064,6 +1064,9 @@ export default {
   //   this.$store.commit('episode/SET_EPISODES', [])
   // },
   computed: {
+    canUploadFile(){
+      return permission().isPlatform() && permission().isOrders()
+    },
     isSuperAdmin() {
       return permission().isSuperAdmin()
     },
@@ -1202,9 +1205,9 @@ export default {
                   return item._id === value.targetFile
                 }
               })
-              if(obj){
+              if (obj) {
                 value['humanId'] = obj.humanId
-              }else{
+              } else {
                 value['humanId'] = 'ندارد'
               }
             })
@@ -1232,9 +1235,9 @@ export default {
                 return item._id === value.targetFile
               }
             })
-            if(obj){
+            if (obj) {
               value['humanId'] = obj.humanId
-            }else{
+            } else {
               value['humanId'] = 'ندارد'
             }
           })
@@ -1248,7 +1251,7 @@ export default {
     handleTab2() {
       this.handleTab1()
       this.files.forEach(item => {
-        const row = {title: item.humanId, id: item._id}
+        const row = {title: `${item.desc} - ${item.humanId}`, id: item._id}
         this.targetFiles.push(row)
       })
     },
@@ -1302,11 +1305,17 @@ export default {
       })
     },
 
-    handleFileRule(item) {
-      this.videoUrl = item.fileUrl
-      this.assessmentId = this.assessmentRequestInfoObject._id
-      this.fileId = item._id
-      this.videoTagDialog = true
+    async handleFileRule(item) {
+      try {
+        await this.$store.dispatch('rule/fetchAllListRulesOfFile', item._id)
+        this.videoUrl = item.fileUrl
+        this.assessmentId = this.assessmentRequestInfoObject._id
+        this.fileId = item._id
+        this.videoTagDialog = true
+      }catch (e){
+        this.$toast.error('خطایی رخ داده است')
+      }
+
     },
     closeVideoTags() {
       this.videoTagDialog = false

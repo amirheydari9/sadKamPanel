@@ -463,11 +463,11 @@
                     </v-col>
                     <v-col
                         cols="12"
-                        sm="3"
+                        sm="6"
                     >
                       <v-autocomplete
                           v-model="dialogEditedItem.targetFile"
-                          label="شناسه کوتاه"
+                          label="فایل"
                           :items="targetFiles"
                           item-text="title"
                           item-value="id"
@@ -513,7 +513,7 @@
 
             <v-tab-item class="mt-1" value="file">
               <v-container>
-                <v-form ref="fileForm">
+                <v-form v-if="canUploadFile" ref="fileForm">
                   <v-row>
                     <v-col
                         cols="12"
@@ -672,7 +672,7 @@ import VideoTag from "../../../components/VideoTag";
 
 export default {
   name: "Index",
-  components:{
+  components: {
     VideoTag
   },
   data() {
@@ -750,6 +750,9 @@ export default {
     }
   },
   computed: {
+    canUploadFile() {
+      return permission().isPlatform() && permission().isOrders()
+    },
     canSetStatusAndAssignToBrokerage() {
       return permission().isSecretariant() && permission().isOrders()
     },
@@ -952,7 +955,7 @@ export default {
     handleDetailTab2() {
       this.seeDetails(this.assessmentRequestInfoObject)
       this.files.forEach(item => {
-        const row = {title: item.humanId, id: item._id}
+        const row = {title: `${item.desc} - ${item.humanId}`, id: item._id}
         this.targetFiles.push(row)
       })
       console.log(this.dialogs, 'a')
@@ -980,12 +983,17 @@ export default {
         })
       }
     },
-    handleFileRule(item) {
+    async handleFileRule(item) {
       console.log(item);
-      this.videoUrl = item.fileUrl
-      this.assessmentId = this.assessmentRequestInfoObject._id
-      this.fileId = item._id
-      this.videoTagDialog = true
+      try {
+        await this.$store.dispatch('rule/fetchAllListRulesOfFile', item._id)
+        this.videoUrl = item.fileUrl
+        this.assessmentId = this.assessmentRequestInfoObject._id
+        this.fileId = item._id
+        this.videoTagDialog = true
+      } catch (e) {
+        this.$toast.error('خطایی رخ داده است')
+      }
     },
     closeVideoTags() {
       this.videoTagDialog = false
