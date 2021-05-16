@@ -129,7 +129,7 @@
                   class="mr-2"
                   @click="seekToTime(item.fromTime)"
               >
-                mdi-forward
+                mdi-play
               </v-icon>
             </template>
             <template v-slot:item.fromTime="{ item }">
