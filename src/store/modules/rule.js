@@ -27,9 +27,32 @@ export const actions = {
             console.log(e)
         }
     },
+    async fetchAllListRulesOfAssessmentRequest({commit}, assessmentRequestId) {
+        try {
+            const {data} = await ruleService().getListRulesOfAssessmentRequest(assessmentRequestId)
+            commit('SET_LIST_RULES_OF_FILE', data.data)
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    async fetchAllListRulesOfAssessment({commit}, assessmentId) {
+        try {
+            const {data} = await ruleService().getListRulesOfAssessment(assessmentId)
+            commit('SET_LIST_RULES_OF_FILE', data.data)
+        } catch (e) {
+            console.log(e)
+        }
+    },
     async createRuleForAssessmentRequest(context, rule) {
         try {
             await ruleService().createRuleForAssessmentRequest(rule)
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    async createRuleForAssessment(context, rule) {
+        try {
+            await ruleService().createRuleForAssessment(rule)
         } catch (e) {
             console.log(e)
         }

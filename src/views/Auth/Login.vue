@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-0 ma-0" :class="$vuetify.breakpoint.mdAndUp ? 'h-100' : 'h-40' ">
+  <v-container fluid class="pa-0 ma-0" :class="$vuetify.breakpoint.mdAndUp ? 'h-100' : 'h-40'">
     <v-row :class="$vuetify.breakpoint.mdAndUp ? 'h-100' : 'h-40'">
       <AuthBanner/>
       <v-col cols="12" md="4" class="d-flex align-center">

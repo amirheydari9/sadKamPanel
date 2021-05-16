@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <v-container>
       <v-row>
         <v-col cols="8">
@@ -94,6 +95,7 @@
               :search="search"
               no-results-text="اطلاعاتی یافت نشد"
               class="elevation-1 w-100"
+              v-if="type==='assessmentRequest'"
           >
             <template v-slot:top>
               <v-toolbar
@@ -124,8 +126,62 @@
                   @click="deleteItem(item)"
                   v-if="hasPermission"
               >
-                mdi-cloud
+                mdi-delete
               </v-icon>
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="seekToTime(item.fromTime)"
+              >
+                mdi-play
+              </v-icon>
+            </template>
+            <template v-slot:item.fromTime="{ item }">
+              {{ transformVideoTimeFormat(item.fromTime) }}
+            </template>
+            <template v-slot:item.toTime="{ item }">
+              {{ transformVideoTimeFormat(item.toTime) }}
+            </template>
+          </v-data-table>
+          <v-data-table
+              :headers="headers"
+              :items="assessmentRulesData"
+              :search="search"
+              no-results-text="اطلاعاتی یافت نشد"
+              class="elevation-1 w-100"
+              v-if="type==='assessment'"
+          >
+            <template v-slot:top>
+              <v-toolbar
+                  flat
+              >
+                <v-text-field
+                    v-model="search"
+                    label="جست جو"
+                    single-line
+                    hide-details
+                    autofocus
+                ></v-text-field>
+                <v-spacer></v-spacer>
+              </v-toolbar>
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <!--              <v-icon-->
+              <!--                  small-->
+              <!--                  class="mr-2"-->
+              <!--                  @click="editItem(item)"-->
+              <!--                  v-if="hasPermission"-->
+              <!--              >-->
+              <!--                mdi-pencil-->
+              <!--              </v-icon>-->
+              <!--              <v-icon-->
+              <!--                  small-->
+              <!--                  class="mr-2"-->
+              <!--                  @click="deleteItem(item)"-->
+              <!--                  v-if="hasPermission"-->
+              <!--              >-->
+              <!--                mdi-cloud-->
+              <!--              </v-icon>-->
               <v-icon
                   small
                   class="mr-2"
@@ -144,6 +200,7 @@
         </v-col>
       </v-row>
     </v-container>
+
     <v-dialog
         v-model="dialog"
         max-width="600px"
@@ -241,6 +298,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
   </div>
 </template>
 
@@ -255,6 +313,8 @@ export default {
     url: {String, isRequired: true},
     assessment: {String, isRequired: true},
     file: {String, isRequired: false},
+    assessmentRules: {Array, isRequired: false},
+    type: {String, isRequired: false, default: 'assessmentRequest'}
   },
   data() {
     return {
@@ -310,6 +370,9 @@ export default {
       set(value) {
         return this.$store.commit('rule/SET_LIST_RULES_OF_FILE', value)
       }
+    },
+    assessmentRulesData() {
+      return this.assessmentRules
     },
     subjects() {
       return this.$store.getters['staticData/getSubjectsRule']
@@ -442,20 +505,34 @@ export default {
     async saveRule() {
       if (this.$refs.ruleForm.validate()) {
         try {
-          const rule = {
+          let rule = {
             ...this.editedItem,
             fromTime: this.transformVideoTimeToSecond(this.startTime),
             toTime: this.transformVideoTimeToSecond(this.endTime),
             rowNumber: this.rulesOfFile.length ? this.rulesOfFile.length + 1 : 1,
-            assessmentRequestId: this.assessment,
             file: this.file
+          }
+          if (this.type === 'assessmentRequest') {
+            rule = {...rule, assessmentRequestId: this.assessment,}
+          } else {
+            rule = {...rule, assessmentId: this.assessment}
           }
           if (this.editedIndex > -1) {
             await this.$store.dispatch('rule/updateRule', rule)
           } else {
-            await this.$store.dispatch('rule/createRuleForAssessmentRequest', rule)
+            if (this.type === 'assessmentRequest') {
+              await this.$store.dispatch('rule/createRuleForAssessmentRequest', rule)
+              await this.$store.dispatch('rule/fetchAllListRulesOfFile', this.file)
+              this.successAction()
+            } else {
+              await this.$store.dispatch('rule/createRuleForAssessment', rule).then((data)=>{
+                console.log(data.data.id)
+              })
+            }
           }
-          await this.$store.dispatch('rule/fetchAllListRulesOfFile', this.file)
+          // if (this.type === 'assessmentRequest') {
+          //   await this.$store.dispatch('rule/fetchAllListRulesOfFile', this.file)
+          // }
           this.successAction()
         } catch (e) {
           this.failAction()

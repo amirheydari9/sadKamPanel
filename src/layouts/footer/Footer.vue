@@ -1,9 +1,12 @@
 <template>
-    <v-footer app  color="white" class="footerpart" inset>
-      <v-col cols="12">
-        <span>© {{ new Date().getFullYear() }} — Material Pro Admin by wrappixel.com</span>
-      </v-col>
-    </v-footer>
+<!--    <v-footer app  color="white" class="footerpart" inset>-->
+<!--      <v-col cols="12">-->
+<!--&lt;!&ndash;        <span>© {{ new Date().getFullYear() }} — Material Pro Admin by wrappixel.com</span>&ndash;&gt;-->
+<!--      </v-col>-->
+<!--    </v-footer>-->
+  <div>
+
+  </div>
 </template>
 <script>
 export default {

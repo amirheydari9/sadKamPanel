@@ -633,7 +633,7 @@
                     </v-col>
                   </v-row>
                 </template>
-                <template v-if="!assessmentRequestInfoObject">
+                <template v-if="!assessmentRequestInfoObject && canUploadFile">
                   <v-text-field
                       v-model="tab1Desc"
                       outlined
@@ -646,12 +646,12 @@
                   </v-btn>
                 </template>
                 <template>
-                  <v-row v-if="assessmentRequestInfoObject && (!assessmentInfo && canCreateAssessment)">
-                    <v-btn
-                        @click="createAssessment"
-                    >ارزیابی
-                    </v-btn>
-                  </v-row>
+<!--                  <v-row v-if="assessmentRequestInfoObject && (!assessmentInfo && canCreateAssessment)">-->
+<!--                    <v-btn-->
+<!--                        @click="createAssessment"-->
+<!--                    >ارزیابی-->
+<!--                    </v-btn>-->
+<!--                  </v-row>-->
                 </template>
               </v-col>
             </v-tab-item>
@@ -1224,13 +1224,13 @@ export default {
               }
             })
             this.dialogs = res.data.data.dialogs
-            if (res.data.data.assessment) {
-              this.assessmentInfo = data.data.assessment
-            } else {
-              if (this.canCreateAssessment) {
-                this.$toast.info('حداقل یک فایل بارگزاری کنید')
-              }
-            }
+            // if (res.data.data.assessment) {
+            //   this.assessmentInfo = data.data.assessment
+            // } else {
+            //   if (this.canCreateAssessment) {
+            //     this.$toast.info('حداقل یک فایل بارگزاری کنید')
+            //   }
+            // }
           })
         }
       })
@@ -1258,13 +1258,13 @@ export default {
             }
           })
           this.dialogs = res.data.data.dialogs
-          if (res.data.data.assessment) {
-            this.assessmentInfo = data.data.assessment
-          } else {
-            if (this.canCreateAssessment) {
-              this.$toast.info('حداقل یک فایل بارگزاری کنید')
-            }
-          }
+          // if (res.data.data.assessment) {
+          //   this.assessmentInfo = data.data.assessment
+          // } else {
+          //   if (this.canCreateAssessment) {
+          //     this.$toast.info('حداقل یک فایل بارگزاری کنید')
+          //   }
+          // }
         })
       })
     },
@@ -1346,17 +1346,17 @@ export default {
         this.fileId = null
       })
     },
-    async createAssessment() {
-      try {
-        const data = {
-          episode: this.episodeIdForTab1,
-          assessmentRequest: this.assessmentRequestInfoObject._id
-        }
-        await this.$store.dispatch('assessment/createAssessment', data)
-      } catch (e) {
-        this.$toast.error('عملیات انجام نشد')
-      }
-    }
+    // async createAssessment() {
+    //   try {
+    //     const data = {
+    //       episode: this.episodeIdForTab1,
+    //       assessmentRequest: this.assessmentRequestInfoObject._id
+    //     }
+    //     await this.$store.dispatch('assessment/createAssessment', data)
+    //   } catch (e) {
+    //     this.$toast.error('عملیات انجام نشد')
+    //   }
+    // }
   },
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
-  <v-app-bar app clipped-left clipped-right color="primary" dark>
+  <v-app-bar app clipped-left clipped-right color="white">
     <v-toolbar-title class="align-center d-flex">
-      <span class="logo-icon">
-        <img src="../../assets/logo-light-icon.png"/>
-      </span>
+<!--      <span class="logo-icon">-->
+<!--        <img src="../../assets/logo-light-icon.png"/>-->
+<!--      </span>-->
       <span class="logo-text ml-2">
-        <img src="../../assets/logo-light-text.png" class="mt-2"/>
+        <img src="../../assets/logo_50.png" class="mt-2"/>
       </span>
     </v-toolbar-title>
     <v-app-bar-nav-icon
@@ -17,7 +17,7 @@
     <v-menu bottom left transition="scale-transition">
       <template v-slot:activator="{ on }">
         <v-btn dark icon v-on="on">
-          <v-icon>mdi-dots-vertical</v-icon>
+          <v-icon color="black">mdi-dots-vertical</v-icon>
         </v-btn>
       </template>
 

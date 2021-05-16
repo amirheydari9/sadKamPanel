@@ -442,12 +442,12 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <v-row v-if="!assessmentInfo && canAssignTome">
-                    <v-btn
-                        @click="createAssessment"
-                    >ارزیابی
-                    </v-btn>
-                  </v-row>
+<!--                  <v-row v-if="!assessmentInfo && canAssignTome">-->
+<!--                    <v-btn-->
+<!--                        @click="createAssessment"-->
+<!--                    >ارزیابی-->
+<!--                    </v-btn>-->
+<!--                  </v-row>-->
                 </template>
               </v-col>
             </v-tab-item>
@@ -630,6 +630,22 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
+<!--          <v-btn-->
+<!--              color="blue darken-1"-->
+<!--              text-->
+<!--              @click="completeAssessmentRequest"-->
+<!--              v-if="!assessmentRequestIsCompleted && canAssignTome"-->
+<!--          >-->
+<!--            تایید کارگزار-->
+<!--          </v-btn>-->
+<!--          <v-btn-->
+<!--              color="blue darken-1"-->
+<!--              text-->
+<!--              @click="viewAllAssessments"-->
+<!--              v-if="assessmentRequestIsCompleted && canUploadFile"-->
+<!--          >-->
+<!--            مشاهده ارزیابی ها-->
+<!--          </v-btn>-->
           <v-btn
               color="blue darken-1"
               text
@@ -649,7 +665,8 @@
     >
       <v-card>
         <v-card-text>
-          <video-tag :url="videoUrl" :file="fileId" :assessment="assessmentId"/>
+          <video-tag :url="videoUrl" :file="fileId" :assessment="assessmentId" :assessment-rules="assessmentRules"
+                     :type="type"/>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -665,6 +682,26 @@
     </v-dialog>
     <!--    ویدیو تگ-->
 
+<!--    &lt;!&ndash;    دیدبن assessment ها&ndash;&gt;-->
+<!--    <v-dialog-->
+<!--        v-model="assessmentDialog"-->
+<!--        persistent-->
+<!--    >-->
+<!--      <v-card>-->
+<!--        <v-card-text>-->
+
+<!--        </v-card-text>-->
+<!--        <v-card-actions>-->
+<!--          <v-btn-->
+<!--              @click="closeAssessmentDialog"-->
+<!--          >-->
+<!--            بستن-->
+<!--          </v-btn>-->
+<!--        </v-card-actions>-->
+<!--      </v-card>-->
+<!--    </v-dialog>-->
+<!--    &lt;!&ndash;    دیدبن assessment ها&ndash;&gt;-->
+
   </v-container>
 </template>
 
@@ -675,6 +712,8 @@ import {permission} from "../../../plugins/permission";
 import {assessmentRequestService} from "../../../service/assessmentRequestService";
 import {required} from "../../../plugins/rule";
 import VideoTag from "../../../components/VideoTag";
+import {assessmentService} from "../../../service/assessmentService";
+// import {ruleService} from "../../../service/ruleService";
 
 export default {
   name: "Index",
@@ -755,7 +794,12 @@ export default {
       fileId: null,
       currentEpisode: null,
       assessmentId: null,
-
+      assessmentRules: [],
+      type: 'assessment',
+      assessmentRequestIsCompleted: false,
+      canViewAllAssessments: false,
+      assessmentDialog: false,
+      assessmentDialogData: [],
     }
   },
   computed: {
@@ -879,7 +923,7 @@ export default {
         }
         await this.$store.dispatch('assessmentRequest/setStatusOfAssessmentRequest', assessment)
         this.fetchAssessmentListByStatus(this.currentTab)
-        this.$toast.success('عملیات با موفقیا انجام شد')
+        this.$toast.success('عملیات با موفقیت انجام شد')
         this.closeStatus()
       } catch (e) {
         this.$toast.error('عملیات انجام نشد')
@@ -939,6 +983,8 @@ export default {
       }
     },
     seeDetails(item) {
+      console.log(item);
+      this.currentEpisode = item.episode
       assessmentRequestService().getAssessmentRequest(item._id).then(({data}) => {
         this.assessmentRequestInfoObject = data.data
         this.files = data.data.files
@@ -956,14 +1002,13 @@ export default {
         })
         this.dialogs = data.data.dialogs
         this.tabsDialog = true
-        if (data.data.assessment) {
-          this.assessmentInfo = data.data.assessment
-          this.currentEpisode = item._id
-        } else {
-          if (this.canAssignTome) {
-            this.$toast.info('حداقل یک فایل بارگزاری کنید')
-          }
-        }
+        // if (data.data.assessment) {
+        //   this.assessmentInfo = data.data.assessment
+        // } else {
+        //   if (this.canAssignTome) {
+        //     this.$toast.info('حداقل یک فایل بارگزاری کنید')
+        //   }
+        // }
       }).catch(() => this.$toast.error('خطایی رخ داده است'))
     },
     handleDetailTab1() {
@@ -975,7 +1020,6 @@ export default {
         const row = {title: `${item.desc} - ${item.humanId}`, id: item._id}
         this.targetFiles.push(row)
       })
-      console.log(this.dialogs, 'a')
     },
     handleDetailTab3() {
       this.seeDetails(this.assessmentRequestInfoObject)
@@ -1024,19 +1068,50 @@ export default {
       this.assessmentRequestInfoObject = null
       this.assessmentInfo = null
       this.currentEpisode = null
+      this.assessmentRequestIsCompleted = false
+      this.canViewAllAssessments = false
+
     },
 
-    async createAssessment() {
-      try {
-        const data = {
-          episode: this.currentEpisode,
-          assessmentRequest: this.assessmentRequestInfoObject._id
-        }
-        await this.$store.dispatch('assessment/createAssessment', data)
-      } catch (e) {
-        this.$toast.error('عملیات انجام نشد')
-      }
-    }
+    // createAssessment() {
+    //   try {
+    //     const assessment = {
+    //       episode: this.currentEpisode,
+    //       assessmentRequest: this.assessmentRequestInfoObject._id
+    //     }
+    //     console.log(assessment, 'assessment')
+    //     this.$store.dispatch('assessment/createAssessment', assessment).then((data) => {
+    //       console.log(data, 'forid', data.data.id);
+    //       assessmentService().getRulesByAssessmentId(data.data.id).then((value) => {
+    //         this.videoTagDialog = true
+    //         this.videoUrl = this.assessmentRequestInfoObject.files[0].fileUrl;
+    //         this.fileId = this.assessmentRequestInfoObject.files[0]._id
+    //         this.assessmentId = data.data.id
+    //         console.log(value, 'value', value.data.data.rules);
+    //         this.assessmentRules = value.data.data.rules
+    //       })
+    //     })
+    //   } catch (e) {
+    //     this.$toast.error('عملیات انجام نشد')
+    //   }
+    // },
+
+    // completeAssessmentRequest() {
+    //   console.log(this.assessmentInfo, 'this.assessmentInfo')
+    //   const data = {
+    //     status: 4,
+    //     _id: this.assessmentInfo._id
+    //   }
+    //   this.$store.dispatch('assessmentRequest/setStatusOfAssessmentRequest', data).then(() => {
+    //     this.assessmentRequestIsCompleted = true
+    //   })
+    // },
+    // viewAllAssessments() {
+    //     ruleService().getListRulesOfAssessment(this.assessmentId)
+    // },
+    // closeAssessmentDialog() {
+    //   this.assessmentDialog = false
+    // }
   },
 }
 </script>

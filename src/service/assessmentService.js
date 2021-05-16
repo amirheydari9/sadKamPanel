@@ -18,8 +18,17 @@ export function assessmentService() {
         }
     }
 
+    const getRulesByAssessmentId = async (assessmentId) => {
+        try {
+            return await axios.get(`http://sadkam.lincast.ir/api/assessment/rule/byAssessment/${assessmentId}`)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     return {
         createAssessment,
-        findAssessmentByEpisodeId
+        findAssessmentByEpisodeId,
+        getRulesByAssessmentId
     }
 }
