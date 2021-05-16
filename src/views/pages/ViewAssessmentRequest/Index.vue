@@ -556,7 +556,7 @@
                         sm="6"
                     >
                       <v-text-field
-                          v-model="fileEditedItem.dec"
+                          v-model="fileEditedItem.desc"
                           label="توضیحات"
                       ></v-text-field>
                     </v-col>
@@ -699,19 +699,19 @@ export default {
         {text: 'تاریخ ارسال', value: 'submitDate'},
         {text: 'شناسه کوتاه', value: 'humanId'},
         {text: 'مدت زمان', value: 'duration'},
-        {text: 'توضیحات', value: 'dec'},
+        {text: 'توضیحات', value: 'desc'},
         {text: 'عملیات', value: 'actions', sortable: false},
       ],
       dialogSearch: '',
       fileSearch: '',
       fileEditedItem: {
-        dec: '',
+        desc: '',
         fileUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
         accessKey: '',
         secretKey: '',
       },
       fileEditedDefaultItem: {
-        dec: '',
+        desc: '',
         fileUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
         accessKey: '',
         secretKey: '',
@@ -898,24 +898,36 @@ export default {
     seeDetails(item) {
       assessmentRequestService().getAssessmentRequest(item._id).then(({data}) => {
         this.assessmentRequestInfoObject = data.data
-        console.log(this.assessmentRequestInfoObject)
         this.files = data.data.files
+        data.data.dialogs.forEach(value => {
+          const obj = this.files.find(item => {
+            if (value.targetFile) {
+              return item._id === value.targetFile
+            }
+          })
+          if(obj){
+            value['humanId'] = obj.humanId
+          }else{
+            value['humanId'] = 'ندارد'
+          }
+        })
         this.dialogs = data.data.dialogs
         this.tabsDialog = true
       }).catch(() => this.$toast.error('خطایی رخ داده است'))
     },
     handleDetailTab1() {
-      this.seeDetails(this.assessmentRequestInfoObject._id)
+      this.seeDetails(this.assessmentRequestInfoObject)
     },
     handleDetailTab2() {
-      this.seeDetails(this.assessmentRequestInfoObject._id)
+      this.seeDetails(this.assessmentRequestInfoObject)
       this.files.forEach(item => {
         const row = {title: item.humanId, id: item._id}
         this.targetFiles.push(row)
       })
+      console.log(this.dialogs,'a')
     },
     handleDetailTab3() {
-      this.seeDetails(this.assessmentRequestInfoObject._id)
+      this.seeDetails(this.assessmentRequestInfoObject)
     },
     saveDialog() {
       if (this.$refs.dialogForm.validate()) {

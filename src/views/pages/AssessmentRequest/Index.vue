@@ -759,7 +759,7 @@
                         sm="6"
                     >
                       <v-text-field
-                          v-model="fileEditedItem.dec"
+                          v-model="fileEditedItem.desc"
                           label="توضیحات"
                       ></v-text-field>
                     </v-col>
@@ -942,7 +942,7 @@ export default {
       {text: 'تاریخ ارسال', value: 'submitDate'},
       {text: 'شناسه کوتاه', value: 'humanId'},
       {text: 'مدت زمان', value: 'duration'},
-      {text: 'توضیحات', value: 'dec'},
+      {text: 'توضیحات', value: 'desc'},
       {text: 'عملیات', value: 'actions', sortable: false},
     ],
     productEditedIndex: -1,
@@ -1002,13 +1002,13 @@ export default {
       description: ''
     },
     fileEditedItem: {
-      dec: '',
+      desc: '',
       fileUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
       accessKey: '',
       secretKey: '',
     },
     fileEditedDefaultItem: {
-      dec: '',
+      desc: '',
       fileUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
       accessKey: '',
       secretKey: '',
@@ -1199,6 +1199,18 @@ export default {
           assessmentRequestService().getAssessmentRequest(data.data[0]._id).then((res) => {
             this.assessmentRequestInfoObject = res.data.data
             this.files = res.data.data.files
+            res.data.data.dialogs.forEach(value => {
+              const obj = this.files.find(item => {
+                if (value.targetFile) {
+                  return item._id === value.targetFile
+                }
+              })
+              if(obj){
+                value['humanId'] = obj.humanId
+              }else{
+                value['humanId'] = 'ندارد'
+              }
+            })
             this.dialogs = res.data.data.dialogs
             // if(!res.data.data.assessment){
             //   this.$toast.info('حداقل یک فایل بارگذاری کنید')
@@ -1217,6 +1229,18 @@ export default {
         assessmentRequestService().getAssessmentRequest(data.data.id).then((res) => {
           this.assessmentRequestInfoObject = res.data.data
           this.files = res.data.data.files
+          res.data.data.dialogs.forEach(value => {
+            const obj = this.files.find(item => {
+              if (value.targetFile) {
+                return item._id === value.targetFile
+              }
+            })
+            if(obj){
+              value['humanId'] = obj.humanId
+            }else{
+              value['humanId'] = 'ندارد'
+            }
+          })
           this.dialogs = res.data.data.dialogs
           // if(!res.data.data.assessment){
           //   this.$toast.info('حداقل یک فایل بارگذاری کنید')
