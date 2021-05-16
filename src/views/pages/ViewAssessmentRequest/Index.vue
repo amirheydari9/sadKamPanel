@@ -63,6 +63,7 @@
                   small
                   class="mr-2"
                   @click="changeStatus(item,0)"
+                  v-if="canSetStatusAndAssignToBrokerage"
               >
                 mdi-eye
               </v-icon>
@@ -70,6 +71,7 @@
                   small
                   class="mr-2"
                   @click="changeBrokerage(item,0)"
+                  v-if="canSetStatusAndAssignToBrokerage"
               >
                 mdi-cloud
               </v-icon>
@@ -110,14 +112,8 @@
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeStatus(item,1)"
-              >
-                mdi-eye
-              </v-icon>
-              <v-icon
-                  small
-                  class="mr-2"
-                  @click="changeBrokerage(item,1)"
+                  @click="assignedToMe(item,1)"
+                  v-if="canAssignTome"
               >
                 mdi-cloud
               </v-icon>
@@ -158,16 +154,10 @@
               <v-icon
                   small
                   class="mr-2"
-                  @click="changeStatus(item,2)"
+                  @click="unAssignMe(item,2)"
+                  v-if="canAssignTome"
               >
                 mdi-eye
-              </v-icon>
-              <v-icon
-                  small
-                  class="mr-2"
-                  @click="changeBrokerage(item,2)"
-              >
-                mdi-cloud
               </v-icon>
             </template>
             <template v-slot:item.status="{ item }">
@@ -202,22 +192,6 @@
                 ></v-text-field>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{item}">
-              <v-icon
-                  small
-                  class="mr-2"
-                  @click="changeStatus(item,3)"
-              >
-                mdi-eye
-              </v-icon>
-              <v-icon
-                  small
-                  class="mr-2"
-                  @click="changeBrokerage(item,3)"
-              >
-                mdi-cloud
-              </v-icon>
-            </template>
             <template v-slot:item.status="{ item }">
               {{ transformAssessmentRequestStatus(item.status) }}
             </template>
@@ -250,22 +224,6 @@
                 ></v-text-field>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{item}">
-              <v-icon
-                  small
-                  class="mr-2"
-                  @click="changeStatus(item,4)"
-              >
-                mdi-eye
-              </v-icon>
-              <v-icon
-                  small
-                  class="mr-2"
-                  @click="changeBrokerage(item,4)"
-              >
-                mdi-cloud
-              </v-icon>
-            </template>
             <template v-slot:item.status="{ item }">
               {{ transformAssessmentRequestStatus(item.status) }}
             </template>
@@ -297,22 +255,6 @@
                     autofocus
                 ></v-text-field>
               </v-toolbar>
-            </template>
-            <template v-slot:item.actions="{item}">
-              <v-icon
-                  small
-                  class="mr-2"
-                  @click="changeStatus(item,5)"
-              >
-                mdi-eye
-              </v-icon>
-              <v-icon
-                  small
-                  class="mr-2"
-                  @click="changeBrokerage(item,5)"
-              >
-                mdi-cloud
-              </v-icon>
             </template>
             <template v-slot:item.status="{ item }">
               {{ transformAssessmentRequestStatus(item.status) }}
@@ -403,6 +345,7 @@
 <script>
 import {transformDateToJalali, transformAssessmentRequestStatus} from '../../../plugins/transformData'
 import {assessmentRequestStatus} from "../../../plugins/constant";
+import {permission} from "../../../plugins/permission";
 
 export default {
   name: "Index",
@@ -433,6 +376,12 @@ export default {
     }
   },
   computed: {
+    canSetStatusAndAssignToBrokerage() {
+      return permission().isSecretariant() && permission().isOrders()
+    },
+    canAssignTome() {
+      return permission().isBrokerage() && permission().isOrders()
+    },
     brokerage() {
       return this.$store.getters['getBrokerage']
     },
@@ -494,7 +443,9 @@ export default {
     this.$store.commit('assessmentRequest/SET_COMPLETED', [])
   },
   mounted() {
-    this.$store.dispatch('fetchOrganizations')
+    if (this.canSetStatusAndAssignToBrokerage) {
+      this.$store.dispatch('fetchOrganizations')
+    }
     this.$store.commit('SET_BREADCRUMBS', this.breadcrumbs)
     this.fetchAssessmentListByStatus(0)
   },
@@ -541,9 +492,22 @@ export default {
           assessmentRequestId: this.item._id
         }
         await this.$store.dispatch('assessmentRequest/setStatusOfAssessmentRequest', assessment)
-        await this.$store.dispatch('assessmentRequest/setStatusOfAssessmentRequest', this.fetchAssessmentListByStatus(this.currentTab))
+        this.fetchAssessmentListByStatus(this.currentTab)
         this.$toast.success('عملیات با موفقیا انجام شد')
         this.closeStatus()
+      } catch (e) {
+        this.$toast.error('عملیات انجام نشد')
+      }
+    },
+    async assignedToMe(item, index) {
+      const brokerage = {
+        brokerageId: this.brokerageValue,
+        assessmentRequestId: item._id
+      }
+      try {
+        await this.$store.dispatch('assessmentRequest/assignAssessmentRequestToBrokerage', brokerage)
+        this.fetchAssessmentListByStatus(index)
+        this.$toast.success('عملیات با موفقیت انجام شد')
       } catch (e) {
         this.$toast.error('عملیات انجام نشد')
       }
@@ -559,8 +523,8 @@ export default {
           assessmentRequestId: this.item._id
         }
         await this.$store.dispatch('assessmentRequest/assignAssessmentRequestToBrokerage', brokerage)
-        await this.$store.dispatch('assessmentRequest/setStatusOfAssessmentRequest', this.fetchAssessmentListByStatus(this.currentTab))
-        this.$toast.success('عملیات با موفقیا انجام شد')
+        this.fetchAssessmentListByStatus(this.currentTab)
+        this.$toast.success('عملیات با موفقیت انجام شد')
         this.closeBrokerage()
       } catch (e) {
         this.$toast.error('عملیات انجام نشد')
@@ -575,8 +539,17 @@ export default {
       this.brokerageDialog = false
       this.item = null
       this.currentTab = null
+    },
+    async unAssignMe(item, index) {
+      try {
+        await this.$store.dispatch('assessmentRequest/unAssignAssessmentRequestToBrokerage', item._id)
+        this.fetchAssessmentListByStatus(index)
+        this.$toast.success('عملیات با موفقیت انجام شد')
+      } catch (e) {
+        this.$toast.error('عملیات انجام نشد')
+      }
     }
-  }
+  },
 }
 </script>
 

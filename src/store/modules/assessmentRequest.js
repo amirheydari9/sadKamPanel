@@ -131,6 +131,14 @@ export const actions = {
         }
     },
 
+    async unAssignAssessmentRequestToBrokerage(context, assessmentRequestId) {
+        try {
+            return await assessmentRequestService().unAssignAssessmentRequestToBrokerage(assessmentRequestId)
+        } catch (e) {
+            console.log(e)
+        }
+    },
+
     async setStatusOfAssessmentRequest(context, status) {
         try {
             return await assessmentRequestService().setStatusOfAssessmentRequest(status)

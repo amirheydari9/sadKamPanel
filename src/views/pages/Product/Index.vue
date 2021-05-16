@@ -824,13 +824,14 @@ export default {
       }
     },
     getEpisodesList(item) {
+      this.currentProduct = item
       if (item.entryType === 'multiple') {
         episodeService().getAllEpisodes(item._id).then(({data}) => {
-          this.episodeEditedItem.parent = item._id
           this.episodes = data.data
           this.episodesListDialog = true
         }).catch(() => this.$toast.error('خطایی رخ داده است'))
       } else {
+        this.currentProduct = null
         this.$toast.info('امکلن تعریف اپیزود برای این محصول امکان پدیر نیست')
       }
     },
@@ -859,7 +860,7 @@ export default {
         }
         if (this.episodeEditedIndex > -1) {
           episodeService().updateEpisode(this.episodeEditedItem).then(() => {
-            episodeService().getAllEpisodes(this.episodeEditedItem.parent).then(({data}) => {
+            episodeService().getAllEpisodes(this.currentProduct._id).then(({data}) => {
               this.episodes = data.data
               this.$toast.success('عملیات با موفقیت انجام شد')
               this.closeEpisode()
@@ -867,7 +868,7 @@ export default {
           }).catch(() => this.$toast.error('خطایی رخ داده است'))
         } else {
           episodeService().createEpisode(this.episodeEditedItem).then(() => {
-            episodeService().getAllEpisodes(this.episodeEditedItem.parent).then(({data}) => {
+            episodeService().getAllEpisodes(this.currentProduct._id).then(({data}) => {
               this.episodes = data.data
               this.$toast.success('عملیات با موفقیت انجام شد')
               this.closeEpisode()
@@ -878,7 +879,8 @@ export default {
     },
 
     closeEpisodeListDialog() {
-      this.episodes = []
+      this.episodes = [];
+      this.currentProduct = null;
       this.episodesListDialog = false
     },
 

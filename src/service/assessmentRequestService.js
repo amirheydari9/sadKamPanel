@@ -64,6 +64,14 @@ export function assessmentRequestService() {
         }
     }
 
+    const unAssignAssessmentRequestToBrokerage = async (assessmentRequestId) => {
+        try {
+            return await axios.patch(`http://sadkam.lincast.ir/api/assessmentRequest/unassign`, assessmentRequestId)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     const setStatusOfAssessmentRequest = async (status) => {
         try {
             return await axios.patch(`http://sadkam.lincast.ir/api/assessmentRequest/status`, status)
@@ -81,6 +89,7 @@ export function assessmentRequestService() {
         createFile,
         getAssessmentListByStatus,
         assignAssessmentRequestToBrokerage,
-        setStatusOfAssessmentRequest
+        setStatusOfAssessmentRequest,
+        unAssignAssessmentRequestToBrokerage
     }
 }
