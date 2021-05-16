@@ -940,7 +940,7 @@ export default {
             }
           })
           if (obj) {
-            value['humanId'] = obj.humanId
+            value['humanId'] = obj.desc ? `${obj.desc}-${obj.humanId}` : `${obj.humanId}`
           } else {
             value['humanId'] = 'ندارد'
           }
