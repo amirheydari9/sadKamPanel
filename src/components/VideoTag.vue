@@ -3,7 +3,7 @@
     <v-container>
       <v-row v-if="hasPermission">
         <v-col cols="8">
-          <video ref="video" src="/1.mp4" controls/>
+          <video ref="video" :src="url" controls/>
         </v-col>
         <v-col cols="4">
           <v-card>
@@ -123,6 +123,13 @@
                   @click="deleteItem(item)"
               >
                 mdi-cloud
+              </v-icon>
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="seekToTime(item.fromTime)"
+              >
+                mdi-forward
               </v-icon>
             </template>
             <template v-slot:item.fromTime="{ item }">
@@ -452,6 +459,10 @@ export default {
           this.failAction()
         }
       }
+    },
+    seekToTime(second) {
+      console.log(second)
+      this.$refs.video.currentTime = second
     },
     successAction() {
       this.$toast.success('عملیات با موفیت انجام شد')
