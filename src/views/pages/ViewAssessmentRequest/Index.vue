@@ -712,7 +712,7 @@ import {permission} from "../../../plugins/permission";
 import {assessmentRequestService} from "../../../service/assessmentRequestService";
 import {required} from "../../../plugins/rule";
 import VideoTag from "../../../components/VideoTag";
-import {assessmentService} from "../../../service/assessmentService";
+// import {assessmentService} from "../../../service/assessmentService";
 // import {ruleService} from "../../../service/ruleService";
 
 export default {
