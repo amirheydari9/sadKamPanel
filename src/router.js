@@ -97,7 +97,7 @@ const routes = new Router({
                     path: '/viewAssessmentRequest',
                     component: () => import('@/views/pages/ViewAssessmentRequest/Index.vue'),
                     meta: {
-                        isSuperAdmin: true
+                        permission: 'orders'
                     }
                 },
 
