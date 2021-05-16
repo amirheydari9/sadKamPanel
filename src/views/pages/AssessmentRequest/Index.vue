@@ -1035,6 +1035,7 @@ export default {
     episodeHasAssessmentRequest: false,
     tab1Desc: null,
     assessmentRequestInfoObject: null,
+    assessmentInfo: null,
     dialogs: [],
     targetFiles: [],
     files: [],
@@ -1064,7 +1065,10 @@ export default {
   //   this.$store.commit('episode/SET_EPISODES', [])
   // },
   computed: {
-    canUploadFile(){
+    canCreateAssessment(){
+      return permission().isBrokerage() && permission().isOrders()
+    },
+    canUploadFile() {
       return permission().isPlatform() && permission().isOrders()
     },
     isSuperAdmin() {
@@ -1212,9 +1216,13 @@ export default {
               }
             })
             this.dialogs = res.data.data.dialogs
-            // if(!res.data.data.assessment){
-            //   this.$toast.info('حداقل یک فایل بارگذاری کنید')
-            // }
+            if (res.data.data.assessment) {
+              this.assessmentInfo = data.data.assessment
+            }else{
+              if(this.canCreateAssessment){
+                this.$toast.info('حداقل یک فیال بارگزاری کنید')
+              }
+            }
           })
         }
       })
@@ -1242,9 +1250,13 @@ export default {
             }
           })
           this.dialogs = res.data.data.dialogs
-          // if(!res.data.data.assessment){
-          //   this.$toast.info('حداقل یک فایل بارگذاری کنید')
-          // }
+          if (res.data.data.assessment) {
+            this.assessmentInfo = data.data.assessment
+          }else{
+            if(this.canCreateAssessment){
+              this.$toast.info('حداقل یک فیال بارگزاری کنید')
+            }
+          }
         })
       })
     },
@@ -1288,6 +1300,7 @@ export default {
       this.$nextTick(() => {
         this.episodeIdForTab1 = null;
         this.assessmentRequestInfoObject = null;
+        this.assessmentInfo = null;
         this.fileEditedItem = Object.assign({}, this.fileEditedDefaultItem)
         this.dialogEditedItem = Object.assign({}, this.dialogEditedDefaultItem)
         if (this.$refs.dialogForm) {
@@ -1312,7 +1325,7 @@ export default {
         this.assessmentId = this.assessmentRequestInfoObject._id
         this.fileId = item._id
         this.videoTagDialog = true
-      }catch (e){
+      } catch (e) {
         this.$toast.error('خطایی رخ داده است')
       }
 

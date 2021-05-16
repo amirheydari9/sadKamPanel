@@ -705,6 +705,7 @@ export default {
       dialogs: [],
       files: [],
       assessmentRequestInfoObject: null,
+      assessmentInfo: null,
       dialogEditedItem: {
         message: '',
         targetFile: '',
@@ -746,7 +747,8 @@ export default {
       videoTagDialog: false,
       videoUrl: null,
       fileId: null,
-      assessmentId: null
+      assessmentId: null,
+
     }
   },
   computed: {
@@ -947,6 +949,13 @@ export default {
         })
         this.dialogs = data.data.dialogs
         this.tabsDialog = true
+        if (data.data.assessment) {
+          this.assessmentInfo = data.data.assessment
+        }else{
+          if(this.canAssignTome){
+            this.$toast.info('حداقل یک فیال بارگزاری کنید')
+          }
+        }
       }).catch(() => this.$toast.error('خطایی رخ داده است'))
     },
     handleDetailTab1() {
@@ -984,7 +993,6 @@ export default {
       }
     },
     async handleFileRule(item) {
-      console.log(item);
       try {
         await this.$store.dispatch('rule/fetchAllListRulesOfFile', item._id)
         this.videoUrl = item.fileUrl
@@ -1006,6 +1014,7 @@ export default {
     closeDetailsTabs() {
       this.tabsDialog = false;
       this.assessmentRequestInfoObject = null
+      this.assessmentInfo = null
     }
   },
 }
