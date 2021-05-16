@@ -594,7 +594,7 @@
                 href="#chat"
                 v-if="assessmentRequestInfoObject"
                 @click="handleTab2"
-            >فراگیر
+            >گفتگوها
             </v-tab>
             <v-tab
                 href="#file"
@@ -1202,6 +1202,9 @@ export default {
             this.assessmentRequestInfoObject = res.data.data
             this.files = res.data.data.files
             this.dialogs = res.data.data.dialogs
+            // if(!res.data.data.assessment){
+            //   this.$toast.info('حداقل یک فایل بارگذاری کنید')
+            // }
           })
         }
       })
@@ -1217,6 +1220,9 @@ export default {
           this.assessmentRequestInfoObject = res.data.data
           this.files = res.data.data.files
           this.dialogs = res.data.data.dialogs
+          // if(!res.data.data.assessment){
+          //   this.$toast.info('حداقل یک فایل بارگذاری کنید')
+          // }
         })
       })
     },
