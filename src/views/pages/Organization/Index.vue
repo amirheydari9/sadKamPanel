@@ -1,166 +1,74 @@
 <template>
-  <v-data-table
-      :headers="headers"
-      :items="organizations"
-      :search="search"
-      no-results-text="اطلاعاتی یافت نشد"
-      class="elevation-1 w-100"
-  >
-    <template v-slot:top>
-      <v-toolbar
-          flat
-      >
-        <v-text-field
-            v-model="search"
-            label="جست جو"
-            single-line
-            hide-details
-            autofocus
-        ></v-text-field>
-        <v-spacer></v-spacer>
-        <v-dialog
-            v-model="dialog"
-            max-width="600px"
-            persistent
+  <div class="w-100">
+    <v-data-table
+        :headers="headers"
+        :items="organizations"
+        :search="search"
+        no-results-text="اطلاعاتی یافت نشد"
+        class="elevation-1 w-100"
+    >
+      <template v-slot:top>
+        <v-toolbar
+            flat
         >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-                color="primary"
-                dark
-                class="mb-2"
-                v-bind="attrs"
-                v-on="on"
-            >
-              افزودن سازمان جدید
-            </v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
+          <v-text-field
+              v-model="search"
+              label="جست جو"
+              single-line
+              hide-details
+              autofocus
+          ></v-text-field>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="primary"
+              dark
+              class="mb-2"
+              @click="createItem"
+          >
+            افزودن سازمان جدید
+          </v-btn>
 
-            <v-card-text>
-              <v-container>
-                <v-form ref="organizationForm">
-                  <v-row>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                    >
-                      <v-text-field
-                          :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                          v-model="editedItem.name"
-                          label="نام سازمان"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                    >
-                      <v-text-field
-                          :rules="[
-                            required('این فیلد الزامی است'),
-                            verifyMobilePhone()
-                            ]"
-                          v-model="editedItem.agent_phone"
-                          label="شماره تماس معرف"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                    >
-                      <v-autocomplete
-                          v-model="editedItem.organizationType"
-                          :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                          label="نوع سازمان"
-                          :items="organizationType"
-                          item-text="fa"
-                          item-value="type"
-                          dense
-                      ></v-autocomplete>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                    >
-                      <v-switch
-                          v-model="editedItem.active"
-                          label="فعال است"
-                      ></v-switch>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                    >
-                      <v-text-field
-                          :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                          v-model="editedItem.address"
-                          label="آدرس سازمان"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-form>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="save"
-              >
-                ذخیره
-              </v-btn>
-              <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="close"
-              >
-                انصراف
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-    <template v-slot:item.active="{ item }">
-      <v-simple-checkbox
-          v-model="item.active"
-          disabled
-      ></v-simple-checkbox>
-    </template>
-    <template v-slot:item.organizationType="{ item }">
-      {{ transformOrganizationType(item.organizationType) }}
-    </template>
-    <template v-slot:item.actions="{ item }">
-      <v-icon
-          small
-          class="mr-2"
-          @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-    </template>
-  </v-data-table>
+        </v-toolbar>
+      </template>
+      <template v-slot:item.active="{ item }">
+        <v-simple-checkbox
+            v-model="item.active"
+            disabled
+        ></v-simple-checkbox>
+      </template>
+      <template v-slot:item.organizationType="{ item }">
+        {{ transformOrganizationType(item.organizationType) }}
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-icon
+            small
+            class="mr-2"
+            @click="editItem(item)"
+        >
+          mdi-pencil
+        </v-icon>
+      </template>
+    </v-data-table>
+    <organization-details-dialog
+        v-if="showDialog"
+        :showDialog="showDialog"
+        :isCreate="isCreate"
+        @closeDialog="closeDialog"
+        @handleSave="handleSave"
+    />
+  </div>
 </template>
 
 <script>
-import {required, verifyMobilePhone, verifyUserName} from "../../../plugins/rule";
-import {organizationService} from "../../../service/organizationService";
 import {transformOrganizationType} from "../../../plugins/transformData";
+import OrganizationDetailsDialog from "./OrganizationDetailsDialog";
 
 export default {
   name: "Index",
+  components: {OrganizationDetailsDialog},
   data: () => ({
-    dialog: false,
-    dialogDelete: false,
+    showDialog: false,
+    isCreate: true,
     search: '',
     headers: [
       {text: 'نام سازمان', value: 'name',},
@@ -171,18 +79,11 @@ export default {
       {text: 'عملیات', value: 'actions', sortable: false},
     ],
     editedIndex: -1,
-    editedItem: {
-      name: '',
-      agent_phone: '',
-      organizationType: [],
-      address: '',
-      active: false,
-    },
     defaultItem: {
       name: '',
       agent_phone: '',
       organizationType: '',
-      address:'',
+      address: '',
       active: false,
     },
     breadcrumbs: [
@@ -198,83 +99,54 @@ export default {
         exact: true
       },
     ],
-    required,
-    verifyMobilePhone,
-    verifyUserName,
     transformOrganizationType
   }),
   mounted() {
-    this.$store.dispatch('fetchOrganizations')
-    this.$store.dispatch('fetchOrganizationTypes')
+    this.$store.dispatch('organization/fetchOrganizations')
+    this.$store.dispatch('organization/fetchOrganizationTypes')
     this.$store.commit('SET_BREADCRUMBS', this.breadcrumbs)
   },
   computed: {
-    organizations:{
+    organizations: {
       get() {
-        return this.$store.getters['getOrganizations']
+        return this.$store.getters['organization/getOrganizations']
       },
       set(value) {
-        return this.$store.commit('SET_ORGANIZATIONS', value)
+        return this.$store.commit('organization/SET_ORGANIZATIONS', value)
       }
     },
     organizationType() {
-      return this.$store.getters['getOrganizationTypes']
+      return this.$store.getters['organization/getOrganizationTypes']
     },
     formTitle() {
       return this.editedIndex === -1 ? 'افزودن سازمان' : 'ویرایش سازمان'
     },
   },
-
-  watch: {
-    dialog(val) {
-      val || this.close()
-    },
-    dialogDelete(val) {
-      val || this.closeDelete()
-    },
-  },
-
   methods: {
-
-    editItem(item) {
+    async editItem(item) {
       this.editedIndex = this.organizations.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
+      await this.$store.commit('organization/SET_ORGANIZATION', {...item})
+      this.isCreate = false
+      this.showDialog = true
     },
-
-    close() {
-      this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
+    async createItem() {
+      await this.$store.commit('organization/SET_ORGANIZATION', {...this.defaultItem})
+      this.isCreate = true
+      this.showDialog = true
+    },
+    async handleSave(organization) {
+      if (this.editedIndex > -1) {
+        await this.$store.dispatch('organization/updateOrganization', organization)
+        Object.assign(this.organizations[this.editedIndex], organization)
         this.editedIndex = -1
-        this.$refs.organizationForm.resetValidation()
-      })
-    },
-
-    closeDelete() {
-      this.dialogDelete = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-    },
-
-    save() {
-      if (this.$refs.organizationForm.validate()) {
-        if (this.editedIndex > -1) {
-          organizationService().updateOrganization(this.editedItem).then(() => {
-            Object.assign(this.organizations[this.editedIndex], this.editedItem)
-            this.close()
-          })
-        } else {
-          organizationService().createOrganization(this.editedItem).then(() => {
-            this.$store.dispatch('fetchOrganizations').then(() => {
-              this.close()
-            })
-          })
-        }
+      } else {
+        await this.$store.dispatch('organization/createOrganization', organization)
+        await this.$store.dispatch('organization/fetchOrganizations')
       }
     },
+    closeDialog() {
+      this.showDialog = false
+    }
   },
 }
 </script>

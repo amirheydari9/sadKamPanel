@@ -41,21 +41,20 @@ export const actions = {
             console.log(e)
         }
     },
-    async createUser(context, organization) {
+    async createOrganization(context, organization) {
         try {
             return await organizationService().createOrganization(organization)
         } catch (e) {
             console.log(e)
         }
     },
-    async updateUser(context, organization) {
+    async updateOrganization(context, organization) {
         try {
             return await organizationService().updateOrganization(organization)
         } catch (e) {
             console.log(e)
         }
     },
-
     async fetchOrganizationTypes({commit}) {
         try {
             const {data} = await organizationService().getOrganizationTypes()
