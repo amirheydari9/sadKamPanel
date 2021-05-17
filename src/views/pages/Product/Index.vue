@@ -292,7 +292,6 @@
 </template>
 
 <script>
-import {required, verifyMobilePhone, verifyUserName, multiSelectRequired, length} from "../../../plugins/rule";
 import {entryType} from '../../../plugins/constant'
 import {
   transformEntryType,
@@ -358,11 +357,6 @@ export default {
         exact: true
       },
     ],
-    required,
-    verifyMobilePhone,
-    verifyUserName,
-    multiSelectRequired,
-    length,
     entryType,
     transformEntryType,
     transformTitleType,
