@@ -9,6 +9,8 @@ import * as assessmentRequest from './modules/assessmentRequest'
 import * as staticData from './modules/static'
 import * as rule from './modules/rule'
 import * as assessment from './modules/assessment'
+import * as user from './modules/user'
+import * as organization from './modules/organization'
 
 Vue.use(Vuex)
 
@@ -126,14 +128,7 @@ export default new Vuex.Store({
                 console.log(e)
             }
         },
-        async fetchUsers({commit}) {
-            try {
-                const {data} = await userService().getAllUsers()
-                commit('SET_USERS', data.data)
-            } catch (e) {
-                console.log(e)
-            }
-        },
+
         async fetchRoles({commit}) {
             try {
                 const {data} = await userService().getAllRoles()
@@ -167,6 +162,8 @@ export default new Vuex.Store({
         }
     },
     modules: {
+        user,
+        organization,
         product,
         episode,
         assessmentRequest,

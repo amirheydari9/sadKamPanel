@@ -10,7 +10,7 @@ Jmoment.loadPersian({
 export const transformRoles = (value) => {
     const roles = []
     value.forEach(item => {
-        const role = store.getters['getAllRoles'].find(i => i.role === item)
+        const role = store.getters['user/getAllRoles'].find(i => i.role === item)
         if (role) {
             roles.push(role.fa)
         }
@@ -19,12 +19,12 @@ export const transformRoles = (value) => {
 }
 
 export const transformOrganizationType = (value) => {
-    const organizationType = store.getters['getOrganizationTypes'].find(item => item.type === value)
+    const organizationType = store.getters['organization/getOrganizationTypes'].find(item => item.type === value)
     return organizationType ? organizationType.fa : value
 }
 
 export const transformOrganization = (value) => {
-    const organization = store.getters['getOrganizations'].find(item => item._id === value)
+    const organization = store.getters['organization/getOrganizations'].find(item => item._id === value)
     return organization ? organization.name : value
 }
 

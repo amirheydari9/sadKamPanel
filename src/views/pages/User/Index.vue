@@ -1,216 +1,98 @@
 <template>
-  <v-data-table
-      :headers="headers"
-      :items="users"
-      :search="search"
-      no-results-text="اطلاعاتی یافت نشد"
-      class="elevation-1 w-100"
-  >
-    <template v-slot:top>
-      <v-toolbar
-          flat
-      >
-        <v-text-field
-            v-model="search"
-            label="جست جو"
-            single-line
-            hide-details
-            autofocus
-        ></v-text-field>
-        <v-spacer></v-spacer>
-        <v-dialog
-            v-model="dialog"
-            max-width="600px"
-            persistent
+  <div class="w-100">
+    <v-data-table
+        :headers="headers"
+        :items="users"
+        :search="search"
+        no-results-text="اطلاعاتی یافت نشد"
+        class="elevation-1 w-100"
+    >
+      <template v-slot:top>
+        <v-toolbar
+            flat
         >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-                color="primary"
-                dark
-                class="mb-2"
-                v-bind="attrs"
-                v-on="on"
-            >
-              افزودن کاربر جدید
-            </v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
-
-            <v-card-text>
-              <v-container>
-                <v-form ref="userForm">
-                  <v-row>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                    >
-                      <v-text-field
-                          :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                          v-model="editedItem.nickname"
-                          label="نام کاربر"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                    >
-                      <v-text-field
-                          :rules="[
-                            required('این فیلد الزامی است'),
-                            verifyMobilePhone()
-                            ]"
-                          v-model="editedItem.phone"
-                          label="شماره تماس"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        v-if="isSuperAdmin"
-                    >
-                      <v-autocomplete
-                          v-model="editedItem.organization"
-                          :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                          label="نام سازمان"
-                          :items="organizationList"
-                          item-text="name"
-                          item-value="_id"
-                          dense
-                      ></v-autocomplete>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        v-if="isSuperAdmin"
-                    >
-                      <v-autocomplete
-                          v-model="editedItem.organizationType"
-                          :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                          label="نوع سازمان"
-                          :items="organizationType"
-                          item-text="fa"
-                          item-value="type"
-                          dense
-                      ></v-autocomplete>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                    >
-                      <v-autocomplete
-                          :rules="[
-                            multiSelectRequired('این فیلد الزامی است'),
-                            ]"
-                          v-model="editedItem.organizationRoles"
-                          :items="roles"
-                          item-text="fa"
-                          item-value="role"
-                          chips
-                          label="سطح دسترسی"
-                          multiple
-                          deletable-chips
-                      ></v-autocomplete>
-                    </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                    >
-                      <v-switch
-                          v-model="editedItem.active"
-                          label="فعال است"
-                      ></v-switch>
-                    </v-col>
-                  </v-row>
-                </v-form>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="save"
-              >
-                ذخیره
-              </v-btn>
-              <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="close"
-              >
-                انصراف
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-    <template v-slot:item.organizationRoles="{ item }">
-      {{ transformRoles(item.organizationRoles) }}
-    </template>
-    <template v-slot:item.organizationType="{ item }">
-      {{ transformOrganizationType(item.organizationType) }}
-    </template>
-    <template v-slot:item.organization="{ item }">
-      {{ transformOrganization(item.organization) }}
-    </template>
-    <template v-slot:item.active="{ item }">
-      <v-simple-checkbox
-          v-model="item.active"
-          disabled
-      ></v-simple-checkbox>
-    </template>
-    <template v-slot:item.actions="{ item }">
-      <v-icon
-          small
-          class="mr-2"
-          @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-    </template>
-  </v-data-table>
+          <v-text-field
+              v-model="search"
+              label="جست جو"
+              single-line
+              hide-details
+              autofocus
+          ></v-text-field>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="primary"
+              dark
+              @click="createItem"
+          >
+            افزودن کاربر جدید
+          </v-btn>
+        </v-toolbar>
+      </template>
+      <template v-slot:item.organizationRoles="{ item }">
+        {{ transformRoles(item.organizationRoles) }}
+      </template>
+      <template v-slot:item.organizationType="{ item }">
+        {{ transformOrganizationType(item.organizationType) }}
+      </template>
+      <template v-slot:item.organization="{ item }">
+        {{ transformOrganization(item.organization) }}
+      </template>
+      <template v-slot:item.active="{ item }">
+        <v-simple-checkbox
+            v-model="item.active"
+            disabled
+        ></v-simple-checkbox>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-icon
+            small
+            class="mr-2"
+            @click="editItem(item)"
+        >
+          mdi-pencil
+        </v-icon>
+      </template>
+    </v-data-table>
+    <user-details-dialog
+        v-if="showDialog"
+        :showDialog="showDialog"
+        :isCreate="isCreate"
+        @closeDialog="closeDialog"
+        @handleSave="handleSave"
+    />
+  </div>
 </template>
 
 <script>
-import {required, verifyMobilePhone, verifyUserName, multiSelectRequired} from "../../../plugins/rule";
-import {userService} from "../../../service/userService";
 import {transformOrganizationType, transformRoles, transformOrganization} from '../../../plugins/transformData'
+import UserDetailsDialog from "./UserDetailsDialog";
 import {permission} from "../../../plugins/permission";
+
 
 export default {
   name: "Index",
+  components: {UserDetailsDialog},
   data: () => ({
-    dialog: false,
-    dialogDelete: false,
+    showDialog: false,
+    isCreate: true,
     search: '',
-    headers: [
+    headers0: [
       {text: 'نام کاربری', value: 'nickname',},
       {text: 'شماره تماس', value: 'phone'},
       {text: 'سطح دسترسی', value: 'organizationRoles'},
       {text: 'نوع سازمان', value: 'organizationType'},
-      {text: 'نام سازمان', value: 'organization.name'},
+      {text: 'نام سازمان', value: 'organization'},
+      {text: 'فعال بودن', value: 'active'},
+      {text: 'عملیات', value: 'actions', sortable: false},
+    ],
+    headers1: [
+      {text: 'نام کاربری', value: 'nickname',},
+      {text: 'شماره تماس', value: 'phone'},
+      {text: 'سطح دسترسی', value: 'organizationRoles'},
       {text: 'فعال بودن', value: 'active'},
       {text: 'عملیات', value: 'actions', sortable: false},
     ],
     editedIndex: -1,
-    editedItem: {
-      nickname: '',
-      phone: '',
-      organizationType: '',
-      organizationRoles: [],
-      organization: '',
-      active: false,
-    },
     defaultItem: {
       nickname: '',
       phone: '',
@@ -232,110 +114,66 @@ export default {
         exact: true
       },
     ],
-    required,
-    verifyMobilePhone,
-    verifyUserName,
-    multiSelectRequired,
     transformOrganizationType,
     transformRoles,
     transformOrganization
   }),
   mounted() {
-    this.$store.dispatch('fetchUsers')
-    this.$store.dispatch('fetchOrganizations')
-    this.$store.dispatch('fetchOrganizationTypes')
-    this.$store.dispatch('fetchRoles')
+    this.$store.dispatch('user/fetchUsers')
+    this.$store.dispatch('user/fetchRoles')
+    if (this.isSecretariant && this.isUserManager) {
+      this.$store.dispatch('organization/fetchOrganizations')
+      this.$store.dispatch('organization/fetchOrganizationTypes')
+    }
     this.$store.commit('SET_BREADCRUMBS', this.breadcrumbs)
   },
   computed: {
+    users: {
+      get() {
+        return this.$store.getters['user/getUsers']
+      },
+      set(value) {
+        return this.$store.commit('user/SET_USER', value)
+      }
+    },
     isSuperAdmin() {
       return permission().isSuperAdmin()
+    },
+    isSecretariant() {
+      return permission().isSecretariant()
     },
     isUserManager() {
       return permission().isUserManager()
     },
-    currentUser() {
-      return this.$store.getters['getCurrentUser']
-    },
-    users: {
-      get() {
-        return this.$store.getters['getUsers']
-      },
-      set(value) {
-        return this.$store.commit('SET_USERS', value)
-      }
-    },
-    organizationList() {
-      return this.$store.getters['getOrganizations']
-    },
-    organizationType() {
-      return this.$store.getters['getOrganizationTypes']
-    },
-    roles() {
-      return this.$store.getters['getAllRoles']
-    },
-    formTitle() {
-      return this.editedIndex === -1 ? 'افزودن کاربر' : 'ویرایش کاربر'
-    },
+    headers() {
+      return (this.isUserManager && this.isSecretariant) ? this.headers0 : this.headers1
+    }
   },
-
-  watch: {
-    dialog(val) {
-      val || this.close()
-    },
-    dialogDelete(val) {
-      val || this.closeDelete()
-    },
-  },
-
   methods: {
-
-    editItem(item) {
+    async editItem(item) {
       this.editedIndex = this.users.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
+      await this.$store.commit('user/SET_USER', {...item})
+      this.isCreate = false
+      this.showDialog = true
     },
-
-    close() {
-      this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
+    async createItem() {
+      await this.$store.commit('user/SET_USER', {...this.defaultItem})
+      this.isCreate = true
+      this.showDialog = true
+    },
+    async handleSave(user) {
+      if (this.editedIndex > -1) {
+        await this.$store.dispatch('user/updateUser', user)
+        Object.assign(this.users[this.editedIndex], user)
         this.editedIndex = -1
-        this.$refs.userForm.resetValidation()
-      })
-    },
-
-    closeDelete() {
-      this.dialogDelete = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-    },
-
-    save() {
-      if (this.$refs.userForm.validate()) {
-        if (!this.isSuperAdmin && this.isUserManager) {
-          this.editedItem = {
-            ...this.editedItem,
-            organization: this.currentUser.organization,
-            organizationType: this.currentUser.organizationType,
-          }
-        }
-        if (this.editedIndex > -1) {
-          userService().updateUser(this.editedItem).then(() => {
-            Object.assign(this.users[this.editedIndex], this.editedItem)
-            this.close()
-          })
-        } else {
-          userService().createUser(this.editedItem).then(() => {
-            this.$store.dispatch('fetchUsers').then(() => {
-              this.close()
-            })
-          })
-        }
+      } else {
+        await this.$store.dispatch('user/createUser', user)
+        await this.$store.dispatch('user/fetchUsers')
       }
     },
+    closeDialog() {
+      this.showDialog = false
+    }
   },
 }
 </script>
