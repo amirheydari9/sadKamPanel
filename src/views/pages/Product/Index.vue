@@ -19,334 +19,13 @@
               autofocus
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-dialog
-              v-model="dialog"
-              persistent
-              max-width="800px"
+          <v-btn
+              color="primary"
+              dark
+              @click="createItem"
           >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                  color="primary"
-                  dark
-                  class="mb-2"
-                  v-bind="attrs"
-                  v-on="on"
-              >
-                افزودن محصول جدید
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-form ref="productForm">
-                    <v-row>
-                      <v-col
-                          cols="12"
-                          sm="6"
-                      >
-                        <v-text-field
-                            :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.enTitle"
-                            label="نام انگلیسی"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="6"
-                      >
-                        <v-text-field
-                            :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.faTitle"
-                            label="نام فارسی"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="3"
-                      >
-                        <v-text-field
-                            v-model="editedItem.startYear"
-                            label="سال شروع"
-                            type="number"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="3"
-                      >
-                        <v-text-field
-                            v-model="editedItem.endYear"
-                            label="سال پایان"
-                            type="number"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="3"
-                      >
-                        <v-text-field
-                            :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.duration"
-                            label="زمان"
-                            type="number"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="3"
-                      >
-                        <v-text-field
-                            :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.rate"
-                            label="امتیاز"
-                            type="number"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="4"
-                      >
-                        <!--                      <v-autocomplete-->
-                        <!--                          :rules="[-->
-                        <!--                            multiSelectRequired('این فیلد الزامی است'),-->
-                        <!--                            ]"-->
-                        <!--                          v-model="editedItem.directors"-->
-                        <!--                          :items="[]"-->
-                        <!--                          item-text="fa"-->
-                        <!--                          item-value="role"-->
-                        <!--                          chips-->
-                        <!--                          label="کارگردان"-->
-                        <!--                          multiple-->
-                        <!--                          deletable-chips-->
-                        <!--                      ></v-autocomplete>-->
-                        <v-combobox
-                            :rules="[
-                            multiSelectRequired('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.directors"
-                            label="کارگردان"
-                            multiple
-                            chips
-                            append-icon=""
-                            persistent-hint
-                            deletable-chips
-                        ></v-combobox>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="4"
-                      >
-                        <!--                      <v-autocomplete-->
-                        <!--                          :rules="[-->
-                        <!--                            multiSelectRequired('این فیلد الزامی است'),-->
-                        <!--                            ]"-->
-                        <!--                          v-model="editedItem.language"-->
-                        <!--                          :items="[]"-->
-                        <!--                          item-text="fa"-->
-                        <!--                          item-value="role"-->
-                        <!--                          chips-->
-                        <!--                          label="زبان"-->
-                        <!--                          multiple-->
-                        <!--                          deletable-chips-->
-                        <!--                      ></v-autocomplete>-->
-                        <v-combobox
-                            :rules="[
-                            multiSelectRequired('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.language"
-                            label="زبان"
-                            multiple
-                            chips
-                            append-icon=""
-                            persistent-hint
-                            deletable-chips
-                        ></v-combobox>
-                      </v-col>
-
-                      <v-col
-                          cols="12"
-                          sm="4"
-                      >
-                        <v-autocomplete
-                            :rules="[
-                            multiSelectRequired('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.genres"
-                            :items="generes"
-                            item-text="fa"
-                            item-value="en"
-                            chips
-                            label="ژاتر ها"
-                            multiple
-                            deletable-chips
-                        ></v-autocomplete>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="4"
-                      >
-                        <!--                      <v-autocomplete-->
-                        <!--                          :rules="[-->
-                        <!--                            multiSelectRequired('این فیلد الزامی است'),-->
-                        <!--                            ]"-->
-                        <!--                          v-model="editedItem.writers"-->
-                        <!--                          :items="[]"-->
-                        <!--                          item-text="fa"-->
-                        <!--                          item-value="role"-->
-                        <!--                          chips-->
-                        <!--                          label="نویسندگان"-->
-                        <!--                          multiple-->
-                        <!--                          deletable-chips-->
-                        <!--                      ></v-autocomplete>-->
-                        <v-combobox
-                            :rules="[
-                            multiSelectRequired('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.writers"
-                            label="نویسندگان"
-                            multiple
-                            chips
-                            append-icon=""
-                            persistent-hint
-                            deletable-chips
-                        ></v-combobox>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="4"
-                      >
-                        <!--                      <v-autocomplete-->
-                        <!--                          :rules="[-->
-                        <!--                            multiSelectRequired('این فیلد الزامی است'),-->
-                        <!--                            ]"-->
-                        <!--                          v-model="editedItem.actors"-->
-                        <!--                          :items="[]"-->
-                        <!--                          item-text="fa"-->
-                        <!--                          item-value="role"-->
-                        <!--                          chips-->
-                        <!--                          label="بازیگران"-->
-                        <!--                          multiple-->
-                        <!--                          deletable-chips-->
-                        <!--                      ></v-autocomplete>-->
-                        <v-combobox
-                            :rules="[
-                            multiSelectRequired('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.actors"
-                            label="بازیگران"
-                            multiple
-                            chips
-                            append-icon=""
-                            persistent-hint
-                            deletable-chips
-                        ></v-combobox>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="4"
-                          v-if="isSuperAdmin"
-                      >
-                        <v-autocomplete
-                            v-model="editedItem.submittedBy"
-                            label="تایید توسط"
-                            :items="organizationList"
-                            item-text="name"
-                            item-value="_id"
-                            dense
-                        ></v-autocomplete>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="4"
-                      >
-                        <v-text-field
-                            :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.imdbId"
-                            label="آی دی imdb"
-                            type="number"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="4"
-                      >
-                        <v-autocomplete
-                            v-model="editedItem.entryType"
-                            :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                            label="نوع ورودی"
-                            :items="entryType"
-                            item-text="fa"
-                            item-value="en"
-                            dense
-                        ></v-autocomplete>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                          sm="4"
-                      >
-                        <v-autocomplete
-                            v-model="editedItem.titleType"
-                            :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                            label="عنوان ورودی"
-                            :items="titleTypes"
-                            item-text="fa"
-                            item-value="en"
-                            dense
-                        ></v-autocomplete>
-                      </v-col>
-                      <v-col
-                          cols="12"
-                      >
-                        <v-text-field
-                            :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                            v-model="editedItem.description"
-                            label="توضیحات"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-form>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="save"
-                >
-                  ذخیره
-                </v-btn>
-                <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="close"
-                >
-                  انصراف
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+            افزودن محصول جدید
+          </v-btn>
         </v-toolbar>
       </template>
       <template v-slot:item.entryType="{ item }">
@@ -452,7 +131,13 @@
         <!--            لیست اپیزود ها-->
       </template>
     </v-data-table>
-
+    <product-details-dialog
+        v-if="showDialog"
+        :showDialog="showDialog"
+        :isCreate="isCreate"
+        @closeDialog="closeDialog"
+        @handleSave="handleSave"
+    />
     <!--    ایجاد اپیزود-->
     <v-dialog
         v-model="episodeDialog"
@@ -608,7 +293,6 @@
 
 <script>
 import {required, verifyMobilePhone, verifyUserName, multiSelectRequired, length} from "../../../plugins/rule";
-import {productService} from "../../../service/productService";
 import {entryType} from '../../../plugins/constant'
 import {
   transformEntryType,
@@ -616,19 +300,20 @@ import {
   transformDateToJalali,
   transformJalaliDateToGeorgian
 } from '../../../plugins/transformData'
-import {permission} from "../../../plugins/permission";
 import {episodeService} from "../../../service/episodeService";
-import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
+// import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
+import ProductDetailsDialog from "./ProductDetailsDialog";
 
 export default {
   components: {
-    vDatePicker: VuePersianDatetimePicker,
+    ProductDetailsDialog,
+    // vDatePicker: VuePersianDatetimePicker,
 
   },
   name: "Index",
   data: () => ({
-    dialog: false,
-    dialogDelete: false,
+    showDialog: false,
+    isCreate: true,
     search: '',
     headers: [
       {text: 'نام انگلسیی', value: 'enTitle',},
@@ -642,24 +327,6 @@ export default {
       {text: 'عملیات', value: 'actions', sortable: false},
     ],
     editedIndex: -1,
-    editedItem: {
-      enTitle: '',
-      faTitle: '',
-      directors: [],
-      language: [],
-      duration: '',
-      genres: [],
-      startYear: [],
-      endYear: [],
-      writers: [],
-      actors: [],
-      submittedBy: '',
-      imdbId: '',
-      entryType: '',
-      titleType: '',
-      rate: '',
-      description: ''
-    },
     defaultItem: {
       enTitle: '',
       faTitle: '',
@@ -740,16 +407,13 @@ export default {
     episodeSearch: '',
   }),
   mounted() {
-    this.$store.dispatch('fetchOrganizations')
+    this.$store.dispatch('organization/fetchOrganizations')
     this.$store.dispatch('product/fetchAllProducts')
     this.$store.dispatch('product/fetchAllGeneres')
     this.$store.dispatch('product/fetchAllTitleTypes')
     this.$store.commit('SET_BREADCRUMBS', this.breadcrumbs)
   },
   computed: {
-    isSuperAdmin() {
-      return permission().isSuperAdmin()
-    },
     products: {
       get() {
         return this.$store.getters['product/getProducts']
@@ -758,71 +422,34 @@ export default {
         return this.$store.commit('product/SET_PRODUCTS', value)
       }
     },
-    generes() {
-      return this.$store.getters['product/getGeneres']
-    },
-    titleTypes() {
-      return this.$store.getters['product/getTitleTypes']
-    },
-    organizationList() {
-      return this.$store.getters['getOrganizations']
-    },
-    formTitle() {
-      return this.editedIndex === -1 ? 'افزودن محصول' : 'ویرایش محصول'
-    },
-  },
-
-  watch: {
-    dialog(val) {
-      val || this.close()
-    },
-    dialogDelete(val) {
-      val || this.closeDelete()
-    },
   },
 
   methods: {
-    editItem(item) {
-      productService().getProduct(item._id).then(({data}) => {
-        this.editedIndex = this.products.indexOf(item)
-        this.editedItem = Object.assign({}, data.data[0])
-        this.dialog = true
-      })
+    async editItem(item) {
+      this.editedIndex = this.products.indexOf(item)
+      await this.$store.dispatch('product/getProduct', item._id)
+      this.isCreate = false
+      this.showDialog = true
     },
-
-    close() {
-      this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
+    async createItem() {
+      await this.$store.commit('product/SET_PRODUCT', {...this.defaultItem})
+      this.isCreate = true
+      this.showDialog = true
+    },
+    async handleSave(product) {
+      if (this.editedIndex > -1) {
+        await this.$store.dispatch('product/updateProduct', product)
+        Object.assign(this.products[this.editedIndex], product)
         this.editedIndex = -1
-        this.$refs.productForm.resetValidation()
-      })
-    },
-
-    closeDelete() {
-      this.dialogDelete = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-    },
-
-    save() {
-      if (this.$refs.productForm.validate()) {
-        if (this.editedIndex > -1) {
-          productService().updateProduct(this.editedItem).then(() => {
-            Object.assign(this.products[this.editedIndex], this.editedItem)
-            this.close()
-          })
-        } else {
-          productService().createProduct(this.editedItem).then(() => {
-            this.$store.dispatch('product/fetchAllProducts').then(() => {
-              this.close()
-            })
-          })
-        }
+      } else {
+        await this.$store.dispatch('product/createProduct', product)
+        await this.$store.dispatch('product/fetchAllProducts')
       }
     },
+    closeDialog() {
+      this.showDialog = false
+    },
+
     getEpisodesList(item) {
       this.currentProduct = item
       if (item.entryType === 'multiple') {
@@ -877,7 +504,6 @@ export default {
         }
       }
     },
-
     closeEpisodeListDialog() {
       this.episodes = [];
       this.currentProduct = null;
