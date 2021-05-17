@@ -22,7 +22,7 @@
           <v-btn
               color="primary"
               dark
-              @click="createItem"
+              @click="createProductItem"
           >
             افزودن محصول جدید
           </v-btn>
@@ -59,234 +59,240 @@
           mdi-tooltip-plus
         </v-icon>
 
-        <!--            لیست اپیزود ها-->
-        <v-dialog
-            v-model="episodesListDialog"
-            persistent
-        >
-          <v-card>
-            <v-card-text>
-              <v-card>
-                <v-card-text>
-                  <v-data-table
-                      :headers="episodeHeaders"
-                      :items="episodes"
-                      :search="episodeSearch"
-                      no-results-text="اطلاعاتی یافت نشد"
-                      class="w-100"
-                  >
-                    <template v-slot:top>
-                      <v-toolbar
-                          flat
-                      >
-                        <v-text-field
-                            v-model="episodeSearch"
-                            label="جست جو"
-                            single-line
-                            hide-details
-                            autofocus
-                        ></v-text-field>
-                        <v-spacer></v-spacer>
-                        <template>
-                          <v-btn
-                              color="primary"
-                              dark
-                              class="mb-2"
-                              @click="handleOpenEpisodeDialog"
-                          >
-                            افزودن اپیزود جدید
-                          </v-btn>
-                        </template>
-                      </v-toolbar>
-                    </template>
-                    <template v-slot:item.releaseDate="{ item }">
-                      {{ transformDateToJalali(item.releaseDate) }}
-                    </template>
-                    <template v-slot:item.actions="{item}">
-                      <v-icon
-                          small
-                          class="mr-2"
-                          @click="editIEpisode(item)"
-                      >
-                        mdi-pencil
-                      </v-icon>
-                    </template>
-                  </v-data-table>
-                </v-card-text>
-              </v-card>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                  color="blue darken-1"
-                  text
-                  small
-                  @click="closeEpisodeListDialog"
-              >
-                انصراف
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <!--            لیست اپیزود ها-->
+        <!--        &lt;!&ndash;            لیست اپیزود ها&ndash;&gt;-->
+        <!--        <v-dialog-->
+        <!--            v-model="episodesListDialog"-->
+        <!--            persistent-->
+        <!--        >-->
+        <!--          <v-card>-->
+        <!--            <v-card-text>-->
+        <!--              <v-card>-->
+        <!--                <v-card-text>-->
+        <!--                  <v-data-table-->
+        <!--                      :headers="episodeHeaders"-->
+        <!--                      :items="episodes"-->
+        <!--                      :search="episodeSearch"-->
+        <!--                      no-results-text="اطلاعاتی یافت نشد"-->
+        <!--                      class="w-100"-->
+        <!--                  >-->
+        <!--                    <template v-slot:top>-->
+        <!--                      <v-toolbar-->
+        <!--                          flat-->
+        <!--                      >-->
+        <!--                        <v-text-field-->
+        <!--                            v-model="episodeSearch"-->
+        <!--                            label="جست جو"-->
+        <!--                            single-line-->
+        <!--                            hide-details-->
+        <!--                            autofocus-->
+        <!--                        ></v-text-field>-->
+        <!--                        <v-spacer></v-spacer>-->
+        <!--                        <template>-->
+        <!--                          <v-btn-->
+        <!--                              color="primary"-->
+        <!--                              dark-->
+        <!--                              class="mb-2"-->
+        <!--                              @click="handleOpenEpisodeDialog"-->
+        <!--                          >-->
+        <!--                            افزودن اپیزود جدید-->
+        <!--                          </v-btn>-->
+        <!--                        </template>-->
+        <!--                      </v-toolbar>-->
+        <!--                    </template>-->
+        <!--                    <template v-slot:item.releaseDate="{ item }">-->
+        <!--                      {{ transformDateToJalali(item.releaseDate) }}-->
+        <!--                    </template>-->
+        <!--                    <template v-slot:item.actions="{item}">-->
+        <!--                      <v-icon-->
+        <!--                          small-->
+        <!--                          class="mr-2"-->
+        <!--                          @click="editIEpisode(item)"-->
+        <!--                      >-->
+        <!--                        mdi-pencil-->
+        <!--                      </v-icon>-->
+        <!--                    </template>-->
+        <!--                  </v-data-table>-->
+        <!--                </v-card-text>-->
+        <!--              </v-card>-->
+        <!--            </v-card-text>-->
+        <!--            <v-card-actions>-->
+        <!--              <v-spacer></v-spacer>-->
+        <!--              <v-btn-->
+        <!--                  color="blue darken-1"-->
+        <!--                  text-->
+        <!--                  small-->
+        <!--                  @click="closeEpisodeListDialog"-->
+        <!--              >-->
+        <!--                انصراف-->
+        <!--              </v-btn>-->
+        <!--            </v-card-actions>-->
+        <!--          </v-card>-->
+        <!--        </v-dialog>-->
+        <!--        &lt;!&ndash;            لیست اپیزود ها&ndash;&gt;-->
       </template>
     </v-data-table>
     <product-details-dialog
-        v-if="showDialog"
-        :showDialog="showDialog"
+        v-if="showProductDetailsDialog"
+        :showDialog="showProductDetailsDialog"
         :isCreate="isCreate"
-        @closeDialog="closeDialog"
-        @handleSave="handleSave"
+        @closeDialog="closeProductDetailsDialog"
+        @handleSave="handleProductDetailsSave"
     />
+    <dialog-list-episode
+        v-if="showEpisodesListDialog"
+        :showDialog="showEpisodesListDialog"
+        @closeDialog="closeEpisodeListDialog"
+    />
+
     <!--    ایجاد اپیزود-->
-    <v-dialog
-        v-model="episodeDialog"
-        max-width="800px"
-        persistent
-    >
-      <v-card>
-        <v-card-title>
-          <span class="headline">ایجاد اپیزود</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-form ref="episodeForm">
-              <v-row>
-                <v-col
-                    cols="12"
-                    sm="6"
-                >
-                  <v-text-field
-                      :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                      v-model="episodeEditedItem.enTitle"
-                      label="نام انگلیسی"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                    cols="12"
-                    sm="6"
-                >
-                  <v-text-field
-                      :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                      v-model="episodeEditedItem.faTitle"
-                      label="نام فارسی"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                    cols="12"
-                    sm="3"
-                >
-                  <v-text-field
-                      :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                      v-model="episodeEditedItem.duration"
-                      label="زمان"
-                      type="number"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                    cols="12"
-                    sm="3"
-                >
-                  <v-text-field
-                      :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                      v-model="episodeEditedItem.rate"
-                      label="امتیاز"
-                      type="number"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                    cols="12"
-                    sm="3"
-                >
-                  <v-text-field
-                      :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                      v-model="episodeEditedItem.seasonNumber"
-                      label="شماره فصل"
-                      type="number"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                    cols="12"
-                    sm="3"
-                >
-                  <v-text-field
-                      :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                      v-model="episodeEditedItem.episodeNumber"
-                      label="شماره قسمت"
-                      type="number"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                    cols="12"
-                    sm="6"
-                >
-                  <v-text-field
-                      id="my-custom-input"
-                      persistent-hint
-                      readonly
-                      v-model="episodeEditedItem.releaseDate"
-                      label="زمان انتشار"
-                      :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                  ></v-text-field>
-                  <v-date-picker
-                      auto-submit
-                      v-model="episodeEditedItem.releaseDate"
-                      element="my-custom-input"
-                  >
-                  </v-date-picker>
-                  <!--                  <date-picker-->
-                  <!--                      :autoSubmit="true"-->
-                  <!--                      placeholder='زمان انتشار'-->
-                  <!--                      v-model="episodeEditedItem.releaseDate" style="margin-top: 20px !important;"></date-picker>-->
-                </v-col>
-                <v-col
-                    cols="12"
-                >
-                  <v-text-field
-                      :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                      v-model="episodeEditedItem.description"
-                      label="توضیحات"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </v-form>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-              color="blue darken-1"
-              text
-              @click="saveEpisode"
-          >
-            ذخیره
-          </v-btn>
-          <v-btn
-              color="blue darken-1"
-              text
-              @click="closeEpisode"
-          >
-            انصراف
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <!--    <v-dialog-->
+    <!--        v-model="episodeDialog"-->
+    <!--        max-width="800px"-->
+    <!--        persistent-->
+    <!--    >-->
+    <!--      <v-card>-->
+    <!--        <v-card-title>-->
+    <!--          <span class="headline">ایجاد اپیزود</span>-->
+    <!--        </v-card-title>-->
+    <!--        <v-card-text>-->
+    <!--          <v-container>-->
+    <!--            <v-form ref="episodeForm">-->
+    <!--              <v-row>-->
+    <!--                <v-col-->
+    <!--                    cols="12"-->
+    <!--                    sm="6"-->
+    <!--                >-->
+    <!--                  <v-text-field-->
+    <!--                      :rules="[-->
+    <!--                            required('این فیلد الزامی است'),-->
+    <!--                            ]"-->
+    <!--                      v-model="episodeEditedItem.enTitle"-->
+    <!--                      label="نام انگلیسی"-->
+    <!--                  ></v-text-field>-->
+    <!--                </v-col>-->
+    <!--                <v-col-->
+    <!--                    cols="12"-->
+    <!--                    sm="6"-->
+    <!--                >-->
+    <!--                  <v-text-field-->
+    <!--                      :rules="[-->
+    <!--                            required('این فیلد الزامی است'),-->
+    <!--                            ]"-->
+    <!--                      v-model="episodeEditedItem.faTitle"-->
+    <!--                      label="نام فارسی"-->
+    <!--                  ></v-text-field>-->
+    <!--                </v-col>-->
+    <!--                <v-col-->
+    <!--                    cols="12"-->
+    <!--                    sm="3"-->
+    <!--                >-->
+    <!--                  <v-text-field-->
+    <!--                      :rules="[-->
+    <!--                            required('این فیلد الزامی است'),-->
+    <!--                            ]"-->
+    <!--                      v-model="episodeEditedItem.duration"-->
+    <!--                      label="زمان"-->
+    <!--                      type="number"-->
+    <!--                  ></v-text-field>-->
+    <!--                </v-col>-->
+    <!--                <v-col-->
+    <!--                    cols="12"-->
+    <!--                    sm="3"-->
+    <!--                >-->
+    <!--                  <v-text-field-->
+    <!--                      :rules="[-->
+    <!--                            required('این فیلد الزامی است'),-->
+    <!--                            ]"-->
+    <!--                      v-model="episodeEditedItem.rate"-->
+    <!--                      label="امتیاز"-->
+    <!--                      type="number"-->
+    <!--                  ></v-text-field>-->
+    <!--                </v-col>-->
+    <!--                <v-col-->
+    <!--                    cols="12"-->
+    <!--                    sm="3"-->
+    <!--                >-->
+    <!--                  <v-text-field-->
+    <!--                      :rules="[-->
+    <!--                            required('این فیلد الزامی است'),-->
+    <!--                            ]"-->
+    <!--                      v-model="episodeEditedItem.seasonNumber"-->
+    <!--                      label="شماره فصل"-->
+    <!--                      type="number"-->
+    <!--                  ></v-text-field>-->
+    <!--                </v-col>-->
+    <!--                <v-col-->
+    <!--                    cols="12"-->
+    <!--                    sm="3"-->
+    <!--                >-->
+    <!--                  <v-text-field-->
+    <!--                      :rules="[-->
+    <!--                            required('این فیلد الزامی است'),-->
+    <!--                            ]"-->
+    <!--                      v-model="episodeEditedItem.episodeNumber"-->
+    <!--                      label="شماره قسمت"-->
+    <!--                      type="number"-->
+    <!--                  ></v-text-field>-->
+    <!--                </v-col>-->
+    <!--                <v-col-->
+    <!--                    cols="12"-->
+    <!--                    sm="6"-->
+    <!--                >-->
+    <!--                  <v-text-field-->
+    <!--                      id="my-custom-input"-->
+    <!--                      persistent-hint-->
+    <!--                      readonly-->
+    <!--                      v-model="episodeEditedItem.releaseDate"-->
+    <!--                      label="زمان انتشار"-->
+    <!--                      :rules="[-->
+    <!--                            required('این فیلد الزامی است'),-->
+    <!--                            ]"-->
+    <!--                  ></v-text-field>-->
+    <!--                  <v-date-picker-->
+    <!--                      auto-submit-->
+    <!--                      v-model="episodeEditedItem.releaseDate"-->
+    <!--                      element="my-custom-input"-->
+    <!--                  >-->
+    <!--                  </v-date-picker>-->
+    <!--                  &lt;!&ndash;                  <date-picker&ndash;&gt;-->
+    <!--                  &lt;!&ndash;                      :autoSubmit="true"&ndash;&gt;-->
+    <!--                  &lt;!&ndash;                      placeholder='زمان انتشار'&ndash;&gt;-->
+    <!--                  &lt;!&ndash;                      v-model="episodeEditedItem.releaseDate" style="margin-top: 20px !important;"></date-picker>&ndash;&gt;-->
+    <!--                </v-col>-->
+    <!--                <v-col-->
+    <!--                    cols="12"-->
+    <!--                >-->
+    <!--                  <v-text-field-->
+    <!--                      :rules="[-->
+    <!--                            required('این فیلد الزامی است'),-->
+    <!--                            ]"-->
+    <!--                      v-model="episodeEditedItem.description"-->
+    <!--                      label="توضیحات"-->
+    <!--                  ></v-text-field>-->
+    <!--                </v-col>-->
+    <!--              </v-row>-->
+    <!--            </v-form>-->
+    <!--          </v-container>-->
+    <!--        </v-card-text>-->
+    <!--        <v-card-actions>-->
+    <!--          <v-spacer></v-spacer>-->
+    <!--          <v-btn-->
+    <!--              color="blue darken-1"-->
+    <!--              text-->
+    <!--              @click="saveEpisode"-->
+    <!--          >-->
+    <!--            ذخیره-->
+    <!--          </v-btn>-->
+    <!--          <v-btn-->
+    <!--              color="blue darken-1"-->
+    <!--              text-->
+    <!--              @click="closeEpisode"-->
+    <!--          >-->
+    <!--            انصراف-->
+    <!--          </v-btn>-->
+    <!--        </v-card-actions>-->
+    <!--      </v-card>-->
+    <!--    </v-dialog>-->
     <!--    ایجاد اپیزود-->
   </div>
 </template>
@@ -302,17 +308,20 @@ import {
 import {episodeService} from "../../../service/episodeService";
 // import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import ProductDetailsDialog from "./ProductDetailsDialog";
+import DialogListEpisode from "../Episode/DialogListEpisode";
 
 export default {
   components: {
+    DialogListEpisode,
     ProductDetailsDialog,
     // vDatePicker: VuePersianDatetimePicker,
 
   },
   name: "Index",
   data: () => ({
-    showDialog: false,
+    showProductDetailsDialog: false,
     isCreate: true,
+    showEpisodesListDialog: false,
     search: '',
     headers: [
       {text: 'نام انگلسیی', value: 'enTitle',},
@@ -423,14 +432,14 @@ export default {
       this.editedIndex = this.products.indexOf(item)
       await this.$store.dispatch('product/getProduct', item._id)
       this.isCreate = false
-      this.showDialog = true
+      this.showProductDetailsDialog = true
     },
-    async createItem() {
+    async createProductItem() {
       await this.$store.commit('product/SET_PRODUCT', {...this.defaultItem})
       this.isCreate = true
-      this.showDialog = true
+      this.showProductDetailsDialog = true
     },
-    async handleSave(product) {
+    async handleProductDetailsSave(product) {
       if (this.editedIndex > -1) {
         await this.$store.dispatch('product/updateProduct', product)
         Object.assign(this.products[this.editedIndex], product)
@@ -440,22 +449,32 @@ export default {
         await this.$store.dispatch('product/fetchAllProducts')
       }
     },
-    closeDialog() {
-      this.showDialog = false
+    closeProductDetailsDialog() {
+      this.showProductDetailsDialog = false
+      this.editedIndex = -1
     },
 
-    getEpisodesList(item) {
+    async getEpisodesList(item) {
       this.currentProduct = item
+      console.log(item)
       if (item.entryType === 'multiple') {
-        episodeService().getAllEpisodes(item._id).then(({data}) => {
-          this.episodes = data.data
-          this.episodesListDialog = true
-        }).catch(() => this.$toast.error('خطایی رخ داده است'))
+        await this.$store.dispatch('episode/fetchAllEpisodes', item._id)
+        this.showEpisodesListDialog = true
+        // episodeService().getAllEpisodes(item._id).then(({data}) => {
+        //   this.episodes = data.data
+        //   this.episodesListDialog = true
+        // }).catch(() => this.$toast.error('خطایی رخ داده است'))
       } else {
         this.currentProduct = null
         this.$toast.info('امکلن تعریف اپیزود برای این محصول امکان پدیر نیست')
       }
     },
+
+    closeEpisodeListDialog() {
+      this.showEpisodesListDialog = false
+    },
+
+
     handleOpenEpisodeDialog() {
       this.episodeDialog = true;
     },
@@ -498,11 +517,11 @@ export default {
         }
       }
     },
-    closeEpisodeListDialog() {
-      this.episodes = [];
-      this.currentProduct = null;
-      this.episodesListDialog = false
-    },
+    // closeEpisodeListDialog() {
+    //   this.episodes = [];
+    //   this.currentProduct = null;
+    //   this.episodesListDialog = false
+    // },
 
   },
 }

@@ -146,6 +146,7 @@ export default {
     },
     closeDialog() {
       this.showDialog = false
+      this.editedIndex = -1
     }
   },
 }
