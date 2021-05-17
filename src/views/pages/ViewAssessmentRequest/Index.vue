@@ -658,6 +658,30 @@
     </v-dialog>
     <!--    تب ها-->
 
+<!--    &lt;!&ndash;    ویدیو تگ&ndash;&gt;-->
+<!--    <v-dialog-->
+<!--        v-model="videoTagDialog"-->
+<!--        persistent-->
+<!--    >-->
+<!--      <v-card>-->
+<!--        <v-card-text>-->
+<!--          <video-tag :url="videoUrl" :file="fileId" :assessment="assessmentId" :assessment-rules="assessmentRules"-->
+<!--                     :type="type"/>-->
+<!--        </v-card-text>-->
+<!--        <v-card-actions>-->
+<!--          <v-spacer></v-spacer>-->
+<!--          <v-btn-->
+<!--              color="blue darken-1"-->
+<!--              text-->
+<!--              @click="closeVideoTags"-->
+<!--          >-->
+<!--            انصراف-->
+<!--          </v-btn>-->
+<!--        </v-card-actions>-->
+<!--      </v-card>-->
+<!--    </v-dialog>-->
+<!--    &lt;!&ndash;    ویدیو تگ&ndash;&gt;-->
+
     <!--    ویدیو تگ-->
     <v-dialog
         v-model="videoTagDialog"
@@ -665,8 +689,7 @@
     >
       <v-card>
         <v-card-text>
-          <video-tag :url="videoUrl" :file="fileId" :assessment="assessmentId" :assessment-rules="assessmentRules"
-                     :type="type"/>
+          <video-tag :url="videoUrl" :file="fileId" :assessment="assessmentId"/>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>

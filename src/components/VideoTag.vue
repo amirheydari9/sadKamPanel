@@ -2,6 +2,7 @@
   <div>
 
     <v-container>
+
       <v-row>
         <v-col cols="8">
           <video ref="video" :src="url" controls/>
@@ -87,6 +88,7 @@
           </v-card>
         </v-col>
       </v-row>
+
       <v-row>
         <v-col cols="12">
           <v-data-table
@@ -143,6 +145,7 @@
               {{ transformVideoTimeFormat(item.toTime) }}
             </template>
           </v-data-table>
+
           <v-data-table
               :headers="headers"
               :items="assessmentRulesData"
@@ -199,6 +202,7 @@
           </v-data-table>
         </v-col>
       </v-row>
+
     </v-container>
 
     <v-dialog
@@ -533,7 +537,7 @@ export default {
           // if (this.type === 'assessmentRequest') {
           //   await this.$store.dispatch('rule/fetchAllListRulesOfFile', this.file)
           // }
-          this.successAction()
+          // this.successAction()
         } catch (e) {
           this.failAction()
         }
