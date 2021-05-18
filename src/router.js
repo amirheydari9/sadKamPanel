@@ -93,6 +93,14 @@ const routes = new Router({
                     }
                 },
                 {
+                    name: 'AssessmentRequest1',
+                    path: '/assessmentRequest1',
+                    component: () => import('@/views/pages/AssessmentRequest1/Index.vue'),
+                    meta: {
+                        hasAssessmentRequestPermission: true
+                    }
+                },
+                {
                     name: 'ViewAssessmentRequest',
                     path: '/viewAssessmentRequest',
                     component: () => import('@/views/pages/ViewAssessmentRequest/Index.vue'),
