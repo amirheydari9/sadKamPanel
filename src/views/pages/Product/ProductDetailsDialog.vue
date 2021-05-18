@@ -151,7 +151,7 @@
               </v-col>
               <v-col
                   cols="12"
-                  sm="4"
+                  sm="8"
               >
                 <v-combobox
                     :rules="[
@@ -166,19 +166,19 @@
                     deletable-chips
                 ></v-combobox>
               </v-col>
-              <v-col
-                  cols="12"
-                  sm="4"
-                  v-if="isSuperAdmin"
-              >
-                <v-autocomplete
-                    v-model="product.submittedBy"
-                    label="ایجاد توسط"
-                    :items="organizationList"
-                    item-text="name"
-                    item-value="_id"
-                ></v-autocomplete>
-              </v-col>
+<!--              <v-col-->
+<!--                  cols="12"-->
+<!--                  sm="4"-->
+<!--                  v-if="isSuperAdmin"-->
+<!--              >-->
+<!--                <v-autocomplete-->
+<!--                    v-model="product.submittedBy"-->
+<!--                    label="ایجاد توسط"-->
+<!--                    :items="organizationList"-->
+<!--                    item-text="name"-->
+<!--                    item-value="_id"-->
+<!--                ></v-autocomplete>-->
+<!--              </v-col>-->
               <v-col
                   cols="12"
                   sm="4"
@@ -262,15 +262,10 @@
 <script>
 import {multiSelectRequired, verifyMobilePhone, verifyUserName, required} from "../../../plugins/rule";
 import {permission} from "../../../plugins/permission";
-// import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import {entryType} from "../../../plugins/constant";
 
 export default {
   name: "ProductDetailsDialog",
-  // components: {
-  //   vDatePicker: VuePersianDatetimePicker,
-  //
-  // },
   props: {
     showDialog: {Boolean, isRequired: true},
     isCreate: {Boolean, isRequired: true}
@@ -291,18 +286,18 @@ export default {
     product() {
       return this.$store.getters['product/getProduct']
     },
-    isSuperAdmin() {
-      return permission().isSuperAdmin()
-    },
+    // isSuperAdmin() {
+    //   return permission().isSuperAdmin()
+    // },
     generes() {
       return this.$store.getters['product/getGeneres']
     },
     titleTypes() {
       return this.$store.getters['product/getTitleTypes']
     },
-    organizationList() {
-      return this.$store.getters['organization/getOrganizations']
-    },
+    // organizationList() {
+    //   return this.$store.getters['organization/getOrganizations']
+    // },
     formTitle() {
       return this.isCreate ? 'افزودن محصول' : 'ویرایش محصول'
     },

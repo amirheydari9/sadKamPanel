@@ -133,6 +133,7 @@ export default {
       await this.$store.commit('organization/SET_ORGANIZATION', {...this.defaultItem})
       this.isCreate = true
       this.showDialog = true
+      this.editedIndex = -1
     },
     async handleSave(organization) {
       if (this.editedIndex > -1) {
@@ -146,7 +147,6 @@ export default {
     },
     closeDialog() {
       this.showDialog = false
-      this.editedIndex = -1
     }
   },
 }

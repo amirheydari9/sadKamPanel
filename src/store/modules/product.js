@@ -36,10 +36,19 @@ export const getters = {
     },
     getTitleTypes(state) {
         return state.titleTypes
-    }
+    },
 }
 
 export const actions = {
+
+    async searchProduct(context, search) {
+        try {
+            return await productService().searchProduct(search)
+            // commit('SET_PRODUCTS', data.data)
+        } catch (e) {
+            console.log(e)
+        }
+    },
     async fetchAllProducts({commit}) {
         try {
             const {data} = await productService().getAllProducts()
@@ -48,7 +57,7 @@ export const actions = {
             console.log(e)
         }
     },
-    async getProduct({commit},productId) {
+    async getProduct({commit}, productId) {
         try {
             const {data} = await productService().getProduct(productId)
             commit('SET_PRODUCT', data.data[0])

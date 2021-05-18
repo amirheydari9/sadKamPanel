@@ -9,10 +9,7 @@
         <v-container>
           <v-form ref="episodeForm">
             <v-row>
-              <v-col
-                  cols="12"
-                  sm="6"
-              >
+              <v-col cols="12" sm="6">
                 <v-text-field
                     :rules="[
                             required('این فیلد الزامی است'),
@@ -21,10 +18,7 @@
                     label="نام انگلیسی"
                 ></v-text-field>
               </v-col>
-              <v-col
-                  cols="12"
-                  sm="6"
-              >
+              <v-col cols="12" sm="6">
                 <v-text-field
                     :rules="[
                             required('این فیلد الزامی است'),
@@ -33,10 +27,7 @@
                     label="نام فارسی"
                 ></v-text-field>
               </v-col>
-              <v-col
-                  cols="12"
-                  :sm="entryTypeIsMultiple ? 3 :6"
-              >
+              <v-col cols="12" sm="3">
                 <v-text-field
                     :rules="[
                             required('این فیلد الزامی است'),
@@ -46,10 +37,7 @@
                     type="number"
                 ></v-text-field>
               </v-col>
-              <v-col
-                  cols="12"
-                  :sm="entryTypeIsMultiple ? 3 :6"
-              >
+              <v-col cols="12" sm="3">
                 <v-text-field
                     :rules="[
                             required('این فیلد الزامی است'),
@@ -59,11 +47,7 @@
                     type="number"
                 ></v-text-field>
               </v-col>
-              <v-col
-                  cols="12"
-                  sm="3"
-                  v-if="entryTypeIsMultiple"
-              >
+              <v-col cols="12" sm="3">
                 <v-text-field
                     :rules="[
                             required('این فیلد الزامی است'),
@@ -73,11 +57,7 @@
                     type="number"
                 ></v-text-field>
               </v-col>
-              <v-col
-                  cols="12"
-                  sm="3"
-                  v-if="entryTypeIsMultiple"
-              >
+              <v-col cols="12" sm="3">
                 <v-text-field
                     :rules="[
                             required('این فیلد الزامی است'),
@@ -87,71 +67,47 @@
                     type="number"
                 ></v-text-field>
               </v-col>
-              <v-col
-                  cols="12"
-                  sm="6"
-                  style="margin-top: 20px"
+              <v-col cols="12" sm="6"
               >
+                <!--                <v-text-field-->
+                <!--                    id="my-custom-input"-->
+                <!--                    persistent-hint-->
+                <!--                    readonly-->
+                <!--                    v-model="releaseDate"-->
+                <!--                    label="زمان انتشار"-->
+                <!--                    :rules="[required('این فیلد الزامی است')]"-->
+                <!--                ></v-text-field>-->
+                <v-date-picker
+                    auto-submit
+                    v-model="releaseDate"
+                >
+                </v-date-picker>
+              </v-col>
+
+              <!--              <v-col cols="12">-->
+              <!--                <v-autocomplete-->
+              <!--                    :rules="[-->
+              <!--                                            required('این فیلد الزامی است'),-->
+              <!--                                            ]"-->
+              <!--                    :loading="isLoading"-->
+              <!--                    :items="filteredProducts"-->
+              <!--                    :search-input.sync="productSearch"-->
+              <!--                    item-text="enTitle"-->
+              <!--                    :item-value="episode.parent"-->
+              <!--                    label="نام محصول"-->
+              <!--                    @change="handleSelectProductName"-->
+              <!--                    return-object-->
+              <!--                ></v-autocomplete>-->
+              <!--              </v-col>-->
+
+              <v-col cols="12">
                 <v-text-field
-                    id="my-custom-input"
-                    persistent-hint
-                    readonly
-                    v-model="episode.releaseDate"
-                    label="زمان انتشار"
                     :rules="[
                             required('این فیلد الزامی است'),
                             ]"
+                    v-model="episode.description"
+                    label="توضیحات"
                 ></v-text-field>
-                <v-date-picker
-                    auto-submit
-                    v-model="episode.releaseDate"
-                    element="my-custom-input"
-                >
-                </v-date-picker>
-
-<!--                <v-col-->
-<!--                    cols="12"-->
-<!--                    sm="6"-->
-<!--                >-->
-<!--                  <v-autocomplete-->
-<!--                      :rules="[-->
-<!--                            required('این فیلد الزامی است'),-->
-<!--                            ]"-->
-<!--                      :loading="isLoading"-->
-<!--                      :items="dialogFilteredProducts"-->
-<!--                      :search-input.sync="dialogProductSearch"-->
-<!--                      item-text="enTitle"-->
-<!--                      :item-value="episode.parent"-->
-<!--                      label="نام محصول"-->
-<!--                      return-object-->
-<!--                      @change="handleDialogProductName"-->
-<!--                  ></v-autocomplete>-->
-<!--                </v-col>-->
-                <v-col
-                    cols="12"
-                    sm="6"
-                    v-if="isSuperAdmin"
-                >
-                  <v-autocomplete
-                      v-model="episode.submittedBy"
-                      label="تایید توسط"
-                      :items="organizationList"
-                      item-text="name"
-                      item-value="_id"
-                      dense
-                  ></v-autocomplete>
-                </v-col>
-                <v-col
-                    cols="12"
-                >
-                  <v-text-field
-                      :rules="[
-                            required('این فیلد الزامی است'),
-                            ]"
-                      v-model="episode.description"
-                      label="توضیحات"
-                  ></v-text-field>
-                </v-col>
               </v-col>
             </v-row>
           </v-form>
@@ -181,9 +137,10 @@
 
 <script>
 import {multiSelectRequired, verifyMobilePhone, verifyUserName, required} from "../../../plugins/rule";
-import {permission} from "../../../plugins/permission";
+// import {permission} from "../../../plugins/permission";
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import {entryType} from "../../../plugins/constant";
+import {transformDateToJalali, transformJalaliDateToGeorgian} from "../../../plugins/transformData";
 
 export default {
   name: "EpisodeDetailsDialog",
@@ -201,6 +158,9 @@ export default {
       verifyUserName,
       multiSelectRequired,
       entryType,
+      isLoading: false,
+      filteredProducts: [],
+      productSearch: '',
     }
   },
   computed: {
@@ -210,33 +170,67 @@ export default {
     episode() {
       return this.$store.getters['episode/getEpisode']
     },
-    isSuperAdmin() {
-      return permission().isSuperAdmin()
-    },
-    // generes() {
-    //   return this.$store.getters['episode/getGeneres']
-    // },
-    // titleTypes() {
-    //   return this.$store.getters['episode/getTitleTypes']
-    // },
-    organizationList() {
-      return this.$store.getters['organization/getOrganizations']
-    },
-    entryTypeIsMultiple() {
-      return this.episode.entryType === 'single' ? false : true
+    releaseDate: {
+      get() {
+        return transformDateToJalali(this.episode.releaseDate)
+      },
+      set(value) {
+        console.log(value)
+      }
     },
     formTitle() {
       return this.isCreate ? 'افزودن اپیزود' : 'ویرایش اپیزود'
     },
   },
+  mounted() {
+
+  },
+  watch: {
+    productSearch(value) {
+      if (!value || value.trim().length <= 0) this.filteredProducts = []
+      if (this.isLoading) return;
+      this.isLoading = true;
+      this.$store.dispatch('product/searchProduct', value).then(({data}) => {
+        if (data.data && data.data.length) {
+          const result = data.data.filter(item => item.entryType === 'multiple');
+          // if (result.length > 0) {
+          //   result.forEach(item => {
+          //     console.log(item)
+          //     item.compositionName = `${item.enTitle}/${item.faTitle}/${transformTitleType(item.titleType)}`
+          //   })
+          //   this.filteredProducts = result
+          // }
+          this.filteredProducts = result
+        }
+      }).finally(() => this.isLoading = false)
+    },
+  },
   methods: {
+    // handleSelectProductName(event) {
+    //   console.log(event);
+    //   // console.log(event.split('/'));
+    //   // this.editedItem.parent = event._id
+    // },
     close() {
       this.$refs.episodeForm.resetValidation()
       this.$emit('closeDialog')
     },
     save() {
       if (this.$refs.episodeForm.validate()) {
-        this.$emit('handleSave', this.episode)
+        console.log(this.episode)
+        let data = {
+          ...this.episode,
+          releaseDate: new Date(transformJalaliDateToGeorgian(this.releaseDate)).getTime(),
+        }
+        if (this.isCreate) {
+          data = {
+            ...data,
+            parent: this.$store.getters['episode/getParentId']
+          }
+        }
+        console.log(data);
+        console.log(this.$store.getters['episode/getParentId']);
+        this.$emit('handleSave', data)
         this.close()
       }
     }

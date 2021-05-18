@@ -4,7 +4,8 @@ export const namespaced = true;
 
 export const state = {
     episodes: [],
-    episode: {}
+    episode: {},
+    parentId: null
 };
 
 export const mutations = {
@@ -13,6 +14,9 @@ export const mutations = {
     },
     SET_EPISODE(state, payload) {
         state.episode = payload
+    },
+    SET_PARENT_ID(state, payload) {
+        state.parentId = payload
     },
 };
 
@@ -23,6 +27,9 @@ export const getters = {
     getEpisode(state) {
         return state.episode
     },
+    getParentId(state) {
+        return state.parentId
+    }
 }
 
 export const actions = {

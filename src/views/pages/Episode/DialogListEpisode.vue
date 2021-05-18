@@ -36,8 +36,9 @@ export default {
     },
   },
   methods: {
-    close() {
+    async close() {
       this.$emit('closeDialog')
+      await this.$store.commit('episode/SET_PARENT_ID', null)
     }
   }
 }

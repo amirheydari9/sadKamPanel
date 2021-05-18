@@ -160,6 +160,7 @@ export default {
       await this.$store.commit('user/SET_USER', {...this.defaultItem})
       this.isCreate = true
       this.showDialog = true
+      this.editedIndex = -1
     },
     async handleSave(user) {
       if (this.editedIndex > -1) {
@@ -173,7 +174,6 @@ export default {
     },
     closeDialog() {
       this.showDialog = false
-      this.editedIndex = -1
     }
   },
 }

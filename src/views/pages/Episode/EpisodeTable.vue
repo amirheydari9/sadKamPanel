@@ -71,15 +71,13 @@ export default {
       isCreate: true,
       search: '',
       headers: [
-        {text: 'نام انگلسیی', value: 'enTitle',},
+        {text: 'نام انگلسیی', value: 'enTitle'},
         {text: 'نام فارسی', value: 'faTitle'},
-        {text: 'نام محصول', value: 'parent'},
         {text: 'شماره فصل', value: 'seasonNumber'},
         {text: 'شماره قسمت', value: 'episodeNumber'},
         {text: 'زمان', value: 'duration'},
         {text: 'امتیاز', value: 'rate'},
         {text: 'تاریخ انتشار', value: 'releaseDate'},
-        {text: 'تایید توسط', value: 'submittedBy'},
         {text: 'عملیات', value: 'actions', sortable: false},
       ],
       transformOrganization,
@@ -100,8 +98,6 @@ export default {
   methods: {
     async editItem(item) {
       this.editedIndex = this.episodes.indexOf(item)
-      console.log(this.editedIndex,'inddx')
-      // await this.$store.commit('episode/SET_USER', {...item})
       await this.$store.dispatch('episode/getEpisode', item._id)
       this.isCreate = false
       this.showDialog = true
@@ -110,21 +106,20 @@ export default {
       await this.$store.commit('episode/SET_EPISODE', {...this.defaultItem})
       this.isCreate = true
       this.showDialog = true
+      this.editedIndex = -1
     },
     async handleSave(episode) {
-      console.log(this.editedIndex,'inddx')
       if (this.editedIndex > -1) {
         await this.$store.dispatch('episode/updateEpisode', episode)
         Object.assign(this.episodes[this.editedIndex], episode)
         this.editedIndex = -1
       } else {
         await this.$store.dispatch('episode/createEpisode', episode)
-        await this.$store.dispatch('episode/fetchEpisodes')
+        await this.$store.dispatch('episode/fetchAllEpisodes', this.$store.getters['episode/getParentId'])
       }
     },
     closeDialog() {
       this.showDialog = false
-      this.editedIndex = -1
     }
   },
 }
