@@ -43,6 +43,14 @@
         >
           mdi-pencil
         </v-icon>
+        <v-icon
+            small
+            class="mr-2"
+            @click="goToAssessment(item)"
+            v-if="showAssessmentIcon"
+        >
+          mdi-eye
+        </v-icon>
       </template>
     </v-data-table>
     <episode-details-dialog
@@ -70,6 +78,7 @@ export default {
       showDialog: false,
       isCreate: true,
       search: '',
+      showAssessmentIcon: false,
       headers: [
         {text: 'نام انگلسیی', value: 'enTitle'},
         {text: 'نام فارسی', value: 'faTitle'},
@@ -82,7 +91,7 @@ export default {
       ],
       transformOrganization,
       transformDateToJalali,
-      transformJalaliDateToGeorgian
+      transformJalaliDateToGeorgian,
     }
   },
   computed: {
@@ -120,6 +129,9 @@ export default {
     },
     closeDialog() {
       this.showDialog = false
+    },
+    goToAssessment() {
+      alert('ok')
     }
   },
 }

@@ -7,7 +7,7 @@
           :loading="isLoading"
           outlined
       ></v-text-field>
-      <add-product-btn />
+      <add-product-btn/>
     </v-col>
     <v-data-table
         :headers="headers"
@@ -39,7 +39,21 @@
       <template v-slot:item.lastUpdate="{ item }">
         {{ transformDateToJalali(item.lastUpdate) }}
       </template>
+      <template v-slot:item.actions="{ item }">
+        <v-icon
+            small
+            class="mr-2"
+            @click="goToAssessmentTabsOrSeeEpisodes(item)"
+        >
+          mdi-pencil
+        </v-icon>
+      </template>
     </v-data-table>
+    <dialog-list-episode
+        v-if="showEpisodesListDialog"
+        :showDialog="showEpisodesListDialog"
+        @closeDialog="closeEpisodeListDialog"
+    />
   </div>
 </template>
 <script>
@@ -49,11 +63,13 @@ import {
   transformEntryType
 } from "../../../plugins/transformData";
 import AddProductBtn from "./AddProductBtn";
+import DialogListEpisode from "../Episode/DialogListEpisode";
 
 export default {
   name: "Index",
   components: {
     AddProductBtn,
+    DialogListEpisode
   },
   data: () => ({
     isLoading: false,
@@ -104,7 +120,8 @@ export default {
     ],
     transformDateToJalali,
     transformTitleType,
-    transformEntryType
+    transformEntryType,
+    showEpisodesListDialog: false,
   }),
   mounted() {
     this.$store.commit('SET_BREADCRUMBS', this.breadcrumbs)
@@ -145,6 +162,22 @@ export default {
       }).finally(() => this.isLoading = false)
     },
   },
+  methods: {
+    async goToAssessmentTabsOrSeeEpisodes(item) {
+      if (item.entryType === 'single') {
+        alert('ok')
+      } else {
+        await this.$store.dispatch('episode/fetchAllEpisodes', item._id)
+        await this.$store.commit('episode/SET_PARENT_ID', item._id)
+        this.showEpisodesListDialog = true
+      }
+    },
+    async closeEpisodeListDialog() {
+      await this.$store.commit('episode/SET_EPISODES', [])
+      await this.$store.commit('episode/SET_PARENT_ID', null)
+      this.showEpisodesListDialog = false
+    }
+  }
 }
 </script>
 

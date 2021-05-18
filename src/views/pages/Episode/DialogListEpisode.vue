@@ -28,6 +28,7 @@ export default {
   name: "DialogListEpisode",
   props: {
     showDialog: {Boolean, isRequired: true},
+    isAssessmentMode: {Boolean, isRequired: false, default: false},
   },
   components: {EpisodeTable},
   computed: {
