@@ -261,7 +261,7 @@
 
 <script>
 import {multiSelectRequired, verifyMobilePhone, verifyUserName, required} from "../../../plugins/rule";
-import {permission} from "../../../plugins/permission";
+// import {permission} from "../../../plugins/permission";
 import {entryType} from "../../../plugins/constant";
 
 export default {
