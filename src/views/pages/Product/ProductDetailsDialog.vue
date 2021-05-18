@@ -166,19 +166,19 @@
                     deletable-chips
                 ></v-combobox>
               </v-col>
-<!--              <v-col-->
-<!--                  cols="12"-->
-<!--                  sm="4"-->
-<!--                  v-if="isSuperAdmin"-->
-<!--              >-->
-<!--                <v-autocomplete-->
-<!--                    v-model="product.submittedBy"-->
-<!--                    label="ایجاد توسط"-->
-<!--                    :items="organizationList"-->
-<!--                    item-text="name"-->
-<!--                    item-value="_id"-->
-<!--                ></v-autocomplete>-->
-<!--              </v-col>-->
+              <!--              <v-col-->
+              <!--                  cols="12"-->
+              <!--                  sm="4"-->
+              <!--                  v-if="isSuperAdmin"-->
+              <!--              >-->
+              <!--                <v-autocomplete-->
+              <!--                    v-model="product.submittedBy"-->
+              <!--                    label="ایجاد توسط"-->
+              <!--                    :items="organizationList"-->
+              <!--                    item-text="name"-->
+              <!--                    item-value="_id"-->
+              <!--                ></v-autocomplete>-->
+              <!--              </v-col>-->
               <v-col
                   cols="12"
                   sm="4"
@@ -268,7 +268,8 @@ export default {
   name: "ProductDetailsDialog",
   props: {
     showDialog: {Boolean, isRequired: true},
-    isCreate: {Boolean, isRequired: true}
+    isCreate: {Boolean, isRequired: true},
+    jusTCreate: {Boolean, isRequired: false, default: false}
   },
   data() {
     return {
@@ -278,6 +279,10 @@ export default {
       multiSelectRequired,
       entryType,
     }
+  },
+  mounted() {
+    this.$store.dispatch('product/fetchAllGeneres')
+    this.$store.dispatch('product/fetchAllTitleTypes')
   },
   computed: {
     show() {
@@ -307,7 +312,7 @@ export default {
       this.$refs.productForm.resetValidation()
       this.$emit('closeDialog')
     },
-    save() {
+    async save() {
       if (this.$refs.productForm.validate()) {
         this.$emit('handleSave', this.product)
         this.close()

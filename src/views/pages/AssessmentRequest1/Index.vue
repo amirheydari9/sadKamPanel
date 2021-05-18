@@ -1,16 +1,17 @@
 <template>
   <div class="w-100 d-flex flex-column justify-start">
-    <v-col cols="12" sm="4">
+    <v-col cols="12" sm="5" class="d-flex flex-row justify-end">
       <v-text-field
           v-model="productSearch"
           label="جستجو در محصولات"
           :loading="isLoading"
           outlined
       ></v-text-field>
+      <add-product-btn />
     </v-col>
     <v-data-table
         :headers="headers"
-        :items="filteredProducts"
+        :items="products"
         :search="search"
         no-results-text="اطلاعاتی یافت نشد"
         class="elevation-1 w-100"
@@ -47,9 +48,13 @@ import {
   transformTitleType,
   transformEntryType
 } from "../../../plugins/transformData";
+import AddProductBtn from "./AddProductBtn";
 
 export default {
   name: "Index",
+  components: {
+    AddProductBtn,
+  },
   data: () => ({
     isLoading: false,
     productSearch: null,
@@ -104,20 +109,24 @@ export default {
   mounted() {
     this.$store.commit('SET_BREADCRUMBS', this.breadcrumbs)
   },
-
+  computed: {
+    products: {
+      get() {
+        return this.$store.getters['product/getProducts']
+      },
+      set() {
+        return this.$store.commit('product/SET_PRODUCTS', [])
+      }
+    }
+  },
   beforeDestroy() {
-    // this.$store.commit('episode/SET_EPISODES', [])
-    // this.$store.commit('episode/SET_PARENT_ID', null)
-    // this.$store.commit('product/SET_PRODUCTS', [])
+    this.$store.commit('product/SET_PRODUCTS', [])
   },
   watch: {
     productSearch(value) {
-      // if (this.$store.getters['product/getProducts'].length > 0 || (!value || value.trim().length <= 0)) {
-      //   // this.$store.commit('episode/SET_EPISODES', [])
-      //   // this.$store.commit('episode/SET_PARENT_ID', null)
-      //   this.$store.commit('product/SET_PRODUCTS', [])
-      //   this.productIsAvailable = false
-      // }
+      if (this.filteredProducts.length > 0 || (!value || value.trim().length <= 0)) {
+        this.$store.commit('product/SET_PRODUCTS', [])
+      }
       if (this.isLoading) return;
       this.isLoading = true;
       this.$store.dispatch('product/searchProduct', value).then(({data}) => {
@@ -131,12 +140,11 @@ export default {
           //   })
           //   this.filteredProducts = result
           // }
-          this.filteredProducts = result
+          this.$store.commit('product/SET_PRODUCTS', result)
         }
       }).finally(() => this.isLoading = false)
     },
   },
-
 }
 </script>
 

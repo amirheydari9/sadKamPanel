@@ -147,8 +147,6 @@ export default {
   mounted() {
     this.$store.dispatch('organization/fetchOrganizations')
     this.$store.dispatch('product/fetchAllProducts')
-    this.$store.dispatch('product/fetchAllGeneres')
-    this.$store.dispatch('product/fetchAllTitleTypes')
     this.$store.commit('SET_BREADCRUMBS', this.breadcrumbs)
   },
   computed: {
@@ -161,7 +159,9 @@ export default {
       }
     },
   },
-
+  beforeDestroy() {
+    return this.$store.commit('product/SET_PRODUCTS', [])
+  },
   methods: {
     async editItem(item) {
       this.editedIndex = this.products.indexOf(item)
