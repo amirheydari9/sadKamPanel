@@ -47,7 +47,6 @@
             small
             class="mr-2"
             @click="goToAssessment(item)"
-            v-if="showAssessmentIcon"
         >
           mdi-eye
         </v-icon>
