@@ -58,6 +58,11 @@
         :isCreate="isCreate"
         @closeDialog="closeDialog"
         @handleSave="handleSave"/>
+    <TabsWrapper
+        v-if="showTabs"
+        :showDialog="showTabs"
+        @closeDialog="closeTabsDialog"
+    />
   </div>
 </template>
 
@@ -68,16 +73,18 @@ import {
   transformDateToJalali,
   transformJalaliDateToGeorgian
 } from "../../../plugins/transformData";
+import TabsWrapper from "./Tabs/TabsWrapper";
 
 export default {
   name: "EpisodeTable",
-  components: {EpisodeDetailsDialog},
+  components: {TabsWrapper, EpisodeDetailsDialog},
   data() {
     return {
       showDialog: false,
       isCreate: true,
       search: '',
       showAssessmentIcon: false,
+      showTabs: false,
       headers: [
         {text: 'نام انگلسیی', value: 'enTitle'},
         {text: 'نام فارسی', value: 'faTitle'},
@@ -130,7 +137,10 @@ export default {
       this.showDialog = false
     },
     goToAssessment() {
-      alert('ok')
+      this.showTabs = true
+    },
+    closeTabsDialog() {
+      this.showTabs = false
     }
   },
 }
