@@ -136,11 +136,13 @@ export default {
     closeDialog() {
       this.showDialog = false
     },
-    goToAssessment() {
+    goToAssessment(item) {
       this.showTabs = true
+      this.$store.commit('episode/SET_EPISODE', item)
     },
     closeTabsDialog() {
       this.showTabs = false
+      this.$store.commit('episode/SET_EPISODE', null)
     }
   },
 }

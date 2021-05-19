@@ -3,6 +3,8 @@ import {assessmentRequestService} from "../../service/assessmentRequestService";
 export const namespaced = true;
 
 export const state = {
+    assessmentRequestInfoByEpisodeId: null,
+    assessmentRequest: null,
     assessmentRequests: [],
     submitted: [],
     inqueu: [],
@@ -10,10 +12,15 @@ export const state = {
     confirmed: [],
     working: [],
     completed: [],
-
 };
 
 export const mutations = {
+    SET_ASSESSMENT_REQUEST_INFO_BY_EPISODE_ID(state, payload) {
+        state.assessmentRequestInfoByEpisodeId = payload
+    },
+    SET_ASSESSMENT_REQUEST(state, payload) {
+        state.assessmentRequest = payload
+    },
     SET_ASSESSMENT_REQUESTS(state, payload) {
         state.assessmentRequests = payload
     },
@@ -38,6 +45,12 @@ export const mutations = {
 };
 
 export const getters = {
+    getAssessmentRequestInfoByEpisodeId(state) {
+        return state.assessmentRequestInfoByEpisodeId
+    },
+    getAssessmentRequest(state) {
+        return state.assessmentRequest
+    },
     getAssessmentRequests(state) {
         return state.assessmentRequests
     },
@@ -71,17 +84,27 @@ export const actions = {
             console.log(e)
         }
     },
-    async fetchAssessmentRequest(context, id) {
+    async fetchAssessmentRequest({commit}, assessmentRequestId) {
         try {
-            return await assessmentRequestService().getAssessmentRequest(id)
+            const {data} = await assessmentRequestService().getAssessmentRequest(assessmentRequestId)
+            if (data.data) {
+                commit('SET_ASSESSMENT_REQUEST', data.data)
+            } else {
+                commit('SET_ASSESSMENT_REQUEST', null)
+            }
         } catch (e) {
             console.log(e)
         }
     },
 
-    async fetchAssessmentRequestByEpisode(context, id) {
+    async fetchAssessmentRequestByEpisodeId({commit}, id) {
         try {
-            return await assessmentRequestService().getAssessmentRequestByEpisode(id)
+            const {data} = await assessmentRequestService().getAssessmentRequestByEpisode(id)
+            if (data.data && data.data.length > 0) {
+                commit('SET_ASSESSMENT_REQUEST_INFO_BY_EPISODE_ID', data.data[0])
+            } else {
+                commit('SET_ASSESSMENT_REQUEST_INFO_BY_EPISODE_ID', null)
+            }
         } catch (e) {
             console.log(e)
         }
