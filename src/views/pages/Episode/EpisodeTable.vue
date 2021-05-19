@@ -73,7 +73,7 @@ import {
   transformDateToJalali,
   transformJalaliDateToGeorgian
 } from "../../../plugins/transformData";
-import TabsWrapper from "./Tabs/TabsWrapper";
+import TabsWrapper from "../../../components/Tabs/TabsWrapper";
 
 export default {
   name: "EpisodeTable",
