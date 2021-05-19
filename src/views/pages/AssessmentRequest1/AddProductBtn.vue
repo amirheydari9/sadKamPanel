@@ -39,7 +39,6 @@ export default {
         endYear: [],
         writers: [],
         actors: [],
-        submittedBy: '',
         imdbId: '',
         entryType: '',
         titleType: '',
@@ -54,13 +53,14 @@ export default {
       this.productDialog = true
     },
     async handleProductDetailsSave(product) {
-      await this.$store.dispatch('product/createProduct', product)
-      await this.$store.dispatch('product/searchProduct', product.enTitle).then(({data}) => {
-        this.$store.commit('product/SET_PRODUCTS', [
-          ...this.$store.getters['product/getProducts'],
-          ...data.data
-        ])
-      })
+      try {
+        await this.$store.dispatch('product/createProduct', product)
+        const {data} = await this.$store.dispatch('product/searchProduct', product.enTitle)
+        await this.$store.commit('product/SET_PRODUCTS', data.data)
+        await this.$toast.success('عملیات با موفقیت انجام نشد')
+      } catch (e) {
+        this.$toast.error('عملیات انجام نشد')
+      }
     },
     closeProductDetailsDialog() {
       this.productDialog = false

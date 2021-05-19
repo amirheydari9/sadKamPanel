@@ -119,7 +119,6 @@ export default {
       endYear: [],
       writers: [],
       actors: [],
-      submittedBy: '',
       imdbId: '',
       entryType: '',
       titleType: '',
