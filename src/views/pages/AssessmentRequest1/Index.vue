@@ -54,6 +54,11 @@
         :showDialog="showEpisodesListDialog"
         @closeDialog="closeEpisodeListDialog"
     />
+    <TabsWrapper
+        v-if="showTabs"
+        :showDialog="showTabs"
+        @closeDialog="closeTabsDialog"
+    />
   </div>
 </template>
 <script>
@@ -64,12 +69,14 @@ import {
 } from "../../../plugins/transformData";
 import AddProductBtn from "./AddProductBtn";
 import DialogListEpisode from "../Episode/DialogListEpisode";
+import TabsWrapper from "../../../components/Tabs/TabsWrapper";
 
 export default {
   name: "Index",
   components: {
     AddProductBtn,
-    DialogListEpisode
+    DialogListEpisode,
+    TabsWrapper
   },
   data: () => ({
     isLoading: false,
@@ -122,6 +129,7 @@ export default {
     transformTitleType,
     transformEntryType,
     showEpisodesListDialog: false,
+    showTabs: false
   }),
   mounted() {
     this.$store.commit('SET_BREADCRUMBS', this.breadcrumbs)
@@ -165,7 +173,8 @@ export default {
   methods: {
     async goToAssessmentTabsOrSeeEpisodes(item) {
       if (item.entryType === 'single') {
-        alert('ok')
+        this.$store.commit('episode/SET_EPISODE', item)
+        this.showTabs = true
       } else {
         await this.$store.dispatch('episode/fetchAllEpisodes', item._id)
         await this.$store.commit('episode/SET_PARENT_ID', item._id)
@@ -176,6 +185,10 @@ export default {
       await this.$store.commit('episode/SET_EPISODES', [])
       await this.$store.commit('episode/SET_PARENT_ID', null)
       this.showEpisodesListDialog = false
+    },
+    closeTabsDialog() {
+      this.showTabs = false
+      this.$store.commit('episode/SET_EPISODE', null)
     }
   }
 }
