@@ -1,10 +1,10 @@
-import axios from '../plugins/axios'
+import axiosInstance from '../plugins/axios'
 
 export function assessmentService() {
 
     const createAssessment = async (assessment) => {
         try {
-            return await axios.post('http://sadkam.lincast.ir/api/assessment', assessment)
+            return await axiosInstance.post('/assessment', assessment)
         } catch (e) {
             console.log(e)
         }
@@ -12,7 +12,7 @@ export function assessmentService() {
 
     const findAssessmentByEpisodeId = async (episodeId) => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/api/assessment', episodeId)
+            return await axiosInstance.get('/assessment', episodeId)
         } catch (e) {
             console.log(e)
         }
@@ -20,7 +20,7 @@ export function assessmentService() {
 
     const getRulesByAssessmentId = async (assessmentId) => {
         try {
-            return await axios.get(`http://sadkam.lincast.ir/api/assessment/rule/byAssessment/${assessmentId}`)
+            return await axiosInstance.get(`/assessment/rule/byAssessment/${assessmentId}`)
         } catch (e) {
             console.log(e)
         }

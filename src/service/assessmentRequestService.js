@@ -1,24 +1,24 @@
-import axios from '../plugins/axios'
+import axiosInstance from '../plugins/axios'
 
 export function assessmentRequestService() {
 
     const getAllAssessmentRequests = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/api/assessmentRequest')
+            return await axiosInstance.get('/assessmentRequest')
         } catch (e) {
             console.log(e)
         }
     }
     const getAssessmentRequest = async (id) => {
         try {
-            return await axios.get(`http://sadkam.lincast.ir/api/assessmentRequest/${id}`)
+            return await axiosInstance.get(`/assessmentRequest/${id}`)
         } catch (e) {
             console.log(e)
         }
     }
     const getAssessmentRequestByEpisode = async (episodeId) => {
         try {
-            return await axios.get(`http://sadkam.lincast.ir/api/assessmentRequest/find/byEpisode/${episodeId}`)
+            return await axiosInstance.get(`/assessmentRequest/find/byEpisode/${episodeId}`)
         } catch (e) {
             console.log(e)
         }
@@ -26,7 +26,7 @@ export function assessmentRequestService() {
 
     const createAssessmentRequest = async (assessmentRequest) => {
         try {
-            return await axios.post('http://sadkam.lincast.ir/api/assessmentRequest', assessmentRequest)
+            return await axiosInstance.post('/assessmentRequest', assessmentRequest)
         } catch (e) {
             console.log(e)
         }
@@ -34,7 +34,7 @@ export function assessmentRequestService() {
 
     const createFile = async (file) => {
         try {
-            return await axios.post('http://sadkam.lincast.ir/api/assessmentRequest/file', file)
+            return await axiosInstance.post('/assessmentRequest/file', file)
         } catch (e) {
             console.log(e)
         }
@@ -42,7 +42,7 @@ export function assessmentRequestService() {
 
     const createDialog = async (dialog) => {
         try {
-            return await axios.post('http://sadkam.lincast.ir/api/assessmentRequest/dialog', dialog)
+            return await axiosInstance.post('/assessmentRequest/dialog', dialog)
         } catch (e) {
             console.log(e)
         }
@@ -50,7 +50,7 @@ export function assessmentRequestService() {
 
     const getAssessmentListByStatus = async (status) => {
         try {
-            return await axios.get(`http://sadkam.lincast.ir/api/assessmentRequest/find/byStatus/${status}`)
+            return await axiosInstance.get(`/assessmentRequest/find/byStatus/${status}`)
         } catch (e) {
             console.log(e)
         }
@@ -58,7 +58,7 @@ export function assessmentRequestService() {
 
     const assignAssessmentRequestToBrokerage = async (assign) => {
         try {
-            return await axios.patch(`http://sadkam.lincast.ir/api/assessmentRequest/assign`, assign)
+            return await axiosInstance.patch(`/assessmentRequest/assign`, assign)
         } catch (e) {
             console.log(e)
         }
@@ -66,7 +66,7 @@ export function assessmentRequestService() {
 
     const unAssignAssessmentRequestToBrokerage = async (assessmentRequestId) => {
         try {
-            return await axios.patch(`http://sadkam.lincast.ir/api/assessmentRequest/unassign`, assessmentRequestId)
+            return await axiosInstance.patch(`/assessmentRequest/unassign`, assessmentRequestId)
         } catch (e) {
             console.log(e)
         }
@@ -74,7 +74,7 @@ export function assessmentRequestService() {
 
     const setStatusOfAssessmentRequest = async (status) => {
         try {
-            return await axios.patch(`http://sadkam.lincast.ir/api/assessmentRequest/status`, status)
+            return await axiosInstance.patch(`/assessmentRequest/status`, status)
         } catch (e) {
             console.log(e)
         }

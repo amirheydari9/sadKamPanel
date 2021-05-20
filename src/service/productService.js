@@ -1,10 +1,10 @@
-import axios from '../plugins/axios'
+import axiosInstance from '../plugins/axios'
 
 export function productService() {
 
     const searchProduct = async (search) => {
         try {
-            return await axios.get(`http://sadkam.lincast.ir/api/products/search/${search}`)
+            return await axiosInstance.get(`/products/search/${search}`)
         } catch (e) {
             console.log(e)
         }
@@ -12,14 +12,14 @@ export function productService() {
 
     const getAllProducts = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/api/products')
+            return await axiosInstance.get('/products')
         } catch (e) {
             console.log(e)
         }
     }
     const getProduct = async (id) => {
         try {
-            return await axios.get(`http://sadkam.lincast.ir/api/products/${id}`)
+            return await axiosInstance.get(`/products/${id}`)
         } catch (e) {
             console.log(e)
         }
@@ -27,7 +27,7 @@ export function productService() {
 
     const createProduct = async (product) => {
         try {
-           return await axios.post('http://sadkam.lincast.ir/api/products', product)
+           return await axiosInstance.post('/products', product)
         } catch (e) {
             console.log(e)
         }
@@ -35,7 +35,7 @@ export function productService() {
 
     const updateProduct = async (product) => {
         try {
-            await axios.put('http://sadkam.lincast.ir/api/products', product)
+            await axiosInstance.put('/products', product)
         } catch (e) {
             console.log(e)
         }
@@ -43,7 +43,7 @@ export function productService() {
 
     const getAllGeneres = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/api/products/related/generes')
+            return await axiosInstance.get('/products/related/generes')
         } catch (e) {
             console.log(e)
         }
@@ -51,7 +51,7 @@ export function productService() {
 
     const getAllTitleType = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/api/products/related/types')
+            return await axiosInstance.get('/products/related/types')
         } catch (e) {
             console.log(e)
         }

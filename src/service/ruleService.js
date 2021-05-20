@@ -1,10 +1,10 @@
-import axios from '../plugins/axios'
+import axiosInstance from '../plugins/axios'
 
 export function ruleService() {
 
     const getListRuleOfFile = async (fileId) => {
         try {
-            return await axios.get(`http://sadkam.lincast.ir/api/rules/find/byFile/${fileId}?count=100`)
+            return await axiosInstance.get(`/rules/find/byFile/${fileId}?count=100`)
         } catch (e) {
             console.log(e)
         }
@@ -12,7 +12,7 @@ export function ruleService() {
 
     const getListRulesOfAssessmentRequest = async (assessmentRequestId) => {
         try {
-            return await axios.get(`http://sadkam.lincast.ir/api/rules/find/${assessmentRequestId}`)
+            return await axiosInstance.get(`/rules/find/${assessmentRequestId}`)
         } catch (e) {
             console.log(e)
         }
@@ -20,7 +20,7 @@ export function ruleService() {
 
     const getListRulesOfAssessment = async (assessmentId) => {
         try {
-            return await axios.get(`http://sadkam.lincast.ir/api/rules/find/${assessmentId}`)
+            return await axiosInstance.get(`/rules/find/${assessmentId}`)
         } catch (e) {
             console.log(e)
         }
@@ -28,7 +28,7 @@ export function ruleService() {
 
     const createRuleForAssessmentRequest = async (rule) => {
         try {
-            return await axios.post(`http://sadkam.lincast.ir/api/rules/forAssessmentRequest`, rule)
+            return await axiosInstance.post(`/rules/forAssessmentRequest`, rule)
         } catch (e) {
             console.log(e)
         }
@@ -36,7 +36,7 @@ export function ruleService() {
 
     const createRuleForAssessment = async (rule) => {
         try {
-            return await axios.post(`http://sadkam.lincast.ir/api/rules/forAssessment`, rule)
+            return await axiosInstance.post(`/rules/forAssessment`, rule)
         } catch (e) {
             console.log(e)
         }
@@ -44,7 +44,7 @@ export function ruleService() {
 
     const updateRule = async (rule) => {
         try {
-            return await axios.put(`http://sadkam.lincast.ir/api/rules`, rule)
+            return await axiosInstance.put(`/rules`, rule)
         } catch (e) {
             console.log(e)
         }
@@ -52,7 +52,7 @@ export function ruleService() {
 
     const deleteRule = async (id) => {
         try {
-            return await axios.delete(`http://sadkam.lincast.ir/api/rules/${id}`)
+            return await axiosInstance.delete(`/rules/${id}`)
         } catch (e) {
             console.log(e)
         }

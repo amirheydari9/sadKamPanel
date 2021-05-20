@@ -65,10 +65,13 @@ export default {
     return {
       transformDateToJalali,
       transformAssessmentRequestStatus,
-      tab1Desc: ''
+      tab1Desc: '',
     }
   },
   computed: {
+    episode() {
+      return this.$store.getters['episode/getEpisode']
+    },
     assessmentRequest() {
       return this.$store.getters['assessmentRequest/getAssessmentRequest']
     }
@@ -78,7 +81,11 @@ export default {
   },
   methods: {
     createAssessmentRequest() {
-      this.$store.dispatch('assessmentRequest/createAssessmentRequest', this.episode._id).then(({data}) => {
+      const data = {
+        episode: this.episode._id,
+        description: this.tab1Desc
+      }
+      this.$store.dispatch('assessmentRequest/createAssessmentRequest', data).then(() => {
         // this.$store.dispatch('assessmentRequest/fetchAssessmentRequest', data.data.id)
         this.$emit('getData')
       })

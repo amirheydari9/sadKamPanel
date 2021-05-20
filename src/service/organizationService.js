@@ -1,10 +1,10 @@
-import axios from '../plugins/axios'
+import axiosInstance from '../plugins/axios'
 
 export function organizationService() {
 
     const getAllOrganization = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/api/organizations?count=100')
+            return await axiosInstance.get('/organizations?count=100')
         } catch (e) {
             console.log(e)
         }
@@ -12,7 +12,7 @@ export function organizationService() {
 
     const createOrganization = async (organization) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/api/organizations', organization)
+            await axiosInstance.post('/organizations', organization)
         } catch (e) {
             console.log(e)
         }
@@ -20,7 +20,7 @@ export function organizationService() {
 
     const updateOrganization = async (organization) => {
         try {
-            await axios.put('http://sadkam.lincast.ir/api/organizations', organization)
+            await axiosInstance.put('/organizations', organization)
         } catch (e) {
             console.log(e)
         }
@@ -28,7 +28,7 @@ export function organizationService() {
 
     const getOrganizationTypes = async () => {
         try {
-            return await axios.get('http://sadkam.lincast.ir/api/organizations/types')
+            return await axiosInstance.get('/organizations/types')
         } catch (e) {
             console.log(e)
         }

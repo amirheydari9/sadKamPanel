@@ -1,17 +1,17 @@
-import axios from '../plugins/axios'
+import axiosInstance from '../plugins/axios'
 
 export function episodeService() {
 
     const getAllEpisodes = async (id) => {
         try {
-            return await axios.get(`http://sadkam.lincast.ir/api/episodes/ofParent/${id}`)
+            return await axiosInstance.get(`/episodes/ofParent/${id}`)
         } catch (e) {
             console.log(e)
         }
     }
     const getEpisode = async (id) => {
         try {
-            return await axios.get(`http://sadkam.lincast.ir/api/episodes/${id}`)
+            return await axiosInstance.get(`/episodes/${id}`)
         } catch (e) {
             console.log(e)
         }
@@ -19,7 +19,7 @@ export function episodeService() {
 
     const createEpisode = async (episode) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/api/episodes', episode)
+            await axiosInstance.post('/episodes', episode)
         } catch (e) {
             console.log(e)
         }
@@ -27,7 +27,7 @@ export function episodeService() {
 
     const updateEpisode = async (episode) => {
         try {
-            await axios.put('http://sadkam.lincast.ir/api/episodes', episode)
+            await axiosInstance.put('/episodes', episode)
         } catch (e) {
             console.log(e)
         }

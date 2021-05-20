@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import jwt_decode from "jwt-decode";
-import axios from '../plugins/axios'
+import axiosInstance from '../plugins/axios'
 
 export function authService() {
 
     const login = async (phone) => {
         try {
-            await axios.post('http://sadkam.lincast.ir/api/users/login', {phone})
+            await axiosInstance.post('/users/login', {phone})
         } catch (e) {
             console.log(e)
         }
@@ -14,7 +14,7 @@ export function authService() {
 
     const loginCheck = async (phone, code) => {
         try {
-            return await axios.post('http://sadkam.lincast.ir/api/users/login_check', {phone, code})
+            return await axiosInstance.post('/users/login_check', {phone, code})
         } catch (e) {
             console.log(e)
         }

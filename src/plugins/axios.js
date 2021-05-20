@@ -2,7 +2,11 @@ import axios from 'axios';
 import {authService} from "../service/authService";
 import router from "../router";
 
-axios.interceptors.request.use(function (config) {
+const axiosInstance = axios.create({
+    baseURL: 'http://sadkam.lincast.ir/api'
+})
+
+axiosInstance.interceptors.request.use(function (config) {
     const token = authService().getToken();
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -12,7 +16,7 @@ axios.interceptors.request.use(function (config) {
     return Promise.reject(err);
 });
 
-axios.interceptors.response.use(response => {
+axiosInstance.interceptors.response.use(response => {
     return response;
 }, error => {
 
@@ -31,4 +35,4 @@ axios.interceptors.response.use(response => {
     return Promise.reject(error)
 })
 
-export default axios
+export default axiosInstance
